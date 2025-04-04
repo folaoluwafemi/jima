@@ -1,4 +1,4 @@
-import 'package:drwho_infra/drwho_infra.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseAuthService {
   final SupabaseClient _client;
