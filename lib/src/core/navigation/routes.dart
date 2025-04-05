@@ -8,6 +8,11 @@ enum AppRoute {
   signup('signup', '/auth-action/signup'),
   login('login', '/auth-action/login'),
   forgotPassword('forgot-password', '/auth-action/login/forgot-password'),
+  dashboard('/dashboard', '/dashboard'),
+  books('/dashboard', '/dashboard'),
+  videos('/dashboard', '/dashboard'),
+  audios('/dashboard', '/dashboard'),
+  profile('/profile', '/profile'),
   ;
 
   final String path;

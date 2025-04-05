@@ -59,10 +59,11 @@ class _VanillaConsumerState<Notifier extends VanillaNotifier<T>, T>
       if (shouldNotify) {
         update();
       }
-      final bool shouldNotifyListener = widget.listenWhen!(
-        previousState,
-        currentState,
-      );
+      final bool shouldNotifyListener = widget.listenWhen?.call(
+            previousState,
+            currentState,
+          ) ??
+          true;
       if (shouldNotifyListener) {
         widget.listener(previousState, currentState);
       }

@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:jima/src/core/error_handling/failure.dart';
 import 'package:equatable/equatable.dart';
+import 'package:jima/src/core/error_handling/failure.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 typedef FutureEither<T> = Future<Either<T, Failure>>;
 
@@ -20,23 +20,28 @@ extension EitherFuture<T> on Future<T> {
           exception: e,
         ),
       );
-    } on DioException catch (e, s) {
+    } on AuthException catch (e, s) {
       return Left(
         Failure(
-          message: switch (e.response?.statusCode) {
-            null => 'An error occurred',
-            >= 500 => 'There was a server error',
-            _ => e.message,
-          },
+          message: e.message,
           stackTrace: s,
-          errorCode: e.response?.statusCode,
           exception: e,
+          errorCode: e.code,
+        ),
+      );
+    } on PostgrestException catch (e, s) {
+      return Left(
+        Failure(
+          message: e.message,
+          stackTrace: s,
+          exception: e,
+          errorCode: e.code,
         ),
       );
     } on Failure catch (e) {
       return Left(customHandler?.call(e) ?? e);
     } catch (e, s) {
-      print('stack trace:$s');
+      print('stack trace${e.runtimeType}${e}:$s');
       return Left(
         customHandler?.call(e) ?? Failure(message: e.toString(), stackTrace: s),
       );

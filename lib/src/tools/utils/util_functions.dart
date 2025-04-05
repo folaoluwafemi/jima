@@ -1,6 +1,20 @@
-import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:uuid/uuid.dart' as uuid;
+import 'package:vanilla_state/vanilla_state.dart';
+
+void handleErrorCase<State extends BaseState>(
+  State? previous,
+  State current, {
+  required BuildContext context,
+  VanillaListenerCallback<State>? callback,
+}) {
+  if (current case ErrorState(:final message)) {
+    return context.showErrorToast(message);
+  }
+  return callback?.call(previous, current);
+}
 
 abstract class UtilFunctions {
   static String generateUuid([int length = 16]) {

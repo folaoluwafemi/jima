@@ -1,5 +1,6 @@
-import 'package:jima/src/modules/auth/presentation/notifiers/login_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:jima/src/core/core.dart';
+import 'package:jima/src/modules/auth/presentation/notifiers/login_notifier.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 class GeneralUiIOCContainer extends StatelessWidget {
@@ -11,7 +12,7 @@ class GeneralUiIOCContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiInheritedVanilla(
       children: [
-        InheritedVanilla(createNotifier: () => LoginNotifier()),
+        InheritedVanilla(createNotifier: () => LoginNotifier(container())),
       ],
       child: child,
     );

@@ -34,6 +34,7 @@ dependencies:
   supabase_flutter: ^2.8.4
   sliver_tools: ^0.2.12
   flutter_svg: ^2.0.17
+  toastification: ^3.0.2
 
 dev_dependencies:
   flutter_test:

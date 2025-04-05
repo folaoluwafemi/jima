@@ -235,7 +235,7 @@ class AppTextField extends StatelessWidget {
     bool isRequired = true,
     bool optional = false,
     AutovalidateMode? autovalidateMode,
-    TextCapitalization textCapitalization = TextCapitalization.words,
+    TextCapitalization textCapitalization = TextCapitalization.none,
     FormFieldValidator<String?>? validator,
   }) =>
       AppTextField(

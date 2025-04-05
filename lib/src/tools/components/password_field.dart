@@ -10,6 +10,7 @@ class PasswordTextField extends StatefulWidget {
     this.labelText = 'Password',
     this.hintText = 'Enter your password',
     this.passwordToMatch,
+    this.validator,
     this.validate = true,
     super.key,
   });
@@ -18,6 +19,7 @@ class PasswordTextField extends StatefulWidget {
   final String hintText;
   final String labelText;
   final TextEditingController? passwordToMatch;
+  final FormFieldValidator<String?>? validator;
   final bool validate;
 
   @override
@@ -54,15 +56,16 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             return TextFormField(
               controller: widget.controller,
               validator: widget.validate
-                  ? (value) {
-                      if (widget.passwordToMatch == null) {
-                        return value.validatePassword();
-                      } else if (widget.passwordToMatch?.text != value) {
-                        return 'Passwords do not match';
-                      } else {
-                        return value.validatePassword();
+                  ? widget.validator ??
+                      (value) {
+                        if (widget.passwordToMatch == null) {
+                          return value.validatePassword();
+                        } else if (widget.passwordToMatch?.text != value) {
+                          return 'Passwords do not match';
+                        } else {
+                          return value.validatePassword();
+                        }
                       }
-                    }
                   : null,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               obscureText: value,

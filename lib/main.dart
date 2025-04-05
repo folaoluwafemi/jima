@@ -6,8 +6,9 @@ import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/supabase_infra/supabase_api.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await setupInfra();
   injectDependencies();
   runApp(const JimaApp());
 }

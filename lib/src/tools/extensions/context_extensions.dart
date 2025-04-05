@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 
 extension BuildContextEx on BuildContext {
   TextTheme get textTheme => Theme.of(this).textTheme;
@@ -29,5 +30,31 @@ extension BuildContextEx on BuildContext {
 
   void hideKeyboard() {
     FocusScope.of(this).unfocus();
+  }
+
+  void showErrorToast(String message) {
+    toastification.show(
+      context: this, // optional if you use ToastificationWrapper
+      title: Text(message),
+      type: ToastificationType.error,
+      autoCloseDuration: const Duration(seconds: 5),
+    );
+  }
+
+  void showSuccessToast(String message) {
+    toastification.show(
+      context: this, // optional if you use ToastificationWrapper
+      title: Text(message),
+      type: ToastificationType.success,
+      autoCloseDuration: const Duration(seconds: 5),
+    );
+  }
+  void showInfoToast(String message) {
+    toastification.show(
+      context: this, // optional if you use ToastificationWrapper
+      title: Text(message),
+      type: ToastificationType.info,
+      autoCloseDuration: const Duration(seconds: 5),
+    );
   }
 }

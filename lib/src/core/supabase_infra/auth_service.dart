@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseAuthService {
@@ -41,12 +43,10 @@ class SupabaseAuthService {
   Future<void> login({
     required String email,
     required String password,
-    String? phone,
   }) async {
     await _client.auth.signInWithPassword(
       password: password,
       email: email,
-      phone: phone,
     );
   }
 
@@ -69,5 +69,28 @@ class SupabaseAuthService {
       email: email,
       data: otherData,
     );
+  }
+
+  /// Create an account for user
+  Future<void> continueWithFacebook() async {
+    await _client.auth.signInWithOAuth(
+      OAuthProvider.facebook,
+      authScreenLaunchMode: LaunchMode.inAppBrowserView,
+      redirectTo: 'https://lrpkqywievdyqjcyheil.supabase.co/auth/v1/callback',
+    );
+  }
+
+  Future<void> continueWithGoogle() async {
+    await _client.auth.signInWithOAuth(
+      OAuthProvider.google,
+      authScreenLaunchMode: Platform.isAndroid
+          ? LaunchMode.externalApplication
+          : LaunchMode.inAppWebView,
+      redirectTo: 'https://lrpkqywievdyqjcyheil.supabase.co/auth/v1/callback',
+    );
+  }
+
+  Future<void> resetPassword(String email) async {
+    await _client.auth.resetPasswordForEmail(email);
   }
 }

@@ -1,8 +1,10 @@
 class Failure implements Exception {
   final String? message;
-  final int? errorCode;
+  final String? errorCode;
   final Exception? exception;
   final StackTrace _stackTrace;
+
+  String get displayMessage => message ?? 'An error occurred';
 
   Failure({
     this.message,
@@ -20,7 +22,7 @@ class Failure implements Exception {
   ''';
 
   Failure copyWith({
-    final int? errorCode,
+    final String? errorCode,
     final String? message,
     final Exception? exception,
     final StackTrace? stackTrace,

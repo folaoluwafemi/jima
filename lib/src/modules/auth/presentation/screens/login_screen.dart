@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/auth/presentation/notifiers/login_notifier.dart';
 import 'package:jima/src/tools/components/app_text_field.dart';
 import 'package:jima/src/tools/components/password_field.dart';
 import 'package:jima/src/tools/components/primary_button.dart';
-import 'package:jima/src/tools/components/vanilla_consumer.dart';
-import 'package:jima/src/tools/extensions/extensions.dart';
+import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return InheritedVanilla(
-      createNotifier: () => LoginNotifier(),
+      createNotifier: () => LoginNotifier(container()),
       child: Scaffold(
         appBar: AppBar(),
         body: Column(
@@ -69,7 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () => context.goNamed(
+                          AppRoute.forgotPassword.name,
+                        ),
                         child: Text(
                           'Forgot Password?',
                           style: Textstyles.normal.copyWith(
@@ -80,27 +83,35 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     32.boxHeight,
-                    VanillaConsumer<LoginNotifier, LoginState>(
-                      listener: (previous, current) {
-                        if(current.isSuccess){
-
-                        }
-                      },
-                      builder: (context, state) {
-                        return AppButton.primary(
-                          loading: state.isOutLoading,
-                          onPressed: () {
-                            final validated = formKey.currentState?.validate();
-                            if (validated != true) return;
-                            context.hideKeyboard();
-                            context.read<LoginNotifier>().login(
-                                  email: emailController.text.trim(),
-                                  password: passwordController.text,
-                                );
-                          },
-                          text: 'Login',
-                        );
-                      },
+                    VanillaListener<LoginNotifier, LoginState>(
+                      listener: (previous, current) => handleErrorCase(
+                        previous,
+                        current,
+                        context: context,
+                        callback: (previous, current) {
+                          if (current.isSuccess) {
+                            context.goNamed(AppRoute.dashboard.name);
+                          }
+                        },
+                      ),
+                      child: VanillaBuilder<LoginNotifier, LoginState>(
+                        builder: (context, state) {
+                          return AppButton.primary(
+                            loading: state.isOutLoading,
+                            onPressed: () {
+                              final validated =
+                                  formKey.currentState?.validate();
+                              if (validated != true) return;
+                              context.hideKeyboard();
+                              context.read<LoginNotifier>().login(
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text,
+                                  );
+                            },
+                            text: 'Login',
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

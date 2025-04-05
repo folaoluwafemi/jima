@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jima/src/core/dependency_injection/ui_container.dart';
 import 'package:jima/src/core/navigation/router.dart';
 import 'package:jima/src/core/theme/app_theme.dart';
+import 'package:toastification/toastification.dart';
 
 class JimaApp extends StatelessWidget {
   const JimaApp({super.key});
@@ -15,11 +16,13 @@ class JimaApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (_, child) {
-          return MaterialApp.router(
-            title: 'JIMA',
-            theme: AppTheme.light,
-            debugShowCheckedModeBanner: false,
-            routerConfig: AppRouter.config,
+          return ToastificationWrapper(
+            child: MaterialApp.router(
+              title: 'JIMA',
+              theme: AppTheme.light,
+              debugShowCheckedModeBanner: false,
+              routerConfig: AppRouter.config,
+            ),
           );
         },
       ),
