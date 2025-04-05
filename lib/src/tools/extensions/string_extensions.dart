@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/widgets.dart';
+import 'package:jima/src/tools/components/svg_widget.dart';
+import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 enum PasswordValidationError {
@@ -91,6 +94,46 @@ extension StringEx on String {
 
     // Remove leading or trailing underscores
     return snakeCase.replaceAll(RegExp(r'^_+|_+$'), '');
+  }
+
+  Widget vectorAssetWidget({
+    double? dimension,
+    double? height,
+    double? width,
+    double? rotationAngle,
+    Color? color,
+    BoxFit fit = BoxFit.contain,
+  }) {
+    return Transform.rotate(
+      angle: rotationAngle?.toRadians ?? 0,
+      child: SvgWidget(
+        this,
+        height: dimension ?? height,
+        width: dimension ?? width,
+        fit: fit,
+        color: color,
+      ),
+    );
+  }
+
+  Widget imageAssetWidget({
+    double? dimension,
+    double? height,
+    double? width,
+    double? rotationAngle,
+    Color? color,
+    BoxFit fit = BoxFit.contain,
+  }) {
+    return Transform.rotate(
+      angle: rotationAngle?.toRadians ?? 0,
+      child: Image.asset(
+        this,
+        height: dimension ?? height,
+        width: dimension ?? width,
+        fit: fit,
+        color: color,
+      ),
+    );
   }
 }
 

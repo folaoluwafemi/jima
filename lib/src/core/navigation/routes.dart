@@ -4,6 +4,10 @@ enum AppRoute {
   /// ============== starter ==============
   splash('/'),
   onboarding('/onboarding'),
+  authAction('/auth-action'),
+  signup('signup', '/auth-action/signup'),
+  login('login', '/auth-action/login'),
+  forgotPassword('forgot-password', '/auth-action/login/forgot-password'),
   ;
 
   final String path;

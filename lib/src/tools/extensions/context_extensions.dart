@@ -9,7 +9,23 @@ extension BuildContextEx on BuildContext {
 
   EdgeInsets get viewPadding => MediaQuery.viewPaddingOf(this);
 
+  double get bottomScreenPadding => MediaQuery.viewPaddingOf(this).bottom;
+
   EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(this);
+
+  double screenHeight({
+    double percent = 1,
+  }) =>
+      MediaQuery.of(this).size.height * percent;
+
+  double screenWidth({
+    double percent = 1,
+  }) =>
+      MediaQuery.of(this).size.width * percent;
+
+  double get height => MediaQuery.sizeOf(this).height;
+
+  double get width => MediaQuery.sizeOf(this).width;
 
   void hideKeyboard() {
     FocusScope.of(this).unfocus();

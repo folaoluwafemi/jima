@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-abstract final class Typography {
+abstract final class Textstyles {
   static final double _defaultSize = 14.sp;
   static const Color _defaultColor = Colors.black;
 

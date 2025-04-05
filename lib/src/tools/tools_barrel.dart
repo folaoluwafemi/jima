@@ -1,6 +1,8 @@
 export 'package:jima/src/tools/constants/endpoints.dart';
+export 'package:jima/src/tools/constants/images.dart';
 export 'package:jima/src/tools/constants/secure_storage_keys.dart';
 export 'package:jima/src/tools/constants/storage_access.dart';
+export 'package:jima/src/tools/constants/vectors.dart';
 export 'package:jima/src/tools/extensions/extensions.dart';
 export 'package:jima/src/tools/utils/image_utils.dart';
 export 'package:jima/src/tools/utils/loggers.dart';
