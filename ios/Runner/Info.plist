@@ -41,6 +41,12 @@
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
+    <key>FacebookAppID</key>
+    <string>638122922359825</string>
+    <key>FacebookClientToken</key>
+    <string>f1b0526d6f57cc930917a1014d001e98</string>
+    <key>FacebookDisplayName</key>
+    <string>Joshua Iginla Ministry</string>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
