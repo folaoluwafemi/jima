@@ -1,0 +1,1 @@
+/Users/mac/AndroidStudioProjects/jima/build/app/intermediates/cxx/RelWithDebInfo/4c2n1m3l/obj/x86_64
