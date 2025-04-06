@@ -2,23 +2,30 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class OauthSource {
-  Future<({String idToken, String accessToken})?> _signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<({String? idToken, String? accessToken})?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    final googleAuth = await googleUser?.authentication;
+      if (googleUser == null) return null;
 
-    final idToken = googleAuth?.idToken;
-    final accessToken = googleAuth?.accessToken;
+      final googleAuth = await googleUser.authentication;
 
-    if (idToken == null || accessToken == null) return null;
+      final idToken = googleAuth.idToken;
+      final accessToken = googleAuth.accessToken;
 
-    return (idToken: idToken, accessToken: accessToken);
+      print("id token: $idToken");
+      print("access token: $accessToken");
+      if (idToken == null || accessToken == null) return null;
+
+      return (idToken: idToken, accessToken: accessToken);
+    } catch (e, s) {
+      print('errror at: $e $s');
+      rethrow;
+    }
   }
 
-
-  Future<void> _signInWithFacebook() async {
+  Future<String?> signInWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
-
-    loginResult.accessToken;
+    return loginResult.accessToken?.tokenString;
   }
 }
