@@ -7,5 +7,7 @@ abstract final class Vectors {
   static const String eye = '$basePath/eye.svg';
   static const String facebook = '$basePath/facebook.svg';
   static const String google = '$basePath/google.svg';
+  static const String searchIcon = '$basePath/search_icon.svg';
+  static const String playNow = '$basePath/play_now.svg';
   static const String _helper = '$basePath/';
 }

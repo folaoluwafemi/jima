@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
   final Color? textColor;
   final Color? color;
   final Color? borderColor;
+  final BorderRadius? borderRadius;
   final bool loading;
 
   const AppButton({
@@ -24,6 +25,7 @@ class AppButton extends StatelessWidget {
     this.textColor,
     this.color,
     this.borderColor,
+    this.borderRadius,
     this.icon,
     this.loading = false,
   });
@@ -34,6 +36,7 @@ class AppButton extends StatelessWidget {
     this.textStyle,
     this.padding,
     this.borderColor,
+    this.borderRadius,
     this.icon,
     super.key,
     this.loading = false,
@@ -46,6 +49,7 @@ class AppButton extends StatelessWidget {
     this.textStyle,
     this.padding,
     this.borderColor,
+    this.borderRadius,
     this.icon,
     super.key,
     this.loading = false,
@@ -57,6 +61,7 @@ class AppButton extends StatelessWidget {
     required this.text,
     this.textStyle,
     this.padding,
+    this.borderRadius,
     this.icon,
     super.key,
     this.loading = false,
@@ -70,6 +75,7 @@ class AppButton extends StatelessWidget {
     this.textStyle,
     this.padding,
     this.borderColor,
+    this.borderRadius,
     this.icon,
     super.key,
     this.loading = false,
@@ -91,7 +97,7 @@ class AppButton extends StatelessWidget {
       disabledElevation: 0,
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: 8.circularBorder,
+        borderRadius: borderRadius ?? 8.circularBorder,
         side: borderColor == null
             ? BorderSide.none
             : BorderSide(

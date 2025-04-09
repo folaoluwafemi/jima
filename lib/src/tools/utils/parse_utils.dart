@@ -6,7 +6,9 @@ abstract final class ParseUtils {
   static E parseEnum<E extends Enum>(String? value, List<E> values) {
     try {
       return values.firstWhere(
-        (element) => (element as dynamic).enumValue == value,
+        (element) =>
+            (element as dynamic).enumValue.toString().toLowerCase() ==
+            value?.toLowerCase(),
       );
     } catch (e) {
       throw ArgumentError('Invalid value: $value--$e');

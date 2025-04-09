@@ -3,15 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/splash_screen.dart';
-import 'package:jima/src/modules/audio/presentation/screens/audio_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/audio_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/auth_action_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/login_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/signup_screen.dart';
-import 'package:jima/src/modules/books/presentation/screens/books_screen.dart';
-import 'package:jima/src/modules/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/books_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/dashboard_screen.dart';
 import 'package:jima/src/modules/profile/presentation/screens/profile_screen.dart';
-import 'package:jima/src/modules/videos/presentation/screens/videos_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/videos_screen.dart';
 
 abstract final class AppRouter {
   static final rootNavigatorKey = GlobalKey<NavigatorState>();
