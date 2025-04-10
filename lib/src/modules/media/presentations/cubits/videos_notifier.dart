@@ -37,7 +37,11 @@ class VideosNotifier extends BaseNotifier<PaginationData<Video>> {
                   hasReachedLimit: true,
                 )
               : fetchAFresh
-                  ? data!.withNewData(value)
+                  ? data!.copyWith(
+                      items: value,
+                      currentPage: 1,
+                      hasReachedLimit: false,
+                    )
                   : data!.withNewDataRaw(value),
         ),
     };

@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:jima/src/modules/media/domain/entities/minister.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
-class Audio {
+class Audio with EquatableMixin {
   final String id;
   final String title;
   final String url;
@@ -61,4 +62,16 @@ class Audio {
       createdAt: ParseUtils.parseDateTime(map['createdAt']),
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        url,
+        thumbnail,
+        dateReleased,
+        minister,
+        viewCount,
+        createdAt,
+      ];
 }

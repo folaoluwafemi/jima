@@ -11,6 +11,7 @@ abstract final class AppColors {
   static const Color textHintColor = Color(0xFFABB3C8);
   static const Color buttonGrey = Color(0xFFF4F7FC);
   static const Color grey500 = Color(0xFF9597A6);
+  static const Color grey400 = Color(0xFF95A6A7);
   static const Color darkGrey = Color(0xFFC2C2C2);
   static const Color iGrey500 = Color(0xFFE7EAF2);
   static const Color glassBlack = Color(0x804F4F4F);
@@ -19,4 +20,5 @@ abstract final class AppColors {
 
   ///
   static const Color greyVariant = Color(0xFFEBECEE);
+  static const Color bottomNavText = Color(0xFF646464);
 }

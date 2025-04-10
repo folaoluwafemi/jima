@@ -101,8 +101,10 @@ class MediaDataSource {
   Future<List<GenericMedia>> searchMedia(String searchQuery) async {
     final result = await _database.rpc(
       RpcFunctions.searchAllMedia,
-      filter: (request) => request.ilikeAnyOf('title', ['%', searchQuery, '%']),
+      params: {'search_term': searchQuery},
     );
+
+    print('result: $result');
 
     return (result as List)
         .cast<Map<String, dynamic>>()

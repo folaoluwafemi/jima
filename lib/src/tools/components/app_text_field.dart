@@ -27,6 +27,7 @@ class AppTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Color? fillColor;
   final Color? borderColor;
+  final BorderRadius? borderRadius;
   final ValueSetter<String>? onChanged;
   final AutovalidateMode? autovalidateMode;
   final TextInputAction? textInputAction;
@@ -57,6 +58,7 @@ class AppTextField extends StatelessWidget {
     this.fillColor,
     this.borderColor,
     this.initialValue,
+    this.borderRadius,
     this.onChanged,
     this.autovalidateMode,
     this.textInputAction,
@@ -84,8 +86,7 @@ class AppTextField extends StatelessWidget {
         hintText: 'Enter email address',
         textInputType: TextInputType.emailAddress,
         textInputAction: textInputAction,
-        autovalidateMode:
-            autovalidateMode ?? AutovalidateMode.onUnfocus,
+        autovalidateMode: autovalidateMode ?? AutovalidateMode.onUnfocus,
         isRequired: isRequired,
         readOnly: readOnly,
         fillColor: fillColor,
@@ -103,9 +104,15 @@ class AppTextField extends StatelessWidget {
       AppTextField(
         controller: controller,
         hintText: 'Search',
-        suffixIcon: suffixIcon,
+        fillColor: AppColors.buttonGrey,
+        borderColor: AppColors.buttonGrey,
+        borderRadius: 25.circularBorder,
         onChanged: onChanged,
         textInputType: TextInputType.text,
+        contentPadding: REdgeInsets.symmetric(horizontal: 27),
+        prefixIcon: Vectors.searchIcon.vectorAssetWidget(
+          dimension: 17.sp,
+        ),
         textInputAction: TextInputAction.search,
       );
 
@@ -323,7 +330,7 @@ class AppTextField extends StatelessWidget {
               prefixIcon: prefixIcon == null
                   ? null
                   : Padding(
-                      padding: const EdgeInsetsDirectional.all(16),
+                      padding: REdgeInsets.all(14),
                       child: prefixIcon,
                     ),
               suffixIcon: suffixIcon == null
@@ -336,7 +343,7 @@ class AppTextField extends StatelessWidget {
                     ),
               suffix: suffix,
               enabledBorder: OutlineInputBorder(
-                borderRadius: 8.circularBorder,
+                borderRadius: borderRadius ?? 8.circularBorder,
                 borderSide: BorderSide(
                   color: borderColor ?? AppColors.iGrey500,
                 ),

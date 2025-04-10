@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
-import 'package:jima/src/modules/media/presentations/cubits/all_view_count_notifier.dart';
+import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/tools/components/grey_box.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';

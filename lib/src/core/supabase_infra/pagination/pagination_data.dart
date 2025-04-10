@@ -18,6 +18,7 @@ class PaginationData<T> with EquatableMixin {
 
   PaginationData<T> withNewData(List<T> data) {
     final newItems = {...items, ...data}.toList();
+
     return copyWith(
       currentPage: data.isEmpty || newItems.length <= data.length
           ? currentPage

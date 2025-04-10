@@ -12,9 +12,8 @@ class HighestViewedNotifier extends BaseNotifier<GenericMedia?> {
 
   Future<void> fetchViewCount() async {
     setInLoading();
-    final result = await _source.fetchHighestViewCountItem().tryCatch();
 
-    print('result:$result');
+    final result = await _source.fetchHighestViewCountItem().tryCatch();
 
     return switch (result) {
       Left(:final value) => setError(value.displayMessage),

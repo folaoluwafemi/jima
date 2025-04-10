@@ -9,5 +9,12 @@ abstract final class Vectors {
   static const String google = '$basePath/google.svg';
   static const String searchIcon = '$basePath/search_icon.svg';
   static const String playNow = '$basePath/play_now.svg';
+  static const String profile = '$basePath/profile.svg';
+  static const String videos = '$basePath/videos.svg';
+  static const String dashboard = '$basePath/dashboard.svg';
+  static const String books = '$basePath/books.svg';
+  static const String audios = '$basePath/audios.svg';
+  static const String calendar = '$basePath/calendar.svg';
+  static const String clock = '$basePath/clock.svg';
   static const String _helper = '$basePath/';
 }

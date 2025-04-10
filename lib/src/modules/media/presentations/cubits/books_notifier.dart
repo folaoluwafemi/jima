@@ -29,8 +29,6 @@ class BooksNotifier extends BaseNotifier<PaginationData<Book>> {
         )
         .tryCatch();
 
-    print('books: $result');
-
     return switch (result) {
       Left(:final value) => setError(value.displayMessage),
       Right(:final value) => setSuccess(
@@ -41,7 +39,11 @@ class BooksNotifier extends BaseNotifier<PaginationData<Book>> {
                   hasReachedLimit: true,
                 )
               : fetchAFresh
-                  ? data!.withNewData(value)
+                  ? data!.copyWith(
+                      items: value,
+                      currentPage: 1,
+                      hasReachedLimit: false,
+                    )
                   : data!.withNewDataRaw(value),
         ),
     };

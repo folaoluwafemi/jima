@@ -7,7 +7,7 @@ import 'package:jima/src/core/supabase_infra/storage_service.dart';
 import 'package:jima/src/core/supabase_infra/supabase_api.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/modules/media/data/media_data_source.dart';
-import 'package:jima/src/modules/media/presentations/cubits/all_view_count_notifier.dart';
+import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/search_all_media_notifier.dart';

@@ -1,4 +1,5 @@
 export 'package:jima/src/tools/components/app_text_field.dart';
+export 'package:jima/src/tools/components/grey_box.dart';
 export 'package:jima/src/tools/components/primary_button.dart';
 export 'package:jima/src/tools/constants/endpoints.dart';
 export 'package:jima/src/tools/constants/images.dart';

@@ -16,6 +16,7 @@ class SearchAllMediaNotifier extends BaseNotifier<List<GenericMedia>> {
 
     final result = await _source.searchMedia(query).tryCatch();
 
+
     return switch (result) {
       Left(:final value) => setError(value.displayMessage),
       Right(:final value) => setSuccess(value),

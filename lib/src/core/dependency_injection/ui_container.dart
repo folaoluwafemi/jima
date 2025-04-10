@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/modules/auth/presentation/notifiers/login_notifier.dart';
-import 'package:jima/src/modules/media/presentations/cubits/all_view_count_notifier.dart';
+import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/search_all_media_notifier.dart';

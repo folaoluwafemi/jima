@@ -28,7 +28,7 @@ extension StringEx on String {
   String get cleanForNum => replaceAll(',', '').replaceAll(' ', '');
 
   String toFirstUppercase() {
-    return isEmpty ? '' : '${this[0].toFirstUppercase()}${substring(1)}';
+    return isEmpty ? '' : '${this[0].toUpperCase()}${substring(1)}';
   }
 
   String get titleCase {

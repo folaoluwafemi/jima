@@ -30,6 +30,7 @@ extension EitherFuture<T> on Future<T> {
         ),
       );
     } on PostgrestException catch (e, s) {
+      print('stack trace${e.runtimeType}$e:$s');
       return Left(
         Failure(
           message: e.message,
@@ -41,7 +42,7 @@ extension EitherFuture<T> on Future<T> {
     } on Failure catch (e) {
       return Left(customHandler?.call(e) ?? e);
     } catch (e, s) {
-      print('stack trace${e.runtimeType}${e}:$s');
+      print('stack trace${e.runtimeType}$e:$s');
       return Left(
         customHandler?.call(e) ?? Failure(message: e.toString(), stackTrace: s),
       );

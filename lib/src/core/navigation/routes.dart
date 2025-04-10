@@ -9,9 +9,10 @@ enum AppRoute {
   login('login', '/auth-action/login'),
   forgotPassword('forgot-password', '/auth-action/login/forgot-password'),
   dashboard('/dashboard', '/dashboard'),
-  books('/dashboard', '/dashboard'),
-  videos('/dashboard', '/dashboard'),
-  audios('/dashboard', '/dashboard'),
+  allMediaSearch('all-media-search', '/dashboard/all-media-search'),
+  books('/books', '/books'),
+  videos('/videos', '/videos'),
+  audios('/audios', '/audios'),
   profile('/profile', '/profile'),
   ;
 

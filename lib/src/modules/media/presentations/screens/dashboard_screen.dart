@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
-import 'package:jima/src/modules/media/presentations/cubits/all_view_count_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
+import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/videos_notifier.dart';
 import 'package:jima/src/modules/media/presentations/widgets/all_view_counts_widget.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_audio_widgets.dart';
@@ -79,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 borderRadius: 25.circularBorder,
               ),
               fillColor: AppColors.buttonGrey,
-              onPressed: () {},
+              onPressed: () => context.goNamed(AppRoute.allMediaSearch.name),
               elevation: 0,
               highlightElevation: 0,
               constraints: BoxConstraints(minHeight: 48.h),
@@ -104,21 +106,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async => unawaited(fetchItems()),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const HighestViewedMediaView(),
-                DashboardVideoWidgets(),
-                DashboardAudioWidgets(),
-                DashboardBookWidgets(),
-                100.boxHeight,
-              ],
-            ),
+      body: RefreshIndicator(
+        onRefresh: () async => unawaited(fetchItems()),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const HighestViewedMediaView(),
+              DashboardVideoWidgets(),
+              DashboardAudioWidgets(),
+              DashboardBookWidgets(),
+              100.boxHeight,
+            ],
           ),
         ),
       ),

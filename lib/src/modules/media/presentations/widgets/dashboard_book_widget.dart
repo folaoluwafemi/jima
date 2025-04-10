@@ -23,62 +23,49 @@ class _DashboardBookWidgetsState extends State<DashboardBookWidgets> {
         if (state.isInLoading) return const BooksLoader();
         final books = state.data?.items;
         if (books == null || books.isEmpty) return const SizedBox.shrink();
-        return Padding(
-          padding: REdgeInsets.symmetric(horizontal: 26),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              24.boxHeight,
-              Row(
-                children: [
-                  25.boxWidth,
-                  Text(
-                    'Top Books',
-                    style: Textstyles.bold.copyWith(
-                      fontSize: 16.sp,
-                      height: 1.5,
-                    ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {},
-                    borderRadius: 4.circularBorder,
-                    child: Padding(
-                      padding: REdgeInsets.all(8),
-                      child: Text(
-                        'More',
-                        style: Textstyles.medium.copyWith(
-                          fontSize: 12.sp,
-                          height: 1.5,
-                          color: AppColors.red,
-                        ),
-                      ),
-                    ),
-                  ),
-                  17.boxWidth,
-                ],
-              ),
-              16.boxHeight,
-              SizedBox(
-                height: 258.h,
-                child: SingleChildScrollView(
-                  padding: REdgeInsets.symmetric(horizontal: 16),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ...books.take(4).map((e) {
-                        return BookItemWidget(
-                          book: e,
-                          onPressed: () {},
-                        );
-                      }),
-                    ],
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            24.boxHeight,
+            Row(
+              children: [
+                25.boxWidth,
+                Text(
+                  'Top Books',
+                  style: Textstyles.bold.copyWith(
+                    fontSize: 16.sp,
+                    height: 1.5,
                   ),
                 ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.arrow_forward),
+                ),
+                17.boxWidth,
+              ],
+            ),
+            16.boxHeight,
+            SizedBox(
+              height: 258.h,
+              child: SingleChildScrollView(
+                padding: REdgeInsets.symmetric(horizontal: 26),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: 16.w,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ...books.take(4).map((e) {
+                      return BookItemWidget(
+                        book: e,
+                        onPressed: () {},
+                      );
+                    }),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

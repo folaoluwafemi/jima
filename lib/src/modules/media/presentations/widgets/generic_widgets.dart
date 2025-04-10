@@ -2,72 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:jima/src/core/core.dart';
-import 'package:jima/src/modules/media/domain/entities/audio.dart';
-import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
+import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
-import 'package:vanilla_state/vanilla_state.dart';
 
-class DashboardAudioWidgets extends StatefulWidget {
-  const DashboardAudioWidgets({super.key});
-
-  @override
-  State<DashboardAudioWidgets> createState() => _DashboardAudioWidgetsState();
-}
-
-class _DashboardAudioWidgetsState extends State<DashboardAudioWidgets> {
-  @override
-  Widget build(BuildContext context) {
-    return VanillaBuilder<AudiosNotifier, AudiosState>(
-      builder: (context, state) {
-        if (state.isInLoading) return const AudiosLoader();
-        final audios = state.data?.items;
-        if (audios == null || audios.isEmpty) return const SizedBox.shrink();
-        return Padding(
-          padding: REdgeInsets.symmetric(horizontal: 26),
-          child: Column(
-            children: [
-              24.boxHeight,
-              Row(
-                children: [
-                  25.boxWidth,
-                  Text(
-                    'Top Audios',
-                    style: Textstyles.bold.copyWith(
-                      fontSize: 16.sp,
-                      height: 1.5,
-                    ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {},
-                    borderRadius: 4.circularBorder,
-                    child: Padding(
-                      padding: REdgeInsets.all(8),
-                      child: Text(
-                        'More',
-                        style: Textstyles.medium.copyWith(
-                          fontSize: 12.sp,
-                          height: 1.5,
-                          color: AppColors.red,
-                        ),
-                      ),
-                    ),
-                  ),
-                  17.boxWidth,
-                ],
-              ),
-              16.boxHeight,
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class AudiosLoader extends StatelessWidget {
-  const AudiosLoader({super.key});
+class GenericMediasLoader extends StatelessWidget {
+  const GenericMediasLoader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +20,7 @@ class AudiosLoader extends StatelessWidget {
           children: [
             24.boxHeight,
             ...List.generate(
-              2,
+              4,
               (index) {
                 return Row(
                   children: [
@@ -120,10 +60,10 @@ class AudiosLoader extends StatelessWidget {
   }
 }
 
-class AudioItemWidget extends StatelessWidget {
-  final Audio audio;
+class GenericMediaItemWidget extends StatelessWidget {
+  final GenericMedia genericMedia;
 
-  const AudioItemWidget({super.key, required this.audio});
+  const GenericMediaItemWidget({super.key, required this.genericMedia});
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +77,7 @@ class AudioItemWidget extends StatelessWidget {
               width: 79.w,
               height: 89.h,
               child: Image.network(
-                audio.thumbnail ?? NetworkImages.placeholder,
+                genericMedia.thumbnail ?? NetworkImages.placeholder,
                 fit: BoxFit.cover,
               ),
             ),
@@ -147,7 +87,7 @@ class AudioItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                audio.title,
+                genericMedia.title,
                 style: Textstyles.semibold.copyWith(
                   fontSize: 12.sp,
                   height: 1.5,
@@ -155,7 +95,7 @@ class AudioItemWidget extends StatelessWidget {
               ),
               7.boxHeight,
               Text(
-                audio.minister.name,
+                genericMedia.minister.name,
                 style: Textstyles.normal.copyWith(
                   fontSize: 11.sp,
                   height: 1.5,
@@ -168,7 +108,7 @@ class AudioItemWidget extends StatelessWidget {
                   Vectors.calendar.vectorAssetWidget(),
                   4.boxWidth,
                   Text(
-                    DateFormat('MMM dd yyyy').format(audio.dateReleased),
+                    DateFormat('MMM dd yyyy').format(genericMedia.dateReleased),
                     style: Textstyles.normal.copyWith(
                       fontSize: 11.sp,
                       height: 1.5,
@@ -179,7 +119,7 @@ class AudioItemWidget extends StatelessWidget {
                   Vectors.clock.vectorAssetWidget(),
                   4.boxWidth,
                   Text(
-                    DateFormat('hh:mm').format(audio.dateReleased),
+                    DateFormat('hh:mm').format(genericMedia.dateReleased),
                     style: Textstyles.normal.copyWith(
                       fontSize: 11.sp,
                       height: 1.5,
