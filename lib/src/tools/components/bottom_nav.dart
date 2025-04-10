@@ -69,8 +69,7 @@ class BottomNav extends StatelessWidget {
                     final selected = item == selectedItem;
                     return RawMaterialButton(
                       onPressed: () {
-                        // if (selected) return;
-                        print('baalbalu');
+                        if (selected) return;
                         context.goNamed(item.route.name);
                       },
                       padding: EdgeInsets.zero,

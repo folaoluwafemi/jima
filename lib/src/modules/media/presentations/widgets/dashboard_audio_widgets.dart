@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
@@ -20,8 +22,10 @@ class _DashboardAudioWidgetsState extends State<DashboardAudioWidgets> {
   Widget build(BuildContext context) {
     return VanillaBuilder<AudiosNotifier, AudiosState>(
       builder: (context, state) {
-        if (state.isInLoading) return const AudiosLoader();
         final audios = state.data?.items;
+        if (state.isInLoading && audios.isNullOrEmpty) {
+          return const AudiosLoader();
+        }
         if (audios == null || audios.isEmpty) return const SizedBox.shrink();
         return Padding(
           padding: REdgeInsets.symmetric(horizontal: 26),
@@ -40,7 +44,7 @@ class _DashboardAudioWidgetsState extends State<DashboardAudioWidgets> {
                   ),
                   const Spacer(),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => context.goNamed(AppRoute.audios.name),
                     borderRadius: 4.circularBorder,
                     child: Padding(
                       padding: REdgeInsets.all(8),

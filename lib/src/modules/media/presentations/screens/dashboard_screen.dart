@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +32,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    fetchItems();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        fetchItems();
+      },
+    );
   }
 
   Future<void> fetchItems() async {
@@ -114,9 +119,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const HighestViewedMediaView(),
-              DashboardVideoWidgets(),
-              DashboardAudioWidgets(),
-              DashboardBookWidgets(),
+              const DashboardVideoWidgets(),
+              const DashboardAudioWidgets(),
+              const DashboardBookWidgets(),
               100.boxHeight,
             ],
           ),

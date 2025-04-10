@@ -88,7 +88,7 @@ abstract final class AppRouter {
             parentNavigatorKey: homeNavigatorKey,
             name: AppRoute.audios.name,
             path: AppRoute.audios.path,
-            builder: (context, state) => const AudioScreen(),
+            builder: (context, state) => const AudiosScreen(),
           ),
           GoRoute(
             parentNavigatorKey: homeNavigatorKey,

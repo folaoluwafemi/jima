@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:jima/src/modules/media/domain/entities/audio.dart';
+import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/domain/entities/minister.dart';
+import 'package:jima/src/modules/media/domain/entities/video.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
 class GenericMedia with EquatableMixin {
@@ -49,6 +52,39 @@ class GenericMedia with EquatableMixin {
       type: type ?? this.type,
     );
   }
+
+  Video toVideo() => Video(
+        id: id,
+        title: title,
+        url: url,
+        dateReleased: dateReleased,
+        minister: minister,
+        viewCount: viewCount,
+        createdAt: createdAt,
+        thumbnail: thumbnail,
+      );
+
+  Audio toAudio() => Audio(
+        id: id,
+        title: title,
+        url: url,
+        dateReleased: dateReleased,
+        minister: minister,
+        viewCount: viewCount,
+        createdAt: createdAt,
+        thumbnail: thumbnail,
+      );
+
+  Book toBook() => Book(
+        id: id,
+        title: title,
+        url: url,
+        dateReleased: dateReleased,
+        minister: minister,
+        viewCount: viewCount,
+        createdAt: createdAt,
+        thumbnail: thumbnail,
+      );
 
   Map<String, dynamic> toMap() {
     return {

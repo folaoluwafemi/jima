@@ -14,35 +14,43 @@ class VideosNotifier extends BaseNotifier<PaginationData<Video>> {
           InitialState(data: PaginationData.empty()),
         );
 
+  Future<void> search(String query) async {
+    if (state.isInLoading) return;
+    setInLoading();
+
+    final result = await _source.searchVideos(query).tryCatch();
+
+    return switch (result) {
+      Left(:final value) => setError(value.displayMessage),
+      Right(:final value) => setSuccess(
+          PaginationData(
+            items: value,
+            currentPage: 1,
+            hasReachedLimit: true,
+          ),
+        ),
+    };
+  }
+
   Future<void> fetchVideos({
-    String? query,
     bool fetchAFresh = false,
   }) async {
     setInLoading();
 
     final result = await _source
-        .fetchVideos(
-          page: fetchAFresh ? 1 : data!.currentPage + 1,
-          searchQuery: query,
-        )
+        .fetchVideos(page: fetchAFresh ? 1 : data!.currentPage + 1)
         .tryCatch();
 
     return switch (result) {
       Left(:final value) => setError(value.displayMessage),
       Right(:final value) => setSuccess(
-          query != null
-              ? PaginationData(
+          fetchAFresh
+              ? data!.copyWith(
                   items: value,
                   currentPage: 1,
-                  hasReachedLimit: true,
+                  hasReachedLimit: false,
                 )
-              : fetchAFresh
-                  ? data!.copyWith(
-                      items: value,
-                      currentPage: 1,
-                      hasReachedLimit: false,
-                    )
-                  : data!.withNewDataRaw(value),
+              : data!.withNewDataRaw(value),
         ),
     };
   }

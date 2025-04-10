@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
-import 'package:jima/src/tools/components/grey_box.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
@@ -20,8 +21,10 @@ class _DashboardBookWidgetsState extends State<DashboardBookWidgets> {
   Widget build(BuildContext context) {
     return VanillaBuilder<BooksNotifier, BooksState>(
       builder: (context, state) {
-        if (state.isInLoading) return const BooksLoader();
         final books = state.data?.items;
+        if (state.isInLoading && books.isNullOrEmpty) {
+          return const BooksLoader();
+        }
         if (books == null || books.isEmpty) return const SizedBox.shrink();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +42,7 @@ class _DashboardBookWidgetsState extends State<DashboardBookWidgets> {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => context.goNamed(AppRoute.books.name),
                   icon: const Icon(Icons.arrow_forward),
                 ),
                 17.boxWidth,
@@ -136,39 +139,42 @@ class BookItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: 15.circularBorder,
-          child: SizedBox(
-            height: 200.h,
-            width: 136.w,
-            child: Image.network(
-              book.thumbnail ?? NetworkImages.placeholder,
-              fit: BoxFit.cover,
+    return SizedBox(
+      width: 136.w,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: 15.circularBorder,
+            child: SizedBox(
+              height: 200.h,
+              width: 136.w,
+              child: Image.network(
+                book.thumbnail ?? NetworkImages.placeholder,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        8.boxHeight,
-        Text(
-          book.title,
-          style: Textstyles.semibold.copyWith(
-            fontSize: 14.sp,
-            height: 1.5,
-            color: AppColors.buttonTextBlack,
+          8.boxHeight,
+          Text(
+            book.title,
+            style: Textstyles.semibold.copyWith(
+              fontSize: 14.sp,
+              height: 1.5,
+              color: AppColors.buttonTextBlack,
+            ),
           ),
-        ),
-        8.boxHeight,
-        Text(
-          book.minister.name,
-          style: Textstyles.normal.copyWith(
-            fontSize: 14.sp,
-            height: 1.5,
-            color: AppColors.darkGrey,
+          8.boxHeight,
+          Text(
+            book.minister.name,
+            style: Textstyles.normal.copyWith(
+              fontSize: 14.sp,
+              height: 1.5,
+              color: AppColors.darkGrey,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

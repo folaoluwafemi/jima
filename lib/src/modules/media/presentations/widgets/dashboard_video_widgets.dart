@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
 import 'package:jima/src/modules/media/presentations/cubits/videos_notifier.dart';
-import 'package:jima/src/tools/components/grey_box.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
@@ -21,10 +22,13 @@ class _DashboardVideoWidgetsState extends State<DashboardVideoWidgets> {
   Widget build(BuildContext context) {
     return VanillaBuilder<VideosNotifier, VideosState>(
       builder: (context, state) {
-        if (state.isInLoading) return const VideosLoader();
         final videos = state.data?.items;
+        if (state.isInLoading && videos.isNullOrEmpty) {
+          return const VideosLoader();
+        }
         if (videos == null || videos.isEmpty) return const SizedBox.shrink();
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             24.boxHeight,
             Row(
@@ -39,7 +43,7 @@ class _DashboardVideoWidgetsState extends State<DashboardVideoWidgets> {
                 ),
                 const Spacer(),
                 InkWell(
-                  onTap: () {},
+                  onTap: () => context.goNamed(AppRoute.videos.name),
                   borderRadius: 4.circularBorder,
                   child: Padding(
                     padding: REdgeInsets.all(8),

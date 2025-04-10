@@ -16,35 +16,43 @@ class AudiosNotifier extends BaseNotifier<PaginationData<Audio>> {
           ),
         );
 
+  Future<void> search(String query) async {
+    if (state.isInLoading) return;
+    setInLoading();
+
+    final result = await _source.searchAudios(query).tryCatch();
+
+    return switch (result) {
+      Left(:final value) => setError(value.displayMessage),
+      Right(:final value) => setSuccess(
+          PaginationData(
+            items: value,
+            currentPage: 1,
+            hasReachedLimit: true,
+          ),
+        ),
+    };
+  }
+
   Future<void> fetchAudios({
-    String? query,
     bool fetchAFresh = false,
   }) async {
     setInLoading();
 
     final result = await _source
-        .fetchAudios(
-          page: fetchAFresh ? 1 : data!.currentPage + 1,
-          searchQuery: query,
-        )
+        .fetchAudios(page: fetchAFresh ? 1 : data!.currentPage + 1)
         .tryCatch();
 
     return switch (result) {
       Left(:final value) => setError(value.displayMessage),
       Right(:final value) => setSuccess(
-          query != null
-              ? PaginationData(
+          fetchAFresh
+              ? data!.copyWith(
                   items: value,
                   currentPage: 1,
-                  hasReachedLimit: true,
+                  hasReachedLimit: false,
                 )
-              : fetchAFresh
-                  ? data!.copyWith(
-                      items: value,
-                      currentPage: 1,
-                      hasReachedLimit: false,
-                    )
-                  : data!.withNewDataRaw(value),
+              : data!.withNewDataRaw(value),
         ),
     };
   }

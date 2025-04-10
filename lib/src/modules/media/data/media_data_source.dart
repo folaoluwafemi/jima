@@ -2,9 +2,11 @@ import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
+import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
 import 'package:jima/src/tools/constants/rpc_functions.dart';
 import 'package:jima/src/tools/constants/tables.dart';
+import 'package:jima/src/tools/extensions/extensions.dart';
 
 class MediaDataSource {
   final AppDatabaseService _database;
@@ -14,18 +16,12 @@ class MediaDataSource {
   Future<List<Video>> fetchVideos({
     bool fetchAFresh = false,
     required int page,
-    String? searchQuery,
     int? ratingFilter,
     int pageSize = 50,
   }) async {
     final result = await _database.select(
       Tables.videos,
       columns: Video.columns,
-      filter: (request) {
-        return searchQuery != null
-            ? request.ilikeAnyOf('title', ['%', searchQuery, '%'])
-            : request;
-      },
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -43,18 +39,12 @@ class MediaDataSource {
   Future<List<Audio>> fetchAudios({
     bool fetchAFresh = false,
     required int page,
-    String? searchQuery,
     int? ratingFilter,
     int pageSize = 50,
   }) async {
     final result = await _database.select(
       Tables.audios,
       columns: Audio.columns,
-      filter: (request) {
-        return searchQuery != null
-            ? request.ilikeAnyOf('title', ['%', searchQuery, '%'])
-            : request;
-      },
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -72,18 +62,12 @@ class MediaDataSource {
   Future<List<Book>> fetchBooks({
     bool fetchAFresh = false,
     required int page,
-    String? searchQuery,
     int? ratingFilter,
     int pageSize = 50,
   }) async {
     final result = await _database.select(
       Tables.books,
       columns: Audio.columns,
-      filter: (request) {
-        return searchQuery != null
-            ? request.ilikeAnyOf('title', ['%', searchQuery, '%'])
-            : request;
-      },
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -98,18 +82,46 @@ class MediaDataSource {
         .toList();
   }
 
-  Future<List<GenericMedia>> searchMedia(String searchQuery) async {
+  Future<List<GenericMedia>> searchMedia({
+    required String searchQuery,
+    required GenericMediaType? type,
+  }) async {
     final result = await _database.rpc(
-      RpcFunctions.searchAllMedia,
-      params: {'search_term': searchQuery},
+      RpcFunctions.searchAllMediaByType,
+      params: {
+        'search_term': searchQuery,
+        'item_type': type?.name.toFirstUppercase() ?? 'all',
+      },
     );
-
-    print('result: $result');
 
     return (result as List)
         .cast<Map<String, dynamic>>()
         .map(GenericMedia.fromMap)
         .toList();
+  }
+
+  Future<List<Book>> searchBooks(String searchQuery) async {
+    final res = await searchMedia(
+      searchQuery: searchQuery,
+      type: GenericMediaType.book,
+    );
+    return res.map((e) => e.toBook()).toList();
+  }
+
+  Future<List<Video>> searchVideos(String searchQuery) async {
+    final res = await searchMedia(
+      searchQuery: searchQuery,
+      type: GenericMediaType.video,
+    );
+    return res.map((e) => e.toVideo()).toList();
+  }
+
+  Future<List<Audio>> searchAudios(String searchQuery) async {
+    final res = await searchMedia(
+      searchQuery: searchQuery,
+      type: GenericMediaType.audio,
+    );
+    return res.map((e) => e.toAudio()).toList();
   }
 
   Future<GenericMedia> fetchHighestViewCountItem() async {
