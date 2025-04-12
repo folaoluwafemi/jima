@@ -14,6 +14,7 @@ enum AppRoute {
   videos('/videos', '/videos'),
   audios('/audios', '/audios'),
   profile('/profile', '/profile'),
+  donation('/donation', '/donation'),
   ;
 
   final String path;

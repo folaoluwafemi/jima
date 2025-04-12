@@ -62,11 +62,13 @@ class AppButton extends StatelessWidget {
     this.textStyle,
     this.padding,
     this.borderRadius,
+    Color? borderColor,
+    Color? color,
     this.icon,
     super.key,
     this.loading = false,
-  })  : color = AppColors.glassBlack,
-        borderColor = AppColors.blue,
+  })  : color = color ?? AppColors.glassBlack,
+        borderColor = borderColor ?? AppColors.blue,
         textColor = AppColors.white;
 
   const AppButton.text({

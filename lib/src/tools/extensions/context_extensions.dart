@@ -8,6 +8,8 @@ extension BuildContextEx on BuildContext {
 
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
+  Color get scaffoldBackgroundColor => Theme.of(this).scaffoldBackgroundColor;
+
   EdgeInsets get viewPadding => MediaQuery.viewPaddingOf(this);
 
   double get bottomScreenPadding => MediaQuery.viewPaddingOf(this).bottom;
@@ -49,6 +51,7 @@ extension BuildContextEx on BuildContext {
       autoCloseDuration: const Duration(seconds: 5),
     );
   }
+
   void showInfoToast(String message) {
     toastification.show(
       context: this, // optional if you use ToastificationWrapper

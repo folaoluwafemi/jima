@@ -8,6 +8,7 @@ import 'package:jima/src/modules/auth/presentation/screens/auth_action_screen.da
 import 'package:jima/src/modules/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/login_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/signup_screen.dart';
+import 'package:jima/src/modules/donate/presentation/donation_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/all_media_search_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/audio_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/books_screen.dart';
@@ -101,6 +102,12 @@ abstract final class AppRouter {
             name: AppRoute.profile.name,
             path: AppRoute.profile.path,
             builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            parentNavigatorKey: homeNavigatorKey,
+            name: AppRoute.donation.name,
+            path: AppRoute.donation.path,
+            builder: (context, state) => const DonationScreen(),
           ),
         ],
       ),

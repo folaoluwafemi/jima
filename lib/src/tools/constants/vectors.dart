@@ -13,8 +13,13 @@ abstract final class Vectors {
   static const String videos = '$basePath/videos.svg';
   static const String dashboard = '$basePath/dashboard.svg';
   static const String books = '$basePath/books.svg';
+  static const String donation = '$basePath/donation.svg';
   static const String audios = '$basePath/audios.svg';
   static const String calendar = '$basePath/calendar.svg';
   static const String clock = '$basePath/clock.svg';
+  static const String userProfile = '$basePath/user_profile.svg';
+  static const String logout = '$basePath/logout.svg';
+  static const String send = '$basePath/send.svg';
+  static const String sendIcon = '$basePath/send_icon.svg';
   static const String _helper = '$basePath/';
 }

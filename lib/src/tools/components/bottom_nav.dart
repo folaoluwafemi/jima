@@ -11,6 +11,7 @@ enum BottomNavItem {
   videos(AppRoute.videos, Vectors.videos),
   audios(AppRoute.audios, Vectors.dashboard),
   books(AppRoute.books, Vectors.books),
+  donate(AppRoute.donation, Vectors.donation),
   profile(AppRoute.profile, Vectors.audios),
   ;
 
@@ -40,7 +41,7 @@ class HomeShell extends StatelessWidget {
     return Column(
       children: [
         Expanded(child: child),
-        BottomNav(),
+        const BottomNav(),
       ],
     );
   }
@@ -63,11 +64,12 @@ class BottomNav extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                21.boxWidth,
+                11.boxWidth,
                 ...BottomNavItem.values.map(
                   (item) {
                     final selected = item == selectedItem;
                     return RawMaterialButton(
+                      constraints: const BoxConstraints(),
                       onPressed: () {
                         if (selected) return;
                         context.goNamed(item.route.name);
@@ -78,33 +80,41 @@ class BottomNav extends StatelessWidget {
                         vertical: -4,
                       ),
                       child: Padding(
-                        padding: REdgeInsets.all(11),
-                        child: Column(
-                          children: [
-                            item.assetPath.vectorAssetWidget(
-                              dimension: 24.sp,
-                              color: selected
-                                  ? AppColors.blue
-                                  : AppColors.bottomNavText,
-                            ),
-                            3.boxHeight,
-                            Text(
-                              item.name.toFirstUppercase(),
-                              style: Textstyles.normal.copyWith(
+                        padding: REdgeInsets.symmetric(
+                          vertical: 11,
+                          horizontal: 8,
+                        ),
+                        child: SizedBox(
+                          width: 48.w,
+                          child: Column(
+                            children: [
+                              item.assetPath.vectorAssetWidget(
+                                dimension: 24.sp,
                                 color: selected
                                     ? AppColors.blue
                                     : AppColors.bottomNavText,
-                                fontSize: 10.sp,
-                                height: 1.5,
                               ),
-                            ),
-                          ],
+                              3.boxHeight,
+                              FittedBox(
+                                child: Text(
+                                  item.name.toFirstUppercase(),
+                                  style: Textstyles.normal.copyWith(
+                                    color: selected
+                                        ? AppColors.blue
+                                        : AppColors.bottomNavText,
+                                    fontSize: 10.sp,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
-                21.boxWidth,
+                11.boxWidth,
               ],
             );
           },
