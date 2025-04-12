@@ -15,9 +15,7 @@ class UserNotifier extends BaseNotifier<User?> {
 
   UserNotifier(this._source)
       : super(
-          InitialState(
-            data: container<SupabaseAuthService>().currentState,
-          ),
+          InitialState(data: container<SupabaseAuthService>().currentState),
         ) {
     sub = container<SupabaseAuthService>()
         .changes
@@ -25,20 +23,35 @@ class UserNotifier extends BaseNotifier<User?> {
   }
 
   void userSubscriptionListener(AuthState? user) {
-    setData(user?.session?.user);
+    setInitial(user?.session?.user);
   }
 
   Future<void> updateUserProfileImage() async {
+    if (state.isOutLoading) return;
     final file = await FilePicker.platform.pickFiles(type: FileType.image);
-    if ((file?.paths).isNullOrEmpty) return;
+    if ((file?.paths).isNullOrEmpty || state.isOutLoading) return;
     setOutLoading();
     final result =
-        await _source.uploadProfilePicture(file!.paths.first!).tryCatch();
+        await _source.updateProfilePicture(file!.paths.first!).tryCatch();
 
-
+    return switch (result) {
+      Left(:final value) => setError(value.displayMessage),
+      Right(:final value) => () {
+          setSuccess(
+            (data
+              ?..userMetadata?.update(
+                'profile_photo',
+                (_) => value,
+              )),
+          );
+          notifyListeners();
+        }(),
+    };
   }
 
   String? get firstname => data?.userMetadata?['firstname'];
+
+  String? get profilePicture => data?.userMetadata?['profile_photo'];
 
   String? get lastname => data?.userMetadata?['lastname'];
 }

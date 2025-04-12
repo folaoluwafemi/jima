@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,8 @@ import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
 import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:vanilla_state/vanilla_state.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -26,29 +29,72 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          InkWell(
-            borderRadius: 139.circularBorder,
-            onTap: () {},
-            child: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                SizedBox.square(
-                  dimension: 139.sp,
-                  child: Vectors.userProfile.vectorAssetWidget(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 12.w),
-                  child: CircleAvatar(
-                    radius: 15.5.sp,
-                    child: SizedBox.square(
-                      dimension: 18.sp,
-                      child: const FittedBox(
-                        child: Icon(Icons.edit_sharp),
-                      ),
+          VanillaListener<UserNotifier, BaseState<User?>>(
+            listener: (previous, current) {
+              if (current case ErrorState(:final message)) {
+                context.showErrorToast(message);
+              }
+            },
+            child: VanillaBuilder<UserNotifier, BaseState<User?>>(
+              builder: (context, state) {
+                final profileImage = container<UserNotifier>().profilePicture;
+                return InkWell(
+                  borderRadius: 139.circularBorder,
+                  onTap: context.read<UserNotifier>().updateUserProfileImage,
+                  child: SizedBox.square(
+                    dimension: 139.sp,
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        ClipOval(
+                          child: SizedBox.square(
+                            dimension: 139.sp,
+                            child: profileImage == null
+                                ? Vectors.userProfile.vectorAssetWidget()
+                                : CachedNetworkImage(
+                                    imageUrl: profileImage,
+                                    width: 139.sp,
+                                    height: 139.sp,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 12.w),
+                          child: CircleAvatar(
+                            radius: 15.5.sp,
+                            child: SizedBox.square(
+                              dimension: 18.sp,
+                              child: const FittedBox(
+                                child: Icon(Icons.edit_sharp),
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (state.isOutLoading) ...[
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.blackVoid.withAlpha(180),
+                            ),
+                          ),
+                          Center(
+                            child: SizedBox.square(
+                              dimension: 56.sp,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 6.sp,
+                                valueColor: const AlwaysStoppedAnimation(
+                                  AppColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           ),
           42.boxHeight,
