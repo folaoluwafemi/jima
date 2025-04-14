@@ -12,7 +12,7 @@ import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/videos_notifier.dart';
-import 'package:jima/src/modules/media/presentations/widgets/all_view_counts_widget.dart';
+import 'package:jima/src/modules/media/presentations/widgets/highest_view_counts_widget.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_audio_widgets.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_book_widget.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_video_widgets.dart';

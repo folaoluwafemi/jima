@@ -37,6 +37,11 @@ dependencies:
   toastification: ^3.0.2
   google_sign_in: ^6.3.0
   flutter_facebook_auth: ^7.1.1
+  webview_flutter: ^4.10.0
+  chewie: ^1.11.1
+  easy_pdf_viewer: ^1.0.8
+  video_player: ^2.9.5
+  youtube_player_flutter: ^9.1.1
 
 dev_dependencies:
   flutter_test:

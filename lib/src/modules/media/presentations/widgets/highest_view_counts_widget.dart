@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
+import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
@@ -31,7 +34,17 @@ class HighestViewedMediaView extends StatelessWidget {
               padding: REdgeInsets.only(top: 24),
               child: HighestViewedMediaWidget(
                 media: state.data!,
-                onPressed: () {},
+                onPressed: switch (state.data!.type) {
+                  GenericMediaType.book => () => context.pushNamed(
+                        AppRoute.bookPreview.name,
+                        extra: state.data!.toBook(),
+                      ),
+                  GenericMediaType.video => () => context.pushNamed(
+                        AppRoute.videoPreview.name,
+                        extra: state.data!.toVideo(),
+                      ),
+                  _ => null,
+                },
               ),
             );
           },
@@ -43,7 +56,7 @@ class HighestViewedMediaView extends StatelessWidget {
 
 class HighestViewedMediaWidget extends StatelessWidget {
   final GenericMedia media;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const HighestViewedMediaWidget({
     super.key,
@@ -70,8 +83,10 @@ class HighestViewedMediaWidget extends StatelessWidget {
               ),
               Container(color: AppColors.black.withAlpha(128)),
               Padding(
-                padding:
-                    REdgeInsets.symmetric(horizontal: 18.w, vertical: 20.h),
+                padding: REdgeInsets.symmetric(
+                  horizontal: 18.w,
+                  vertical: 20.h,
+                ),
                 child: SizedBox(
                   width: 221.w,
                   child: Column(
@@ -120,6 +135,7 @@ class AllViewCountLoader extends StatelessWidget {
       child: Padding(
         padding: REdgeInsets.only(top: 32),
         child: GreyBox(
+          borderRadius: 20.circularBorder,
           height: 173.h,
           width: 351.w,
         ),

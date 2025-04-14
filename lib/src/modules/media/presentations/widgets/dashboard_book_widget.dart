@@ -61,7 +61,10 @@ class _DashboardBookWidgetsState extends State<DashboardBookWidgets> {
                     ...books.take(4).map((e) {
                       return BookItemWidget(
                         book: e,
-                        onPressed: () {},
+                        onPressed: () => context.pushNamed(
+                          AppRoute.bookPreview.name,
+                          extra: e,
+                        ),
                       );
                     }),
                   ],
@@ -139,41 +142,45 @@ class BookItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 136.w,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: 15.circularBorder,
-            child: SizedBox(
-              height: 200.h,
-              width: 136.w,
-              child: Image.network(
-                book.thumbnail ?? NetworkImages.placeholder,
-                fit: BoxFit.cover,
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: 16.circularBorder,
+      child: SizedBox(
+        width: 136.w,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: 15.circularBorder,
+              child: SizedBox(
+                height: 200.h,
+                width: 136.w,
+                child: Image.network(
+                  book.thumbnail ?? NetworkImages.placeholder,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          8.boxHeight,
-          Text(
-            book.title,
-            style: Textstyles.semibold.copyWith(
-              fontSize: 14.sp,
-              height: 1.5,
-              color: AppColors.buttonTextBlack,
+            8.boxHeight,
+            Text(
+              book.title,
+              style: Textstyles.semibold.copyWith(
+                fontSize: 14.sp,
+                height: 1.5,
+                color: AppColors.buttonTextBlack,
+              ),
             ),
-          ),
-          8.boxHeight,
-          Text(
-            book.minister.name,
-            style: Textstyles.normal.copyWith(
-              fontSize: 14.sp,
-              height: 1.5,
-              color: AppColors.darkGrey,
+            8.boxHeight,
+            Text(
+              book.minister.name,
+              style: Textstyles.normal.copyWith(
+                fontSize: 14.sp,
+                height: 1.5,
+                color: AppColors.darkGrey,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

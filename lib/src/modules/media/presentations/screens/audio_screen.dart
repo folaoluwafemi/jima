@@ -30,7 +30,7 @@ class _AudiosScreenState extends State<AudiosScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 0,
+        toolbarHeight: 10.h,
         bottom: PreferredSize(
           preferredSize: Size(context.screenWidth(), 48.h),
           child: Padding(

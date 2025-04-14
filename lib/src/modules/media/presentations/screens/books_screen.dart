@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_book_widget.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
@@ -30,7 +32,7 @@ class _BooksScreenState extends State<BooksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 0,
+        toolbarHeight: 10.h,
         bottom: PreferredSize(
           preferredSize: Size(context.screenWidth(), 48.h),
           child: Padding(
@@ -141,7 +143,10 @@ class _BooksScreenState extends State<BooksScreen> {
                             ...books!.map(
                               (e) => BookItemWidget(
                                 book: e,
-                                onPressed: () {},
+                                onPressed: () => context.pushNamed(
+                                  AppRoute.bookPreview.name,
+                                  extra: e,
+                                ),
                               ),
                             ),
                           ],

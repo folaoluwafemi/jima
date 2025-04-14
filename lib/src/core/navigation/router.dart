@@ -9,10 +9,16 @@ import 'package:jima/src/modules/auth/presentation/screens/forgot_password_scree
 import 'package:jima/src/modules/auth/presentation/screens/login_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/signup_screen.dart';
 import 'package:jima/src/modules/donate/presentation/donation_screen.dart';
+import 'package:jima/src/modules/media/domain/entities/audio.dart';
+import 'package:jima/src/modules/media/domain/entities/books.dart';
+import 'package:jima/src/modules/media/domain/entities/video.dart';
 import 'package:jima/src/modules/media/presentations/screens/all_media_search_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/audio_preview_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/audio_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/book_preview_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/books_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/dashboard_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/video_preview_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/videos_screen.dart';
 import 'package:jima/src/modules/profile/presentation/screens/profile_screen.dart';
 import 'package:jima/src/tools/components/bottom_nav.dart';
@@ -84,18 +90,48 @@ abstract final class AppRouter {
             name: AppRoute.videos.name,
             path: AppRoute.videos.path,
             builder: (context, state) => const VideosScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.videoPreview.name,
+                path: AppRoute.videoPreview.path,
+                builder: (context, state) => VideoPreviewScreen(
+                  video: state.extra as Video,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             parentNavigatorKey: homeNavigatorKey,
             name: AppRoute.audios.name,
             path: AppRoute.audios.path,
             builder: (context, state) => const AudiosScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.audioPreview.name,
+                path: AppRoute.audioPreview.path,
+                builder: (context, state) => AudioPreviewScreen(
+                  audio: state.extra as Audio,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             parentNavigatorKey: homeNavigatorKey,
             name: AppRoute.books.name,
             path: AppRoute.books.path,
             builder: (context, state) => const BooksScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.bookPreview.name,
+                path: AppRoute.bookPreview.path,
+                builder: (context, state) => BookPreviewScreen(
+                  book: state.extra as Book,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             parentNavigatorKey: homeNavigatorKey,

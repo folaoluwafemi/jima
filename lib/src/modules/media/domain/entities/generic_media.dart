@@ -86,6 +86,42 @@ class GenericMedia with EquatableMixin {
         thumbnail: thumbnail,
       );
 
+  factory GenericMedia.fromOtherMedia(Object media) {
+    return switch (media) {
+      Video video => GenericMedia(
+          id: video.id,
+          title: video.title,
+          url: video.url,
+          dateReleased: video.dateReleased,
+          minister: video.minister,
+          viewCount: video.viewCount,
+          createdAt: video.createdAt,
+          type: GenericMediaType.video,
+        ),
+      Audio audio => GenericMedia(
+          id: audio.id,
+          title: audio.title,
+          url: audio.url,
+          dateReleased: audio.dateReleased,
+          minister: audio.minister,
+          viewCount: audio.viewCount,
+          createdAt: audio.createdAt,
+          type: GenericMediaType.video,
+        ),
+      Book book => GenericMedia(
+          id: book.id,
+          title: book.title,
+          url: book.url,
+          dateReleased: book.dateReleased,
+          minister: book.minister,
+          viewCount: book.viewCount,
+          createdAt: book.createdAt,
+          type: GenericMediaType.video,
+        ),
+      _ => throw UnimplementedError(),
+    };
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

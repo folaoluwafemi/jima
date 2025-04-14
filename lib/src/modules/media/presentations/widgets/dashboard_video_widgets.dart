@@ -90,7 +90,7 @@ class VideoItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemWidth = (context.screenWidth() - 88.w) / 2;
     return InkWell(
-      onTap: () {},
+      onTap: () => context.pushNamed(AppRoute.videoPreview.name, extra: video),
       child: SizedBox(
         width: itemWidth,
         child: Column(

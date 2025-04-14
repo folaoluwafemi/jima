@@ -11,8 +11,11 @@ enum AppRoute {
   dashboard('/dashboard', '/dashboard'),
   allMediaSearch('all-media-search', '/dashboard/all-media-search'),
   books('/books', '/books'),
+  bookPreview('/book-preview', '/book-preview'),
   videos('/videos', '/videos'),
+  videoPreview('/video-preview', '/video-preview'),
   audios('/audios', '/audios'),
+  audioPreview('/audio-preview', '/audio-preview'),
   profile('/profile', '/profile'),
   donation('/donation', '/donation'),
   ;

@@ -6,6 +6,8 @@ extension BuildContextEx on BuildContext {
 
   ThemeData get theme => Theme.of(this);
 
+  Brightness get brightness => MediaQuery.platformBrightnessOf(this);
+
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
   Color get scaffoldBackgroundColor => Theme.of(this).scaffoldBackgroundColor;
@@ -13,6 +15,8 @@ extension BuildContextEx on BuildContext {
   EdgeInsets get viewPadding => MediaQuery.viewPaddingOf(this);
 
   double get bottomScreenPadding => MediaQuery.viewPaddingOf(this).bottom;
+
+  double get topScreenPadding => MediaQuery.viewPaddingOf(this).top;
 
   EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(this);
 

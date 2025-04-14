@@ -129,4 +129,14 @@ class MediaDataSource {
 
     return GenericMedia.fromMap(((result[0]) as Map).cast());
   }
+
+  Future<void> increaseMediaViewedCount({
+    required String id,
+    required GenericMediaType type,
+  }) async {
+    await _database.rpc(
+      RpcFunctions.increaseMediaViewedCount,
+      params: {'id': id, 'source': type.tableName},
+    );
+  }
 }
