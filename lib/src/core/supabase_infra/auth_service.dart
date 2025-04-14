@@ -91,6 +91,6 @@ class SupabaseAuthService {
   }
 
   Future<void> resetPassword(String email) async {
-    await _client.auth.resetPasswordForEmail(email);
+    // await _client.auth.updateUser(UserAttributes(password: ) );
   }
 }

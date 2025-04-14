@@ -1,13 +1,8 @@
-import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
-import 'package:jima/src/core/error_handling/try_catch.dart';
-import 'package:jima/src/modules/media/data/media_data_source.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
-import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
-import 'package:jima/src/tools/extensions/context_extensions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BookPreviewScreen extends StatelessWidget {
@@ -35,86 +30,86 @@ class BookPreviewScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: EasyPdfViewerWidget(book: book),
+      body: WebviewDocumentViewer(book: book),
     );
   }
 }
 
-class EasyPdfViewerWidget extends StatefulWidget {
-  final Book book;
-
-  const EasyPdfViewerWidget({
-    super.key,
-    required this.book,
-  });
-
-  @override
-  State<EasyPdfViewerWidget> createState() => _EasyPdfViewerWidgetState();
-}
-
-class _EasyPdfViewerWidgetState extends State<EasyPdfViewerWidget> {
-  final controller = WebViewController();
-  late final PDFDocument doc;
-  final progressNotifier = ValueNotifier<bool>(false);
-
-  @override
-  void initState() {
-    super.initState();
-    loadPage();
-    updateViewCount();
-  }
-
-  Future<void> updateViewCount() async {
-    await Future.delayed(const Duration(seconds: 5));
-    if (!mounted) return;
-    container<MediaDataSource>().increaseMediaViewedCount(
-      id: widget.book.id,
-      type: GenericMediaType.book,
-    );
-  }
-
-  Future<void> loadPage() async {
-    progressNotifier.value = true;
-    final result = await () async {
-      doc = await PDFDocument.fromURL(widget.book.url);
-    }()
-        .tryCatch();
-    if (!mounted) return;
-    progressNotifier.value = false;
-    return switch (result) {
-      Left(:final value) => context.showErrorToast(value.displayMessage),
-      Right() => null,
-    };
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    progressNotifier.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: ValueListenableBuilder<bool>(
-        valueListenable: progressNotifier,
-        builder: (_, value, __) {
-          if (!value) {
-            return PDFViewer(document: doc);
-          }
-          return Center(
-            child: SizedBox.square(
-              dimension: 56.sp,
-              child: CircularProgressIndicator(
-                strokeWidth: 6.sp,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+// class EasyPdfViewerWidget extends StatefulWidget {
+//   final Book book;
+//
+//   const EasyPdfViewerWidget({
+//     super.key,
+//     required this.book,
+//   });
+//
+//   @override
+//   State<EasyPdfViewerWidget> createState() => _EasyPdfViewerWidgetState();
+// }
+//
+// class _EasyPdfViewerWidgetState extends State<EasyPdfViewerWidget> {
+//   final controller = WebViewController();
+//   late final PDFDocument doc;
+//   final progressNotifier = ValueNotifier<bool>(false);
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     loadPage();
+//     updateViewCount();
+//   }
+//
+//   Future<void> updateViewCount() async {
+//     await Future.delayed(const Duration(seconds: 5));
+//     if (!mounted) return;
+//     container<MediaDataSource>().increaseMediaViewedCount(
+//       id: widget.book.id,
+//       type: GenericMediaType.book,
+//     );
+//   }
+//
+//   Future<void> loadPage() async {
+//     progressNotifier.value = true;
+//     final result = await () async {
+//       doc = await PDFDocument.fromURL(widget.book.url);
+//     }()
+//         .tryCatch();
+//     if (!mounted) return;
+//     progressNotifier.value = false;
+//     return switch (result) {
+//       Left(:final value) => context.showErrorToast(value.displayMessage),
+//       Right() => null,
+//     };
+//   }
+//
+//   @override
+//   void dispose() {
+//     super.dispose();
+//     progressNotifier.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SafeArea(
+//       child: ValueListenableBuilder<bool>(
+//         valueListenable: progressNotifier,
+//         builder: (_, value, __) {
+//           if (!value) {
+//             return PDFViewer(document: doc);
+//           }
+//           return Center(
+//             child: SizedBox.square(
+//               dimension: 56.sp,
+//               child: CircularProgressIndicator(
+//                 strokeWidth: 6.sp,
+//               ),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class WebviewDocumentViewer extends StatefulWidget {
   final Book book;
