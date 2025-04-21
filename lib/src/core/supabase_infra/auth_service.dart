@@ -29,7 +29,7 @@ class SupabaseAuthService {
     await _client.auth.signOut();
   }
 
-  Future<void> verifyOtp(String email, String otp) async {
+  Future<void> verifyOtp({required String email, required String otp}) async {
     await _client.auth.verifyOTP(
       token: otp,
       type: OtpType.magiclink,
@@ -97,6 +97,18 @@ class SupabaseAuthService {
   }
 
   Future<void> resetPassword(String email) async {
-    // await _client.auth.updateUser(UserAttributes(password: ) );
+    await _client.auth.resetPasswordForEmail(email);
+  }
+
+  // Future<void> verifyOtp({required String otp, required String email}) async {
+  //   await _client.auth.verifyOTP(
+  //     type: OtpType.magiclink,
+  //     email: email,
+  //     token: otp,
+  //   );
+  // }
+
+  Future<void> updatePassword(String password) async {
+    await _client.auth.updateUser(UserAttributes(password: password));
   }
 }

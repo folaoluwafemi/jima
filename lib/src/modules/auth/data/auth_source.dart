@@ -45,6 +45,10 @@ class AuthSource {
     await _authService.resetPassword(email);
   }
 
+  Future<void> verifyOtp({required String otp, required String email}) async {
+    await _authService.verifyOtp(email: email, otp: otp);
+  }
+
   Future<void> switchUsersToAdmin() async {
     await _authService.updateUserInfo(data: {'is_admin': true});
     await Future.delayed(const Duration(milliseconds: 200));
@@ -58,5 +62,9 @@ class AuthSource {
 
   bool get isUserAnonymous {
     return _authService.currentState?.isAnonymous == true;
+  }
+
+  Future<void> changePassword(String password) async {
+    await _authService.updatePassword(password);
   }
 }

@@ -9,6 +9,8 @@ import 'package:jima/src/modules/admin/presentation/screens/upload_audio_screen.
 import 'package:jima/src/modules/admin/presentation/screens/upload_books_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/upload_video_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/auth_action_screen.dart';
+import 'package:jima/src/modules/auth/presentation/screens/change_password_screen.dart';
+import 'package:jima/src/modules/auth/presentation/screens/forgot_password_otp_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/login_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/signup_screen.dart';
@@ -58,6 +60,20 @@ abstract final class AppRouter {
                 name: AppRoute.forgotPassword.name,
                 path: AppRoute.forgotPassword.path,
                 builder: (context, state) => const ForgotPasswordScreen(),
+                routes: [
+                  GoRoute(
+                    name: AppRoute.forgotPasswordOtp.name,
+                    path: AppRoute.forgotPasswordOtp.path,
+                    builder: (context, state) => ForgotPasswordOtpScreen(
+                      email: state.extra as String,
+                    ),
+                  ),
+                ],
+              ),
+              GoRoute(
+                name: AppRoute.changePassword.name,
+                path: AppRoute.changePassword.path,
+                builder: (context, state) => const ChangePasswordScreen(),
               ),
             ],
           ),

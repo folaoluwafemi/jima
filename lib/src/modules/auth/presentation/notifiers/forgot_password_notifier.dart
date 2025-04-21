@@ -17,4 +17,22 @@ class ForgotPasswordNotifier extends BaseNotifier<Object?> {
       Left(:final value) => setError(value.displayMessage),
     };
   }
+
+  Future<void> verifyOtp(String otp, String email) async {
+    setOutLoading();
+    final result = await _source.verifyOtp(otp: otp, email: email).tryCatch();
+    return switch (result) {
+      Right() => setSuccess(),
+      Left(:final value) => setError(value.displayMessage),
+    };
+  }
+
+  Future<void> changePassword(String password) async {
+    setOutLoading();
+    final result = await _source.changePassword(password).tryCatch();
+    return switch (result) {
+      Right() => setSuccess(),
+      Left(:final value) => setError(value.displayMessage),
+    };
+  }
 }

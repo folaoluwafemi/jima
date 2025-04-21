@@ -8,6 +8,8 @@ enum AppRoute {
   signup('signup', '/auth-action/signup'),
   login('login', '/auth-action/login'),
   forgotPassword('forgot-password', '/auth-action/login/forgot-password'),
+  forgotPasswordOtp('forgot-password-otp', '/auth-action/login/forgot-password/forgot-password-otp'),
+  changePassword('change-password', '/auth-action/login/change-password'),
   dashboard('/dashboard', '/dashboard'),
   allMediaSearch('all-media-search', '/dashboard/all-media-search'),
   books('/books', '/books'),

@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/auth/presentation/notifiers/login_notifier.dart';
-import 'package:jima/src/tools/components/app_text_field.dart';
 import 'package:jima/src/tools/components/password_field.dart';
-import 'package:jima/src/tools/components/primary_button.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 

@@ -48,7 +48,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                   10.boxHeight,
                   Text(
-                    'Enter your email address and a reset link\n will be sent to you.\n\n',
+                    'Enter your email address and a reset otp\n will be sent to you.\n\n',
                     style: Textstyles.normal.copyWith(
                       color: AppColors.black,
                       fontSize: 14,
@@ -77,11 +77,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         context: context,
                         callback: (previous, current) {
                           if (current.isSuccess) {
-                            context.showSuccessToast(
-                              'Check your email for password reset '
-                              'instructions',
+                            context.pushNamed(
+                              AppRoute.forgotPasswordOtp.name,
+                              extra: emailController.text,
                             );
-                            context.goNamed(AppRoute.authAction.name);
                           }
                         },
                       ),
