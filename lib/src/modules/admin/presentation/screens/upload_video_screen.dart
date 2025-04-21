@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/modules/admin/presentation/notifiers/upload_video_notifier.dart';
@@ -65,34 +65,16 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                   hintText: 'Youtube Video ID e.g https://youtu.be/{{id_here}}',
                 ),
                 32.boxHeight,
-                Row(
-                  children: [
-                    Text(
-                      'Release Date',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14.sp,
-                        height: 1.3,
-                        color: AppColors.black500,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                8.boxHeight,
                 ValueListenableBuilder<DateTime?>(
                   valueListenable: releaseDateNotifier,
-                  builder: (context, state, _) {
-                    final exists = state != null;
-                    return AppButton.outlined(
-                      padding: REdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 13,
-                      ),
-                      borderColor: AppColors.iGrey500,
-                      color: context.scaffoldBackgroundColor,
-                      onPressed: () async {
+                  builder: (context, releaseDate, _) {
+                    return AppTextField.text(
+                      key: ValueKey(releaseDate),
+                      readOnly: true,
+                      onTap: () async {
                         final date = await showDatePicker(
                           context: context,
+                          initialDate: releaseDate,
                           firstDate: DateTime.now().copySubtract(year: 100),
                           lastDate: DateTime.now(),
                         );
@@ -100,19 +82,12 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                         if (!context.mounted) return;
                         releaseDateNotifier.value = date;
                       },
-                      borderWidth: 1,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      icon: const SizedBox.shrink(),
-                      textStyle: GoogleFonts.poppins(
-                        fontSize: exists ? 14.sp : 16.sp,
-                        height: 1.6,
-                        color: exists ? AppColors.black500 : AppColors.grey500,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      // https://a.co/d/c6wlrWO
-                      text: state != null
-                          ? DateFormat('EEE, dd MMM, yyyy').format(state)
-                          : 'Enter Release Date',
+                      initialValue: releaseDate == null
+                          ? null
+                          : DateFormat('EEE, dd MMM, yyyy').format(releaseDate),
+                      autovalidateMode: AutovalidateMode.onUnfocus,
+                      labelText: 'Release Date',
+                      hintText: 'Select Release Date',
                     );
                   },
                 ),
@@ -155,4 +130,3 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
     );
   }
 }
-

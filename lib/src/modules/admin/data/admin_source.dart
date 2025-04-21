@@ -51,4 +51,17 @@ class AdminSource {
       },
     );
   }
+
+  Future<void> uploadAudio(
+    String title,
+    String spotifyUrl,
+    DateTime releaseDate,
+  ) async { await _database.insert(
+    Tables.audios,
+    values: {
+      'title': title,
+      'url': spotifyUrl,
+      'dateReleased': releaseDate.toUtc().toIso8601String(),
+    },
+  );}
 }

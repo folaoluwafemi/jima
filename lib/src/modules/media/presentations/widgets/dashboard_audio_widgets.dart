@@ -8,6 +8,7 @@ import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 class DashboardAudioWidgets extends StatefulWidget {
@@ -133,12 +134,16 @@ class AudioItemWidget extends StatelessWidget {
 
   const AudioItemWidget({super.key, required this.audio});
 
+  Future<void> onPressed() async {
+    launchUrl(
+      Uri.parse(audio.url),
+      mode: LaunchMode.externalApplication,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        context.pushNamed(AppRoute.audioPreview.name, extra: audio);
-      },
+      onTap: onPressed,
       child: Row(
         children: [
           ClipRRect(
