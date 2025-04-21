@@ -9,6 +9,30 @@ class DonationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final details = <List<(String, String, bool)>>[
+      [
+        ('Bank name', 'Access bank', false),
+        ('Account number', '00180770071', true),
+        ('Account name', 'Champions royal assembly ', false),
+      ],
+      [
+        ('PayPal', 'Joshuaiginla48821@gmail.com', true),
+      ],
+      [
+        ('Bank name', 'Eco bank PLC', false),
+        ('Account number', '4582043784', true),
+        ('Account name', 'Champions royal assembly ', false),
+      ],
+      [
+        ('Bank name', 'FNB', false),
+        ('Account name', 'Champions royal assembly ', false),
+        ('Account number', '63065448136', true),
+      ],
+      [
+        ('SWIFT code', '05 0 0 8 1 0 3 7', true),
+      ],
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -21,7 +45,7 @@ class DonationScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: REdgeInsets.symmetric(horizontal: 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,78 +135,58 @@ class DonationScreen extends StatelessWidget {
               ),
             ),
             12.boxHeight,
-            Text.rich(
-              TextSpan(
-                text: 'Bank name: ',
-                children: [
-                  TextSpan(
-                    text: 'Wema Bank',
-                    style: Textstyles.bold.copyWith(
-                      fontSize: 14.sp,
-                      color: const Color(0xCC3E3E3E),
-                    ),
-                  ),
-                ],
-              ),
-              style: Textstyles.normal.copyWith(
-                fontSize: 14.sp,
-                color: const Color(0xCC3E3E3E),
-              ),
-            ),
-            8.boxHeight,
-            Text.rich(
-              TextSpan(
-                text: 'Account Number: ',
-                children: [
-                  TextSpan(
-                    text: '0124698236  ',
-                    style: Textstyles.bold.copyWith(
-                      fontSize: 14.sp,
-                      color: const Color(0xCC3E3E3E),
-                    ),
-                  ),
-                  WidgetSpan(
-                    child: InkWell(
-                      onTap: () async {
-                        await Clipboard.setData(
-                          const ClipboardData(text: '0124698236'),
-                        );
-                        if (!context.mounted) return;
-                        context.showSuccessToast('Account number copied');
-                      },
-                      child: Icon(
-                        Icons.copy_all,
-                        size: 18.sp,
-                        color: const Color(0xCC3E3E3E),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 24.h,
+              children: [
+                ...details.map(
+                  (e) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 8.h,
+                    children: [
+                      ...e.map(
+                        (items) => Text.rich(
+                          TextSpan(
+                            text: '${items.$1}: ',
+                            children: [
+                              TextSpan(
+                                text: '${items.$2}  ',
+                                style: Textstyles.bold.copyWith(
+                                  fontSize: 14.sp,
+                                  color: const Color(0xCC3E3E3E),
+                                ),
+                              ),
+                              if (items.$3)
+                                WidgetSpan(
+                                  child: InkWell(
+                                    onTap: () async {
+                                      await Clipboard.setData(
+                                        ClipboardData(text: items.$2),
+                                      );
+                                      if (!context.mounted) return;
+                                      context.showSuccessToast('copied');
+                                    },
+                                    child: Icon(
+                                      Icons.copy,
+                                      size: 18.sp,
+                                      color: const Color(0xCC3E3E3E),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          style: Textstyles.normal.copyWith(
+                            fontSize: 14.sp,
+                            color: const Color(0xCC3E3E3E),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              style: Textstyles.normal.copyWith(
-                fontSize: 14.sp,
-                color: const Color(0xCC3E3E3E),
-              ),
+                ),
+              ],
             ),
-            8.boxHeight,
-            Text.rich(
-              TextSpan(
-                text: 'Account Name: ',
-                children: [
-                  TextSpan(
-                    text: 'Iginla Ministries',
-                    style: Textstyles.bold.copyWith(
-                      fontSize: 14.sp,
-                      color: const Color(0xCC3E3E3E),
-                    ),
-                  ),
-                ],
-              ),
-              style: Textstyles.normal.copyWith(
-                fontSize: 14.sp,
-                color: const Color(0xCC3E3E3E),
-              ),
-            ),
+            100.boxHeight,
           ],
         ),
       ),
