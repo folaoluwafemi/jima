@@ -87,6 +87,7 @@ class _AudiosScreenState extends State<AudiosScreen> {
           context.read<AudiosNotifier>().fetchAudios(fetchAFresh: true),
         ),
         child: SingleChildScrollView(
+          padding: REdgeInsets.only(bottom: 200),
           physics: const AlwaysScrollableScrollPhysics(),
           child: VanillaBuilder<AudiosNotifier, AudiosState>(
             builder: (context, state) {
@@ -98,6 +99,7 @@ class _AudiosScreenState extends State<AudiosScreen> {
               if (audios.isNullOrEmpty) {
                 return Center(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
                         padding: REdgeInsets.symmetric(vertical: 120),

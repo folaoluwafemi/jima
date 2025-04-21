@@ -179,9 +179,7 @@ class _WebviewDocumentViewerState extends State<WebviewDocumentViewer> {
             },
           ),
           Expanded(
-            child: WebViewWidget(
-              controller: controller,
-            ),
+            child: WebViewWidget(controller: controller),
           ),
         ],
       ),

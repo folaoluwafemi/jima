@@ -1,12 +1,13 @@
 import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
+import 'package:jima/src/modules/media/domain/entities/audio_data.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
 import 'package:jima/src/tools/constants/rpc_functions.dart';
 import 'package:jima/src/tools/constants/tables.dart';
-import 'package:jima/src/tools/extensions/extensions.dart';
+import 'package:jima/src/tools/tools_barrel.dart';
 
 class MediaDataSource {
   final AppDatabaseService _database;
@@ -136,7 +137,13 @@ class MediaDataSource {
   }) async {
     await _database.rpc(
       RpcFunctions.increaseMediaViewedCount,
-      params: {'id': id, 'source': type.tableName},
+      params: {'media_id': id, 'source': type.tableName},
     );
+  }
+
+  Future<AudioData> fetchAudioData() async {
+    final value = await _database.select(Tables.audioData);
+
+    return ParseUtils.parseJson(value[0], mapper: AudioData.fromMap);
   }
 }

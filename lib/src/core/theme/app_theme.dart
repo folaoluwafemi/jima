@@ -6,11 +6,14 @@ import 'package:jima/src/tools/extensions/extensions.dart';
 
 abstract final class AppTheme {
   static final light = ThemeData(
+    scaffoldBackgroundColor: AppColors.whiteVariant,
+    canvasColor: AppColors.whiteVariant,
     brightness: Brightness.light,
     textTheme: GoogleFonts.poppinsTextTheme(),
     colorScheme: lightColorScheme,
     primaryColor: AppColors.blue,
     appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.whiteVariant,
       scrolledUnderElevation: 0,
       elevation: 0,
     ),

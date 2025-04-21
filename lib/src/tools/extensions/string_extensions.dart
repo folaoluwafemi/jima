@@ -41,6 +41,8 @@ extension StringEx on String {
     }).join(' ');
   }
 
+  Uri toUri() => Uri.parse(this);
+
   String get toEmoji {
     // 0x41 is Letter A
     // 0x1F1E6 is Regional Indicator Symbol Letter A

@@ -244,8 +244,10 @@ class AppTextField extends StatelessWidget {
     AutovalidateMode? autovalidateMode,
     TextCapitalization textCapitalization = TextCapitalization.none,
     FormFieldValidator<String?>? validator,
+    Key? key,
   }) =>
       AppTextField(
+        key: key,
         controller: controller,
         hintText: hintText,
         labelText: labelText,

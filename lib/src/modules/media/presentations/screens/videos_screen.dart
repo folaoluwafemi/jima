@@ -88,6 +88,7 @@ class _VideosScreenState extends State<VideosScreen> {
           context.read<VideosNotifier>().fetchVideos(fetchAFresh: true),
         ),
         child: SingleChildScrollView(
+          padding: REdgeInsets.only(bottom: 200),
           physics: const AlwaysScrollableScrollPhysics(),
           child: VanillaBuilder<VideosNotifier, VideosState>(
             builder: (context, state) {

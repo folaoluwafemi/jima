@@ -4,26 +4,40 @@ import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/home_observer.dart';
 import 'package:jima/src/core/navigation/routes.dart';
+import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
 enum BottomNavItem {
-  dashboard(AppRoute.dashboard, Vectors.profile),
+  dashboard(AppRoute.dashboard, Vectors.dashboard),
   videos(AppRoute.videos, Vectors.videos),
-  audios(AppRoute.audios, Vectors.dashboard),
+  audios(AppRoute.audios, Vectors.audios),
   books(AppRoute.books, Vectors.books),
   donate(AppRoute.donation, Vectors.donation),
-  profile(AppRoute.profile, Vectors.audios),
+  profile(AppRoute.profile, Vectors.profile),
   ;
 
   final AppRoute route;
   final String assetPath;
+
+  Future<void> resolveAction(BuildContext context) async {
+    if (this == profile) {
+      if (container<AuthSource>().isUserAnonymous) {
+        context.showErrorToast('You have to be logged in to access this page');
+        return;
+      }
+      return container<AuthSource>().isUserAdmin
+          ? context.goNamed(AppRoute.admin.name)
+          : context.goNamed(route.name);
+    }
+    context.goNamed(route.name);
+  }
 
   const BottomNavItem(this.route, this.assetPath);
 
   factory BottomNavItem.fromRoute(AppRoute route) {
     return values.firstWhere(
       (element) => element.route == route,
-      orElse: () => dashboard,
+      orElse: () => route == AppRoute.admin ? profile : dashboard,
     );
   }
 }
@@ -72,7 +86,7 @@ class BottomNav extends StatelessWidget {
                       constraints: const BoxConstraints(),
                       onPressed: () {
                         if (selected) return;
-                        context.goNamed(item.route.name);
+                        item.resolveAction(context);
                       },
                       padding: EdgeInsets.zero,
                       visualDensity: const VisualDensity(
@@ -97,7 +111,10 @@ class BottomNav extends StatelessWidget {
                               3.boxHeight,
                               FittedBox(
                                 child: Text(
-                                  item.name.toFirstUppercase(),
+                                  container<AuthSource>().isUserAdmin &&
+                                          item == BottomNavItem.profile
+                                      ? 'Admin'
+                                      : item.name.toFirstUppercase(),
                                   style: Textstyles.normal.copyWith(
                                     color: selected
                                         ? AppColors.blue

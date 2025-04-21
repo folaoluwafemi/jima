@@ -4,6 +4,10 @@ import 'package:jima/src/core/navigation/home_observer.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/splash_screen.dart';
+import 'package:jima/src/modules/admin/presentation/screens/admin_screen.dart';
+import 'package:jima/src/modules/admin/presentation/screens/upload_audio_screen.dart';
+import 'package:jima/src/modules/admin/presentation/screens/upload_books_screen.dart';
+import 'package:jima/src/modules/admin/presentation/screens/upload_video_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/auth_action_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/login_screen.dart';
@@ -13,7 +17,7 @@ import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
 import 'package:jima/src/modules/media/presentations/screens/all_media_search_screen.dart';
-import 'package:jima/src/modules/media/presentations/screens/audio_preview_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/audio_player_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/audio_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/book_preview_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/books_screen.dart';
@@ -111,7 +115,7 @@ abstract final class AppRouter {
                 parentNavigatorKey: rootNavigatorKey,
                 name: AppRoute.audioPreview.name,
                 path: AppRoute.audioPreview.path,
-                builder: (context, state) => AudioPreviewScreen(
+                builder: (context, state) => AudioPlayerScreen(
                   audio: state.extra as Audio,
                 ),
               ),
@@ -144,6 +148,32 @@ abstract final class AppRouter {
             name: AppRoute.donation.name,
             path: AppRoute.donation.path,
             builder: (context, state) => const DonationScreen(),
+          ),
+          GoRoute(
+            parentNavigatorKey: homeNavigatorKey,
+            name: AppRoute.admin.name,
+            path: AppRoute.admin.path,
+            builder: (context, state) => const AdminScreen(),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.uploadAudio.name,
+                path: AppRoute.uploadAudio.path,
+                builder: (context, state) => const UploadAudioScreen(),
+              ),
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.uploadBook.name,
+                path: AppRoute.uploadBook.path,
+                builder: (context, state) => const UploadBooksScreen(),
+              ),
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.uploadVideo.name,
+                path: AppRoute.uploadVideo.path,
+                builder: (context, state) => const UploadVideoScreen(),
+              ),
+            ],
           ),
         ],
       ),

@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
-import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_book_widget.dart';
+import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
@@ -90,6 +89,7 @@ class _BooksScreenState extends State<BooksScreen> {
         ),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
+          padding: REdgeInsets.only(bottom: 200),
           child: VanillaBuilder<BooksNotifier, BooksState>(
             builder: (context, state) {
               if (state.isInLoading) return const BooksLoader();
@@ -98,6 +98,7 @@ class _BooksScreenState extends State<BooksScreen> {
               if (books.isNullOrEmpty) {
                 return Center(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
                         padding: REdgeInsets.symmetric(vertical: 120),
@@ -117,7 +118,7 @@ class _BooksScreenState extends State<BooksScreen> {
               }
 
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   28.boxHeight,
                   Padding(
@@ -141,13 +142,7 @@ class _BooksScreenState extends State<BooksScreen> {
                           spacing: context.screenWidth() - 328.w,
                           children: [
                             ...books!.map(
-                              (e) => BookItemWidget(
-                                book: e,
-                                onPressed: () => context.pushNamed(
-                                  AppRoute.bookPreview.name,
-                                  extra: e,
-                                ),
-                              ),
+                              (e) => BookItemWidget(book: e),
                             ),
                           ],
                         ),
@@ -157,6 +152,54 @@ class _BooksScreenState extends State<BooksScreen> {
                 ],
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BooksLoader extends StatelessWidget {
+  const BooksLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final itemWidth = 136.w;
+    return MakeShimmer(
+      child: Padding(
+        padding: REdgeInsets.symmetric(vertical: 24, horizontal: 36),
+        child: SizedBox(
+          height: 258.h,
+          child: Wrap(
+            runSpacing: 20.w,
+            spacing: context.screenWidth() - 348.w,
+            children: [
+              ...List.generate(
+                4,
+                (index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GreyBox(
+                        width: 136.w,
+                        height: 200.h,
+                        borderRadius: 15.circularBorder,
+                      ),
+                      8.boxHeight,
+                      GreyBox(
+                        width: itemWidth.percent(100),
+                        height: 21.h,
+                      ),
+                      8.boxHeight,
+                      GreyBox(
+                        width: itemWidth.percent(65),
+                        height: 21.h,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),

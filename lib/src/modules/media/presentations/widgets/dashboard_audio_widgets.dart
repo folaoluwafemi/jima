@@ -28,13 +28,12 @@ class _DashboardAudioWidgetsState extends State<DashboardAudioWidgets> {
         }
         if (audios == null || audios.isEmpty) return const SizedBox.shrink();
         return Padding(
-          padding: REdgeInsets.symmetric(horizontal: 26),
+          padding: REdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
               24.boxHeight,
               Row(
                 children: [
-                  25.boxWidth,
                   Text(
                     'Top Audios',
                     style: Textstyles.bold.copyWith(
@@ -58,10 +57,15 @@ class _DashboardAudioWidgetsState extends State<DashboardAudioWidgets> {
                       ),
                     ),
                   ),
-                  17.boxWidth,
                 ],
               ),
               16.boxHeight,
+              Column(
+                spacing: 10.h,
+                children: [
+                  ...audios.take(3).map((e) => AudioItemWidget(audio: e)),
+                ],
+              ),
             ],
           ),
         );
@@ -132,7 +136,9 @@ class AudioItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        context.pushNamed(AppRoute.audioPreview.name, extra: audio);
+      },
       child: Row(
         children: [
           ClipRRect(

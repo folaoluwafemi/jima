@@ -1,4 +1,5 @@
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
+import 'package:jima/src/tools/tools_barrel.dart';
 
 class AuthSource {
   final SupabaseAuthService _authService;
@@ -38,5 +39,20 @@ class AuthSource {
 
   Future<void> sendResetInstructions(String email) async {
     await _authService.resetPassword(email);
+  }
+
+  Future<void> switchUsersToAdmin() async {
+    await _authService.updateUserInfo(data: {'is_admin': true});
+    await Future.delayed(const Duration(milliseconds: 200));
+    Logger.info('metadata: ${_authService.currentState?.userMetadata}');
+  }
+
+  bool get isUserAdmin {
+    return _authService.currentState?.userMetadata?['is_admin'] == 'true' ||
+        _authService.currentState?.userMetadata?['is_admin'] == true;
+  }
+
+  bool get isUserAnonymous {
+    return _authService.currentState?.isAnonymous == true;
   }
 }

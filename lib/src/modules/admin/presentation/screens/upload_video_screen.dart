@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:jima/src/core/core.dart';
+import 'package:jima/src/modules/admin/presentation/notifiers/upload_video_notifier.dart';
+import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:vanilla_state/vanilla_state.dart';
+
+class UploadVideoScreen extends StatefulWidget {
+  const UploadVideoScreen({super.key});
+
+  @override
+  State<UploadVideoScreen> createState() => _UploadVideoScreenState();
+}
+
+class _UploadVideoScreenState extends State<UploadVideoScreen> {
+  final formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final videoIdController = TextEditingController();
+  final releaseDateNotifier = ValueNotifier<DateTime?>(null);
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    videoIdController.dispose();
+    releaseDateNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InheritedVanilla<UploadVideoNotifier>(
+      createNotifier: () => UploadVideoNotifier(container()),
+      child: Scaffold(
+        appBar: AppBar(
+          foregroundColor: AppColors.blue,
+          centerTitle: true,
+          title: Text(
+            'Upload Video',
+            style: Textstyles.extraBold.copyWith(
+              fontSize: 14.sp,
+              color: AppColors.blackVoid,
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          padding: REdgeInsets.symmetric(horizontal: 32),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                18.boxHeight,
+                AppTextField.text(
+                  autovalidateMode: AutovalidateMode.onUnfocus,
+                  controller: titleController,
+                  labelText: 'Title',
+                  hintText: 'Video Title',
+                ),
+                32.boxHeight,
+                AppTextField.text(
+                  autovalidateMode: AutovalidateMode.onUnfocus,
+                  controller: videoIdController,
+                  labelText: 'Video ID',
+                  hintText: 'Youtube Video ID e.g https://youtu.be/{{id_here}}',
+                ),
+                32.boxHeight,
+                Row(
+                  children: [
+                    Text(
+                      'Release Date',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14.sp,
+                        height: 1.3,
+                        color: AppColors.black500,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                8.boxHeight,
+                ValueListenableBuilder<DateTime?>(
+                  valueListenable: releaseDateNotifier,
+                  builder: (context, state, _) {
+                    final exists = state != null;
+                    return AppButton.outlined(
+                      padding: REdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 13,
+                      ),
+                      borderColor: AppColors.iGrey500,
+                      color: context.scaffoldBackgroundColor,
+                      onPressed: () async {
+                        final date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now().copySubtract(year: 100),
+                          lastDate: DateTime.now(),
+                        );
+                        if (date == null) return;
+                        if (!context.mounted) return;
+                        releaseDateNotifier.value = date;
+                      },
+                      borderWidth: 1,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      icon: const SizedBox.shrink(),
+                      textStyle: GoogleFonts.poppins(
+                        fontSize: exists ? 14.sp : 16.sp,
+                        height: 1.6,
+                        color: exists ? AppColors.black500 : AppColors.grey500,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      // https://a.co/d/c6wlrWO
+                      text: state != null
+                          ? DateFormat('EEE, dd MMM, yyyy').format(state)
+                          : 'Enter Release Date',
+                    );
+                  },
+                ),
+                32.boxHeight,
+                VanillaListener<UploadVideoNotifier, UploadVideoState>(
+                  listener: (previous, current) {
+                    if (current.isSuccess) {
+                      titleController.clear();
+                      videoIdController.clear();
+                      releaseDateNotifier.value = null;
+                      context.showSuccessToast('Upload successful');
+                    }
+                    if (current case ErrorState(:final message)) {
+                      context.showErrorToast(message);
+                    }
+                  },
+                  child: VanillaBuilder<UploadVideoNotifier, UploadVideoState>(
+                    builder: (context, state) {
+                      return AppButton.primary(
+                        loading: state.isOutLoading,
+                        onPressed: () {
+                          if (formKey.currentState?.validate() != true) return;
+                          if (releaseDateNotifier.value == null) return;
+                          context.read<UploadVideoNotifier>().uploadVideo(
+                                titleController.text.trim(),
+                                videoIdController.text.trim(),
+                                releaseDateNotifier.value!,
+                              );
+                        },
+                        text: 'Upload',
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+

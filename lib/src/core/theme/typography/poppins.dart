@@ -31,6 +31,11 @@ abstract final class Textstyles {
     fontSize: _defaultSize,
     color: _defaultColor,
   );
+  static final extraBold = GoogleFonts.poppins(
+    fontWeight: FontWeight.w800,
+    fontSize: _defaultSize,
+    color: _defaultColor,
+  );
 }
 
 asa() {

@@ -7,6 +7,7 @@ import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 class DashboardBookWidgets extends StatefulWidget {
@@ -59,13 +60,7 @@ class _DashboardBookWidgetsState extends State<DashboardBookWidgets> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ...books.take(4).map((e) {
-                      return BookItemWidget(
-                        book: e,
-                        onPressed: () => context.pushNamed(
-                          AppRoute.bookPreview.name,
-                          extra: e,
-                        ),
-                      );
+                      return BookItemWidget(book: e);
                     }),
                   ],
                 ),
@@ -132,13 +127,18 @@ class BooksLoader extends StatelessWidget {
 
 class BookItemWidget extends StatelessWidget {
   final Book book;
-  final VoidCallback onPressed;
 
   const BookItemWidget({
     super.key,
     required this.book,
-    required this.onPressed,
   });
+
+  Future<void> onPressed() async {
+    launchUrl(
+      Uri.parse(book.url),
+      mode: LaunchMode.externalApplication,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,9 +151,9 @@ class BookItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: 15.circularBorder,
+              borderRadius: 4.circularBorder,
               child: SizedBox(
-                height: 200.h,
+                height: 148.h,
                 width: 136.w,
                 child: Image.network(
                   book.thumbnail ?? NetworkImages.placeholder,
@@ -166,18 +166,24 @@ class BookItemWidget extends StatelessWidget {
               book.title,
               style: Textstyles.semibold.copyWith(
                 fontSize: 14.sp,
-                height: 1.5,
+                height: 1.3,
                 color: AppColors.buttonTextBlack,
               ),
             ),
-            8.boxHeight,
             Text(
               book.minister.name,
               style: Textstyles.normal.copyWith(
                 fontSize: 14.sp,
-                height: 1.5,
+                height: 1.3,
                 color: AppColors.darkGrey,
               ),
+            ),
+            8.boxHeight,
+            AppButton.primary(
+              padding: REdgeInsets.symmetric(vertical: 8.5),
+              borderRadius: 12.circularBorder,
+              onPressed: onPressed,
+              text: 'Buy Now',
             ),
           ],
         ),

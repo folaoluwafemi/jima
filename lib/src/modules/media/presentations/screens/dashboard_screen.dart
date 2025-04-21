@@ -12,10 +12,10 @@ import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/videos_notifier.dart';
-import 'package:jima/src/modules/media/presentations/widgets/highest_view_counts_widget.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_audio_widgets.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_book_widget.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_video_widgets.dart';
+import 'package:jima/src/modules/media/presentations/widgets/highest_view_counts_widget.dart';
 import 'package:jima/src/tools/constants/vectors.dart';
 import 'package:jima/src/tools/extensions/extensions.dart';
 
@@ -118,6 +118,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Icon(
+                Icons.admin_panel_settings_outlined,
+                size: 20.sp,
+              ),
               const HighestViewedMediaView(),
               const DashboardVideoWidgets(),
               const DashboardAudioWidgets(),

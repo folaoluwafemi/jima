@@ -94,6 +94,8 @@ class HighestViewedMediaWidget extends StatelessWidget {
                     children: [
                       Text(
                         media.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: Textstyles.medium.copyWith(
                           fontSize: 21.sp,
                           height: 1.19,

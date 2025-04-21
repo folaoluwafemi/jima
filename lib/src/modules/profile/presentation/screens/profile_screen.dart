@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
+import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -133,6 +134,40 @@ class ProfileScreen extends StatelessWidget {
                       height: 1.5,
                       fontSize: 14.sp,
                       color: AppColors.bleakRedColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          24.boxHeight,
+          RawMaterialButton(
+            onPressed: () async {
+              await container<AuthSource>().switchUsersToAdmin();
+              if (!context.mounted) return;
+              context.showSuccessToast('message');
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: 8.circularBorder,
+              side: BorderSide(color: Colors.green[600]!, width: 1.sp),
+            ),
+            fillColor: Colors.green[600]!,
+            elevation: 0,
+            highlightElevation: 0,
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            padding: EdgeInsets.zero,
+            child: Padding(
+              padding: REdgeInsets.symmetric(horizontal: 25.w, vertical: 10.h),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'change user to admin',
+                    style: TextStyle(
+                      height: 1.5,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
                     ),
                   ),
                 ],

@@ -18,6 +18,10 @@ enum AppRoute {
   audioPreview('/audio-preview', '/audio-preview'),
   profile('/profile', '/profile'),
   donation('/donation', '/donation'),
+  admin('/admin', '/admin'),
+  uploadVideo('upload-video', '/admin/upload-video'),
+  uploadAudio('upload-audio', '/admin/upload-audio'),
+  uploadBook('upload-book', '/admin/upload-book'),
   ;
 
   final String path;

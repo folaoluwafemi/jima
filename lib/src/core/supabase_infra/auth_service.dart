@@ -14,6 +14,8 @@ class SupabaseAuthService {
 
   User? get currentState => _client.auth.currentUser;
 
+  Session? get currentSession => _client.auth.currentSession;
+
   Future<void> updateUserInfo({
     String? newPassword,
     Object? data,

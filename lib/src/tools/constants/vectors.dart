@@ -21,5 +21,6 @@ abstract final class Vectors {
   static const String logout = '$basePath/logout.svg';
   static const String send = '$basePath/send.svg';
   static const String sendIcon = '$basePath/send_icon.svg';
+  static const String image = '$basePath/image.svg';
   static const String _helper = '$basePath/';
 }

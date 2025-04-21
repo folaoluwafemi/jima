@@ -15,6 +15,8 @@ class AppButton extends StatelessWidget {
   final Color? borderColor;
   final BorderRadius? borderRadius;
   final bool loading;
+  final double? borderWidth;
+  final MainAxisAlignment? mainAxisAlignment;
 
   const AppButton({
     super.key,
@@ -25,8 +27,10 @@ class AppButton extends StatelessWidget {
     this.textColor,
     this.color,
     this.borderColor,
+    this.borderWidth,
     this.borderRadius,
     this.icon,
+    this.mainAxisAlignment,
     this.loading = false,
   });
 
@@ -36,7 +40,9 @@ class AppButton extends StatelessWidget {
     this.textStyle,
     this.padding,
     this.borderColor,
+    this.borderWidth,
     this.borderRadius,
+    this.mainAxisAlignment,
     this.icon,
     super.key,
     this.loading = false,
@@ -49,7 +55,9 @@ class AppButton extends StatelessWidget {
     this.textStyle,
     this.padding,
     this.borderColor,
+    this.borderWidth,
     this.borderRadius,
+    this.mainAxisAlignment,
     this.icon,
     super.key,
     this.loading = false,
@@ -61,15 +69,18 @@ class AppButton extends StatelessWidget {
     required this.text,
     this.textStyle,
     this.padding,
+    this.borderWidth,
     this.borderRadius,
+    this.mainAxisAlignment,
     Color? borderColor,
     Color? color,
+    Color? textColor,
     this.icon,
     super.key,
     this.loading = false,
   })  : color = color ?? AppColors.glassBlack,
         borderColor = borderColor ?? AppColors.blue,
-        textColor = AppColors.white;
+        textColor = textColor ?? AppColors.white;
 
   const AppButton.text({
     required this.onPressed,
@@ -77,7 +88,9 @@ class AppButton extends StatelessWidget {
     this.textStyle,
     this.padding,
     this.borderColor,
+    this.borderWidth,
     this.borderRadius,
+    this.mainAxisAlignment,
     this.icon,
     super.key,
     this.loading = false,
@@ -104,16 +117,15 @@ class AppButton extends StatelessWidget {
             ? BorderSide.none
             : BorderSide(
                 color: borderColor!,
-                width: 2.sp,
+                width: borderWidth ?? 2.sp,
               ),
       ),
       highlightElevation: 0,
       elevation: 0,
       child: Padding(
-        padding: REdgeInsets.symmetric(vertical: 16.h),
+        padding: padding ?? REdgeInsets.symmetric(vertical: 16.h),
         child: Row(
-          // mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
           children: [
             if (!loading) ...[
               if (icon != null) ...[
