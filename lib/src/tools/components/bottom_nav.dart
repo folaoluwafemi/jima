@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/home_observer.dart';
 import 'package:jima/src/core/navigation/routes.dart';
+import 'package:jima/src/core/supabase_infra/auth_service.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
@@ -33,6 +34,11 @@ enum BottomNavItem {
   }
 
   const BottomNavItem(this.route, this.assetPath);
+
+  bool get shouldBeRemoved {
+    return container<SupabaseAuthService>().currentState == null ||
+        container<AuthSource>().isUserAnonymous && this == profile;
+  }
 
   factory BottomNavItem.fromRoute(AppRoute route) {
     return values.firstWhere(
@@ -79,7 +85,9 @@ class BottomNav extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 11.boxWidth,
-                ...BottomNavItem.values.map(
+                ...BottomNavItem.values
+                    .copyRemoveWhere((e) => e.shouldBeRemoved)
+                    .map(
                   (item) {
                     final selected = item == selectedItem;
                     return RawMaterialButton(

@@ -52,6 +52,10 @@ class SupabaseAuthService {
     );
   }
 
+  Future<void> loginAnonymously() async {
+    await _client.auth.signInAnonymously();
+  }
+
   /// this logs a user in
   Future<void> loginWithOtp(String email) async {
     await _client.auth.signInWithOtp(

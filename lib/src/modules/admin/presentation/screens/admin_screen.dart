@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
+import 'package:jima/src/core/supabase_infra/auth_service.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
 class AdminScreen extends StatelessWidget {
@@ -52,6 +53,38 @@ class AdminScreen extends StatelessWidget {
                 ),
               );
             },
+          ),
+          54.boxHeight,
+          RawMaterialButton(
+            onPressed: () async {
+              await container<SupabaseAuthService>().signOut();
+              if (!context.mounted) return;
+              context.goNamed(AppRoute.authAction.name);
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: 8.circularBorder,
+              side: BorderSide(color: AppColors.bleakRedColor, width: 1.sp),
+            ),
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            padding: EdgeInsets.zero,
+            child: Padding(
+              padding: REdgeInsets.symmetric(horizontal: 25.w, vertical: 10.h),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Vectors.logout.vectorAssetWidget(),
+                  10.boxWidth,
+                  Text(
+                    'Logout',
+                    style: TextStyle(
+                      height: 1.5,
+                      fontSize: 14.sp,
+                      color: AppColors.bleakRedColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

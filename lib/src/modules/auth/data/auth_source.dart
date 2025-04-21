@@ -37,6 +37,10 @@ class AuthSource {
     await _authService.continueWithFacebook();
   }
 
+  Future<void> loginAnonymously() async {
+    await _authService.loginAnonymously();
+  }
+
   Future<void> sendResetInstructions(String email) async {
     await _authService.resetPassword(email);
   }

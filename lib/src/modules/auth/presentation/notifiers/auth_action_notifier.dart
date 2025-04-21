@@ -30,4 +30,15 @@ class AuthActionNotifier extends BaseNotifier<Object?> {
       Right() => setSuccess(),
     };
   }
+
+  Future<void> loginAnonymously() async {
+    setInLoading();
+
+    final result = await _source.loginAnonymously().tryCatch();
+
+    return switch (result) {
+      Left(:final value) => setError(value.message!),
+      Right() => setSuccess(),
+    };
+  }
 }

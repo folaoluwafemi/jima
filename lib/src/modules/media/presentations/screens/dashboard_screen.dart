@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
+import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
@@ -77,6 +78,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
             );
           },
         ),
+        actions: [
+          if (container<SupabaseAuthService>().currentState == null ||
+              container<AuthSource>().isUserAnonymous)
+            TextButton(
+              onPressed: () async {
+                await container<SupabaseAuthService>().signOut();
+                if (!context.mounted) return;
+                context.goNamed(AppRoute.authAction.name);
+              },
+              child: Text(
+                'Log out',
+                style: Textstyles.medium.copyWith(
+                  color: AppColors.red,
+                ),
+              ),
+            ),
+          12.boxWidth,
+        ],
         bottom: PreferredSize(
           preferredSize: Size(context.screenWidth(), 48.h),
           child: Padding(
@@ -118,10 +137,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(
-                Icons.admin_panel_settings_outlined,
-                size: 20.sp,
-              ),
               const HighestViewedMediaView(),
               const DashboardVideoWidgets(),
               const DashboardAudioWidgets(),

@@ -94,6 +94,7 @@ class VideoItemWidget extends StatelessWidget {
       child: SizedBox(
         width: itemWidth,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: 15.circularBorder,
