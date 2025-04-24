@@ -5,6 +5,7 @@ import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/splash_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/admin_screen.dart';
+import 'package:jima/src/modules/admin/presentation/screens/update_donation_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/upload_audio_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/upload_books_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/upload_video_screen.dart';
@@ -14,7 +15,7 @@ import 'package:jima/src/modules/auth/presentation/screens/forgot_password_otp_s
 import 'package:jima/src/modules/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/login_screen.dart';
 import 'package:jima/src/modules/auth/presentation/screens/signup_screen.dart';
-import 'package:jima/src/modules/donate/presentation/donation_screen.dart';
+import 'package:jima/src/modules/donate/presentation/screen/donation_screen.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
@@ -188,6 +189,12 @@ abstract final class AppRouter {
                 name: AppRoute.uploadVideo.name,
                 path: AppRoute.uploadVideo.path,
                 builder: (context, state) => const UploadVideoScreen(),
+              ),
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.uploadDonation.name,
+                path: AppRoute.uploadDonation.path,
+                builder: (context, state) => const UpdateDonationScreen(),
               ),
             ],
           ),

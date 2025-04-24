@@ -9,6 +9,7 @@ import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
+import 'package:jima/src/modules/donate/presentation/cubit/donation_cubit.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
@@ -34,9 +35,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        fetchItems();
-      },
+      (timeStamp) => fetchItems(),
     );
   }
 
@@ -45,6 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     container<VideosNotifier>().fetchVideos(fetchAFresh: true);
     container<AudiosNotifier>().fetchAudios(fetchAFresh: true);
     container<BooksNotifier>().fetchBooks(fetchAFresh: true);
+    container<DonationNotifier>().refresh();
   }
 
   @override

@@ -42,6 +42,9 @@ class AuthSource {
   }
 
   Future<void> loginWithFacebook() async {
+    // final value = await container<OauthSource>().signInWithFacebook();
+    //
+    // if (value == null) throw 'Unable to authenticate user!';
     await _authService.continueWithFacebook();
   }
 

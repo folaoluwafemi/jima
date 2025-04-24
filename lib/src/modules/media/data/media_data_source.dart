@@ -1,4 +1,5 @@
 import 'package:jima/src/core/supabase_infra/database.dart';
+import 'package:jima/src/modules/donate/domain/entities/donation_data.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/audio_data.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
@@ -141,9 +142,35 @@ class MediaDataSource {
     );
   }
 
-  Future<AudioData> fetchAudioData() async {
-    final value = await _database.select(Tables.audioData);
+  Future<void> uploadDonationData(DonationData data) async {
+    await _database.update(
+      Tables.usageData,
+      values: {'donation': data.toMap()},
+      filter: (request) => request.eq('id', 1),
+    );
+  }
 
-    return ParseUtils.parseJson(value[0], mapper: AudioData.fromMap);
+  Future<(AudioData, DonationData?)> fetchAudioData() async {
+    final value = await _database.selectSingle(Tables.usageData);
+
+    final AudioData audioData = ParseUtils.parseJson(
+      value,
+      mapper: AudioData.fromMap,
+    );
+
+    final donationData = ParseUtils.maybeParseJson(
+      value['donation'],
+      mapper: DonationData.fromMap,
+    );
+    return (audioData, donationData);
+  }
+
+  Future<DonationData?> fetchDonationData() async {
+    final value = await _database.selectSingle(Tables.usageData);
+
+    return ParseUtils.maybeParseJson(
+      value['donation'],
+      mapper: DonationData.fromMap,
+    );
   }
 }

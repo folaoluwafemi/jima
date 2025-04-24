@@ -77,24 +77,28 @@ class SupabaseAuthService {
 
   /// Create an account for user
   Future<void> continueWithFacebook() async {
-    await _client.auth.signInWithOAuth(
-      OAuthProvider.facebook,
-      authScreenLaunchMode: LaunchMode.inAppBrowserView,
-      redirectTo: 'https://lrpkqywievdyqjcyheil.supabase.co/auth/v1/callback',
-    );
+    try {
+      await _client.auth.signInWithOAuth(
+        OAuthProvider.facebook,
+        authScreenLaunchMode: LaunchMode.inAppBrowserView,
+        redirectTo: 'https://lrpkqywievdyqjcyheil.supabase.co/auth/v1/callback',
+      );
+    } catch (e, s) {
+      print('google sign in issue $e at $s');
+    }
   }
 
   Future<void> continueWithGoogle({
     required String idToken,
     required String accessToken,
   }) async {
-    try{
+    try {
       await _client.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
         accessToken: accessToken,
       );
-    }catch(e, s){
+    } catch (e, s) {
       print('google sign in issue $e at $s');
     }
   }

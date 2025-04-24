@@ -112,9 +112,10 @@ class AuthActionScreen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: AppButton.outlined(
-                                        onPressed: () => context.goNamed(
-                                          AppRoute.login.name,
-                                        ),
+                                        loading: state is FatalErrorState,
+                                        onPressed: context
+                                            .read<AuthActionNotifier>()
+                                            .loginAnonymously,
                                         text: 'Continue as Guest',
                                       ),
                                     ),

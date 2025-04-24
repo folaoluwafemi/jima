@@ -24,6 +24,7 @@ enum AppRoute {
   uploadVideo('upload-video', '/admin/upload-video'),
   uploadAudio('upload-audio', '/admin/upload-audio'),
   uploadBook('upload-book', '/admin/upload-book'),
+  uploadDonation('upload-donation', '/admin/upload-donation'),
   ;
 
   final String path;

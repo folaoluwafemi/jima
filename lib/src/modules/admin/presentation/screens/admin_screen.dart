@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
-import 'package:jima/src/core/supabase_infra/auth_service.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
@@ -30,6 +29,7 @@ class AdminScreen extends StatelessWidget {
             ('Upload Video', Vectors.videos, AppRoute.uploadVideo),
             ('Upload Audio', Vectors.audios, AppRoute.uploadAudio),
             ('Upload Books', Vectors.books, AppRoute.uploadBook),
+            ('Update Donation', Vectors.donation, AppRoute.uploadDonation),
           ].map(
             (e) {
               return InkWell(
@@ -55,7 +55,7 @@ class AdminScreen extends StatelessWidget {
               );
             },
           ),
-          54.boxHeight,
+          84.boxHeight,
           RawMaterialButton(
             onPressed: () async {
               await container<AuthSource>().signOut();

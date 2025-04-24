@@ -137,6 +137,46 @@ class AppTextField extends StatelessWidget {
         },
       );
 
+  factory AppTextField.amount({
+    required TextEditingController controller,
+    String? labelText,
+    required String hintText,
+    bool isRequired = true,
+    int decimalDigits = 2,
+    AutovalidateMode? autovalidateMode,
+    ValueChanged<String>? onChanged,
+    FormFieldValidator<String>? validator,
+  }) =>
+      AppTextField(
+        controller: controller,
+        labelText: labelText,
+        hintText: hintText,
+        isRequired: isRequired,
+        textInputType: TextInputType.number,
+        autovalidateMode: autovalidateMode,
+        onChanged: onChanged,
+        inputFormatters: [
+          // CurrencyTextInputFormatter.currency(
+          //   name: '',
+          //   decimalDigits: decimalDigits,
+          // ),
+        ],
+        validator: validator ??
+                (value) {
+              return value == null || value.isEmpty
+                  ? 'Field is required'
+                  : null;
+            },
+        prefix: const Text(
+          '\$ ',
+          style: TextStyle(
+            color: AppColors.blackVoid,
+            fontSize: 16,
+            fontFamily: 'Roboto',
+          ),
+        ),
+      );
+
   factory AppTextField.number({
     TextEditingController? controller,
     required String? labelText,

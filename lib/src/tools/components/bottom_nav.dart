@@ -36,6 +36,7 @@ enum BottomNavItem {
   const BottomNavItem(this.route, this.assetPath);
 
   bool get shouldBeRemoved {
+    if (this != profile) return false;
     return this == profile &&
             container<SupabaseAuthService>().currentState == null ||
         container<AuthSource>().isUserAnonymous;

@@ -4,6 +4,7 @@ abstract final class AppColors {
   static const Color black = Color(0xFF000000);
   static const Color black500 = Color(0xFF040C22);
   static const Color black600 = Color(0xFF3E3E3E);
+  static const Color black700 = Color(0xFF1E1E1E);
   static const Color blackVoid = Color(0xFF1F2024);
   static const Color textBlack = Color(0xFF373E49);
   static const Color buttonTextBlack = Color(0xFF343434);

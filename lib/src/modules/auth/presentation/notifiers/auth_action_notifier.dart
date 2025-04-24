@@ -32,7 +32,7 @@ class AuthActionNotifier extends BaseNotifier<Object?> {
   }
 
   Future<void> loginAnonymously() async {
-    setInLoading();
+    value = const FatalErrorState(message: 'logging in anonymously');
 
     final result = await _source.loginAnonymously().tryCatch();
 
