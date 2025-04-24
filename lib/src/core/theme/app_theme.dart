@@ -13,6 +13,7 @@ abstract final class AppTheme {
     colorScheme: lightColorScheme,
     primaryColor: AppColors.blue,
     appBarTheme: const AppBarTheme(
+      centerTitle: true,
       backgroundColor: AppColors.whiteVariant,
       scrolledUnderElevation: 0,
       elevation: 0,

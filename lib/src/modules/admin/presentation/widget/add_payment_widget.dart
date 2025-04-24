@@ -111,40 +111,62 @@ class _AddPaymentWidgetState extends State<AddPaymentWidget> {
                     ),
                   ),
                 ...paymentDetails.map(
-                  (items) => Text.rich(
-                    TextSpan(
-                      text: '${items.name}: ',
-                      children: [
-                        TextSpan(
-                          text: '${items.value}  ',
-                          style: Textstyles.bold.copyWith(
+                  (item) => Row(
+                    children: [
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            text: '${item.name}: ',
+                            children: [
+                              TextSpan(
+                                text: '${item.value}  ',
+                                style: Textstyles.bold.copyWith(
+                                  fontSize: 14.sp,
+                                  color: const Color(0xCC3E3E3E),
+                                ),
+                              ),
+                              if (item.canCopy)
+                                WidgetSpan(
+                                  child: InkWell(
+                                    onTap: () async {
+                                      await Clipboard.setData(
+                                        ClipboardData(text: item.value),
+                                      );
+                                      if (!context.mounted) return;
+                                      context.showSuccessToast('copied');
+                                    },
+                                    child: Icon(
+                                      Icons.copy,
+                                      size: 18.sp,
+                                      color: const Color(0xCC3E3E3E),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          style: Textstyles.normal.copyWith(
                             fontSize: 14.sp,
                             color: const Color(0xCC3E3E3E),
                           ),
                         ),
-                        if (items.canCopy)
-                          WidgetSpan(
-                            child: InkWell(
-                              onTap: () async {
-                                await Clipboard.setData(
-                                  ClipboardData(text: items.value),
-                                );
-                                if (!context.mounted) return;
-                                context.showSuccessToast('copied');
-                              },
-                              child: Icon(
-                                Icons.copy,
-                                size: 18.sp,
-                                color: const Color(0xCC3E3E3E),
-                              ),
-                            ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          editModeNotifier.value = item;
+                          paymentDetails = paymentDetails.copyRemove(item);
+                          setState(() {});
+                        },
+                        borderRadius: 40.circularBorder,
+                        child: Padding(
+                          padding: REdgeInsets.all(10),
+                          child: Icon(
+                            Icons.edit,
+                            size: 16.sp,
+                            color: AppColors.grey500,
                           ),
-                      ],
-                    ),
-                    style: Textstyles.normal.copyWith(
-                      fontSize: 14.sp,
-                      color: const Color(0xCC3E3E3E),
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -171,6 +193,7 @@ class _AddPaymentWidgetState extends State<AddPaymentWidget> {
           ),
           24.boxHeight,
           context.bottomScreenPadding.boxHeight,
+          (context.viewInsets.bottom + 50.h).boxHeight,
         ],
       ),
     );

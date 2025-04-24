@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
@@ -65,6 +64,26 @@ class _UploadDonationViewState extends State<UploadDonationView> {
     super.dispose();
   }
 
+  Future<void> showEditModal({
+    List<PaymentMethodValue>? initialItems,
+  }) async {
+    final value = await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => AddPaymentWidget(
+        initialItems: initialItems,
+      ),
+    );
+
+    if (initialItems != null && value != null) {
+      paymentDetailsNotifier.value = paymentDetailsNotifier.value.copyRemove(
+        initialItems,
+      );
+    }
+
+    paymentDetailsNotifier.value = paymentDetailsNotifier.value.copyAdd(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,20 +128,20 @@ class _UploadDonationViewState extends State<UploadDonationView> {
                   ValueListenableBuilder<List<List<PaymentMethodValue>>>(
                     valueListenable: paymentDetailsNotifier,
                     builder: (context, value, _) {
-                      return DetailsWidget(details: value);
+                      return DetailsWidget(
+                        details: value,
+                        onEditPressed: (value) => showEditModal(
+                          initialItems: value,
+                        ),
+                        onDeletePressed: (value) {
+                          paymentDetailsNotifier.value =
+                              paymentDetailsNotifier.value.copyRemove(value);
+                        },
+                      );
                     },
                   ),
                   RawMaterialButton(
-                    onPressed: () async {
-                      final value = await showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (context) => const AddPaymentWidget(),
-                      );
-
-                      paymentDetailsNotifier.value =
-                          paymentDetailsNotifier.value.copyAdd(value);
-                    },
+                    onPressed: showEditModal,
                     shape: RoundedRectangleBorder(
                       borderRadius: 8.circularBorder,
                       side: BorderSide(
@@ -203,10 +222,14 @@ class _UploadDonationViewState extends State<UploadDonationView> {
 
 class DetailsWidget extends StatelessWidget {
   final List<List<PaymentMethodValue>> details;
+  final ValueChanged<List<PaymentMethodValue>> onEditPressed;
+  final ValueChanged<List<PaymentMethodValue>> onDeletePressed;
 
   const DetailsWidget({
     super.key,
     required this.details,
+    required this.onEditPressed,
+    required this.onDeletePressed,
   });
 
   @override
@@ -218,48 +241,53 @@ class DetailsWidget extends StatelessWidget {
           (e) {
             return Padding(
               padding: REdgeInsets.only(bottom: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: 8.h,
-                children: [
-                  ...e.map(
-                    (items) => Text.rich(
-                      TextSpan(
-                        text: '${items.name}: ',
+              child: InkWell(
+                onTap: () => onEditPressed(e),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: 8.h,
                         children: [
-                          TextSpan(
-                            text: '${items.value}  ',
-                            style: Textstyles.bold.copyWith(
-                              fontSize: 14.sp,
-                              color: const Color(0xCC3E3E3E),
-                            ),
-                          ),
-                          if (items.canCopy)
-                            WidgetSpan(
-                              child: InkWell(
-                                onTap: () async {
-                                  await Clipboard.setData(
-                                    ClipboardData(text: items.value),
-                                  );
-                                  if (!context.mounted) return;
-                                  context.showSuccessToast('copied');
-                                },
-                                child: Icon(
-                                  Icons.copy,
-                                  size: 18.sp,
-                                  color: const Color(0xCC3E3E3E),
-                                ),
+                          ...e.map(
+                            (items) => Text.rich(
+                              TextSpan(
+                                text: '${items.name}: ',
+                                children: [
+                                  TextSpan(
+                                    text: '${items.value}  ',
+                                    style: Textstyles.bold.copyWith(
+                                      fontSize: 14.sp,
+                                      color: const Color(0xCC3E3E3E),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              style: Textstyles.normal.copyWith(
+                                fontSize: 14.sp,
+                                color: const Color(0xCC3E3E3E),
                               ),
                             ),
+                          ),
                         ],
                       ),
-                      style: Textstyles.normal.copyWith(
-                        fontSize: 14.sp,
-                        color: const Color(0xCC3E3E3E),
+                    ),
+                    InkWell(
+                      onTap: () => onDeletePressed(e),
+                      borderRadius: 40.circularBorder,
+                      child: Padding(
+                        padding: REdgeInsets.all(6),
+                        child: Icon(
+                          Icons.delete,
+                          size: 24.sp,
+                          color: AppColors.blackVoid,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
