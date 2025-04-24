@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseAuthService {
@@ -86,14 +84,19 @@ class SupabaseAuthService {
     );
   }
 
-  Future<void> continueWithGoogle() async {
-    await _client.auth.signInWithOAuth(
-      OAuthProvider.google,
-      authScreenLaunchMode: Platform.isAndroid
-          ? LaunchMode.externalApplication
-          : LaunchMode.inAppWebView,
-      redirectTo: 'https://lrpkqywievdyqjcyheil.supabase.co/auth/v1/callback',
-    );
+  Future<void> continueWithGoogle({
+    required String idToken,
+    required String accessToken,
+  }) async {
+    try{
+      await _client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+    }catch(e, s){
+      print('google sign in issue $e at $s');
+    }
   }
 
   Future<void> resetPassword(String email) async {

@@ -90,58 +90,44 @@ class AuthActionScreen extends StatelessWidget {
                                   ],
                                 ),
                                 16.boxHeight,
-                                // AppButton.outlined(
-                                //   loading: state.isOutLoading,
-                                //   onPressed: context
-                                //       .read<AuthActionNotifier>()
-                                //       .loginWithGoogle,
-                                //   text: 'Continue with Google',
-                                //   icon: Vectors.google.vectorAssetWidget(),
-                                // ),
-                                // 16.boxHeight,
-                                // AppButton.outlined(
-                                //   loading: state.isInLoading,
-                                //   onPressed: context
-                                //       .read<AuthActionNotifier>()
-                                //       .loginWithFacebook,
-                                //   text: 'Continue with Facebook',
-                                //   icon: Vectors.facebook.vectorAssetWidget(),
-                                // ),
-                                // 16.boxHeight,
-                                // Row(
-                                //   children: [
-                                //     Expanded(
-                                //       child: AppButton.outlined(
-                                //         onPressed: () => context.goNamed(
-                                //           AppRoute.login.name,
-                                //         ),
-                                //         text: 'Continue as Guest',
-                                //       ),
-                                //     ),
-                                //     16.boxWidth,
-                                //     Expanded(
-                                //       child: AppButton.outlined(
-                                //         onPressed: () => context.goNamed(
-                                //           AppRoute.login.name,
-                                //         ),
-                                //         text: 'Sign In as Admin',
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
+                                AppButton.outlined(
+                                  loading: state.isOutLoading,
+                                  onPressed: context
+                                      .read<AuthActionNotifier>()
+                                      .loginWithGoogle,
+                                  text: 'Continue with Google',
+                                  icon: Vectors.google.vectorAssetWidget(),
+                                ),
+                                16.boxHeight,
                                 AppButton.outlined(
                                   loading: state.isInLoading,
                                   onPressed: context
                                       .read<AuthActionNotifier>()
-                                      .loginAnonymously,
-                                  text: 'Continue as Guest',
+                                      .loginWithFacebook,
+                                  text: 'Continue with Facebook',
+                                  icon: Vectors.facebook.vectorAssetWidget(),
                                 ),
                                 16.boxHeight,
-                                AppButton.outlined(
-                                  onPressed: () => context.goNamed(
-                                    AppRoute.login.name,
-                                  ),
-                                  text: 'Sign In as Admin',
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppButton.outlined(
+                                        onPressed: () => context.goNamed(
+                                          AppRoute.login.name,
+                                        ),
+                                        text: 'Continue as Guest',
+                                      ),
+                                    ),
+                                    16.boxWidth,
+                                    Expanded(
+                                      child: AppButton.outlined(
+                                        onPressed: () => context.goNamed(
+                                          AppRoute.login.name,
+                                        ),
+                                        text: 'Sign In as Admin',
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

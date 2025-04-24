@@ -7,6 +7,7 @@ import 'package:jima/src/core/supabase_infra/storage_service.dart';
 import 'package:jima/src/core/supabase_infra/supabase_api.dart';
 import 'package:jima/src/modules/admin/data/admin_source.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
+import 'package:jima/src/modules/auth/data/oauth_source.dart';
 import 'package:jima/src/modules/media/data/media_data_source.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audio_data_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
@@ -47,6 +48,7 @@ void injectDependencies() {
     ..registerLazySingleton(() => SearchAllMediaNotifier(container()))
     ..registerLazySingleton(() => VideosNotifier(container()))
     ..registerLazySingleton(() => AudiosNotifier(container()))
+    ..registerLazySingleton<OauthSource>(() => OauthSource())
     ..registerLazySingleton(
       () => AudioDataNotifier(container()..fetchAudioData()),
     )

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
+import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
 class AdminScreen extends StatelessWidget {
@@ -57,7 +58,7 @@ class AdminScreen extends StatelessWidget {
           54.boxHeight,
           RawMaterialButton(
             onPressed: () async {
-              await container<SupabaseAuthService>().signOut();
+              await container<AuthSource>().signOut();
               if (!context.mounted) return;
               context.goNamed(AppRoute.authAction.name);
             },

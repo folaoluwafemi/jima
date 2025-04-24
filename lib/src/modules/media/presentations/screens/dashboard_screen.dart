@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               container<AuthSource>().isUserAnonymous)
             TextButton(
               onPressed: () async {
-                await container<SupabaseAuthService>().signOut();
+                await container<AuthSource>().signOut();
                 if (!context.mounted) return;
                 context.goNamed(AppRoute.authAction.name);
               },

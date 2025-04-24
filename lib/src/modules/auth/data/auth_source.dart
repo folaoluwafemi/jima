@@ -1,4 +1,7 @@
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
+import 'package:jima/src/modules/auth/data/oauth_source.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
 class AuthSource {
@@ -30,7 +33,12 @@ class AuthSource {
   }
 
   Future<void> loginWithGoogle() async {
-    await _authService.continueWithGoogle();
+    final value = await container<OauthSource>().signInWithGoogle();
+
+    await _authService.continueWithGoogle(
+      idToken: value!.idToken!,
+      accessToken: value.accessToken!,
+    );
   }
 
   Future<void> loginWithFacebook() async {
@@ -45,7 +53,10 @@ class AuthSource {
     await _authService.resetPassword(email);
   }
 
-  Future<void> verifyOtp({required String otp, required String email}) async {
+  Future<void> verifyOtp({
+    required String otp,
+    required String email,
+  }) async {
     await _authService.verifyOtp(email: email, otp: otp);
   }
 
@@ -66,5 +77,12 @@ class AuthSource {
 
   Future<void> changePassword(String password) async {
     await _authService.updatePassword(password);
+  }
+
+  Future<void> signOut() async {
+    await container<SupabaseAuthService>().signOut();
+    if (await GoogleSignIn().isSignedIn()) {
+      await GoogleSignIn().signOut();
+    }
   }
 }

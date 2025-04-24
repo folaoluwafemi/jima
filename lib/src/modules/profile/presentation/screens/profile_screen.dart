@@ -111,7 +111,7 @@ class ProfileScreen extends StatelessWidget {
           54.boxHeight,
           RawMaterialButton(
             onPressed: () async {
-              await container<SupabaseAuthService>().signOut();
+              await container<AuthSource>().signOut();
               if (!context.mounted) return;
               context.goNamed(AppRoute.authAction.name);
             },
