@@ -4,11 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
-import 'package:jima/src/core/supabase_infra/auth_service.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
+import 'package:jima/src/modules/profile/domain/entities/user.dart';
 import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -38,7 +37,6 @@ class ProfileScreen extends StatelessWidget {
             },
             child: VanillaBuilder<UserNotifier, BaseState<User?>>(
               builder: (context, state) {
-                final profileImage = container<UserNotifier>().profilePicture;
                 return InkWell(
                   borderRadius: 139.circularBorder,
                   onTap: context.read<UserNotifier>().updateUserProfileImage,
@@ -50,10 +48,10 @@ class ProfileScreen extends StatelessWidget {
                         ClipOval(
                           child: SizedBox.square(
                             dimension: 139.sp,
-                            child: profileImage == null
+                            child: state.data?.profilePhoto == null
                                 ? Vectors.userProfile.vectorAssetWidget()
                                 : CachedNetworkImage(
-                                    imageUrl: profileImage,
+                                    imageUrl: state.data!.profilePhoto!,
                                     width: 139.sp,
                                     height: 139.sp,
                                     fit: BoxFit.cover,
@@ -103,8 +101,8 @@ class ProfileScreen extends StatelessWidget {
             valueListenable: container<UserNotifier>(),
             builder: (context, state, _) {
               return FieldView(
-                firstname: container<UserNotifier>().firstname,
-                lastname: container<UserNotifier>().lastname,
+                firstname: state.data?.firstname,
+                lastname: state.data?.lastname,
               );
             },
           ),

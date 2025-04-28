@@ -1,5 +1,7 @@
+import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/error_handling/try_catch.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
+import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 typedef AuthActionState = BaseState<Object?>;
@@ -16,7 +18,10 @@ class AuthActionNotifier extends BaseNotifier<Object?> {
 
     return switch (result) {
       Left(:final value) => setError(value.message!),
-      Right() => setSuccess(),
+      Right(:final value) => () {
+          setSuccess();
+          container<UserNotifier>().setData(value);
+        }(),
     };
   }
 
@@ -27,7 +32,10 @@ class AuthActionNotifier extends BaseNotifier<Object?> {
 
     return switch (result) {
       Left(:final value) => setError(value.message!),
-      Right() => setSuccess(),
+      Right(:final value) => () {
+          setSuccess();
+          container<UserNotifier>().setData(value);
+        }(),
     };
   }
 
@@ -38,7 +46,10 @@ class AuthActionNotifier extends BaseNotifier<Object?> {
 
     return switch (result) {
       Left(:final value) => setError(value.message!),
-      Right() => setSuccess(),
+      Right(:final value) => () {
+          setSuccess();
+          container<UserNotifier>().setData(value);
+        }(),
     };
   }
 }

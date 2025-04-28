@@ -41,9 +41,11 @@ void injectDependencies() {
     )
     ..registerLazySingleton(() => SupabaseAuthService(client: container()))
     ..registerLazySingleton(() => AppStorageService(client: container()))
-    ..registerLazySingleton(() => ProfileDataSource(container(), container()))
+    ..registerLazySingleton(
+      () => ProfileDataSource(container(), container(), container()),
+    )
     ..registerLazySingleton<UserNotifier>(() => UserNotifier(container()))
-    ..registerLazySingleton(() => AuthSource(container()))
+    ..registerLazySingleton(() => AuthSource(container(), container()))
     ..registerLazySingleton(() => MediaDataSource(container()))
     ..registerLazySingleton(() => HighestViewedNotifier(container()))
     ..registerLazySingleton(() => SearchAllMediaNotifier(container()))

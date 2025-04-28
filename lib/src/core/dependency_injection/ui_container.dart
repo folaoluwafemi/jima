@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/modules/admin/presentation/notifiers/manage_admins_notifier.dart';
 import 'package:jima/src/modules/auth/presentation/notifiers/login_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
@@ -29,6 +30,9 @@ class GeneralUiIOCContainer extends StatelessWidget {
         InheritedVanilla<VideosNotifier>(createNotifier: () => container()),
         InheritedVanilla<AudiosNotifier>(createNotifier: () => container()),
         InheritedVanilla<BooksNotifier>(createNotifier: () => container()),
+        InheritedVanilla<ManageAdminsNotifier>(
+          createNotifier: () => ManageAdminsNotifier(container()),
+        ),
       ],
       child: child,
     );

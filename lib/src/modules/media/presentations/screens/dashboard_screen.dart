@@ -18,6 +18,7 @@ import 'package:jima/src/modules/media/presentations/widgets/dashboard_audio_wid
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_book_widget.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_video_widgets.dart';
 import 'package:jima/src/modules/media/presentations/widgets/highest_view_counts_widget.dart';
+import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/constants/vectors.dart';
 import 'package:jima/src/tools/extensions/extensions.dart';
 
@@ -79,8 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
         ),
         actions: [
-          if (container<SupabaseAuthService>().currentState == null ||
-              container<AuthSource>().isUserAnonymous)
+          if (container<UserNotifier>().userPrivilege.isNone)
             TextButton(
               onPressed: () async {
                 await container<AuthSource>().signOut();

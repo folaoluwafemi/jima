@@ -1,31 +1,43 @@
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
+import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/core/supabase_infra/storage_service.dart';
+import 'package:jima/src/modules/profile/domain/entities/user.dart';
 import 'package:jima/src/tools/constants/buckets.dart';
+import 'package:jima/src/tools/constants/tables.dart';
 
 class ProfileDataSource {
   final SupabaseAuthService _authService;
+  final AppDatabaseService _databaseService;
   final AppStorageService _storageService;
 
-  ProfileDataSource(this._authService, this._storageService);
+  ProfileDataSource(
+    this._authService,
+    this._storageService,
+    this._databaseService,
+  );
 
-  Future<String> updateProfilePicture(String path) async {
-    final downloadUrl = await _uploadProfilePicture(path);
+  Future<User> updateProfilePicture(
+    String path, {
+    String? oldUrl,
+  }) async {
+    final downloadUrl = await _uploadProfilePicture(path, oldUrl);
 
-    await _authService.updateUserInfo(
-      data: {
-        ...?_authService.currentState?.userMetadata,
-        'profile_photo': downloadUrl,
-      },
+    final id = _authService.currentState!.id;
+
+    final value = await _databaseService.update(
+      Tables.users,
+      values: {'profilePhoto': downloadUrl},
+      filter: (request) => request.eq('id', id),
+      transform: (request) => request.maybeSingle(),
     );
-    return downloadUrl;
+
+    return User.fromMap(value);
   }
 
-  Future<String> _uploadProfilePicture(String path) async {
-    final userImage = _authService.currentState!.userMetadata?['profile_photo'];
-
-    if (userImage != null) {
+  Future<String> _uploadProfilePicture(String path, String? oldUrl) async {
+    if (oldUrl != null) {
       await _storageService.delete(
-        [userImage],
+        [oldUrl],
         bucket: StorageBuckets.profilePhoto,
       );
     }
@@ -34,5 +46,17 @@ class ProfileDataSource {
       bucket: StorageBuckets.profilePhoto,
     );
     return downloadUrl;
+  }
+
+  Future<User> fetchUser() async {
+    final id = _authService.currentState?.id;
+    if (id == null) throw 'User not authenticated';
+
+    final value = await _databaseService.selectSingle(
+      Tables.users,
+      filter: (request) => request.eq('id', id),
+    );
+
+    return User.fromMap(value);
   }
 }

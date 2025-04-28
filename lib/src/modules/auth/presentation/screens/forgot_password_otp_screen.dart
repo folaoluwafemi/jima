@@ -63,7 +63,8 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                     ),
                     8.boxHeight,
                     Text(
-                      'Enter your email address and a reset link\n will be sent to you.\n\n',
+                      'Enter your email address and a reset link\n will be sent'
+                      ' to you.\n\n',
                       style: GoogleFonts.inter(
                         color: const Color(0xFF71727A),
                         fontSize: 14,

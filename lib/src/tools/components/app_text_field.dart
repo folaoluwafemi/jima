@@ -8,6 +8,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class AppTextField extends StatelessWidget {
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final String? initialValue;
   final String? hintText;
   final String? labelText;
@@ -29,6 +30,7 @@ class AppTextField extends StatelessWidget {
   final Color? borderColor;
   final BorderRadius? borderRadius;
   final ValueSetter<String>? onChanged;
+  final ValueSetter<String>? onSubmit;
   final AutovalidateMode? autovalidateMode;
   final TextInputAction? textInputAction;
   final EdgeInsets? contentPadding;
@@ -52,6 +54,7 @@ class AppTextField extends StatelessWidget {
     this.mustUseValidator = false,
     this.onTap,
     this.prefixIcon,
+    this.onSubmit,
     this.suffixIcon,
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.none,
@@ -67,34 +70,9 @@ class AppTextField extends StatelessWidget {
     this.addPaddingToSuffixIcon = true,
     this.labels = const [],
     this.suffix,
+    this.focusNode,
     super.key,
   });
-
-  factory AppTextField.email({
-    required TextEditingController controller,
-    TextInputAction? textInputAction,
-    String labelText = 'Enter your email address',
-    AutovalidateMode? autovalidateMode,
-    bool isRequired = true,
-    bool readOnly = false,
-    Color? fillColor,
-    Widget? suffixIcon,
-  }) =>
-      AppTextField(
-        controller: controller,
-        labelText: labelText,
-        hintText: 'Enter email address',
-        textInputType: TextInputType.emailAddress,
-        textInputAction: textInputAction,
-        autovalidateMode: autovalidateMode ?? AutovalidateMode.onUnfocus,
-        isRequired: isRequired,
-        readOnly: readOnly,
-        fillColor: fillColor,
-        suffixIcon: suffixIcon,
-        validator: (value) {
-          return value == null || !value.isValidEmail ? 'Invalid email' : null;
-        },
-      );
 
   factory AppTextField.search({
     TextEditingController? controller,
@@ -114,6 +92,37 @@ class AppTextField extends StatelessWidget {
           dimension: 17.sp,
         ),
         textInputAction: TextInputAction.search,
+      );
+
+  factory AppTextField.email({
+    required TextEditingController controller,
+    FocusNode? focusNode,
+    TextInputAction? textInputAction,
+    String? labelText = 'Enter your email address',
+    String? hintText,
+    AutovalidateMode? autovalidateMode,
+    ValueChanged<String>? onSubmit,
+    bool isRequired = true,
+    bool readOnly = false,
+    Color? fillColor,
+    Widget? suffixIcon,
+  }) =>
+      AppTextField(
+        controller: controller,
+        labelText: labelText,
+        focusNode: focusNode,
+        onSubmit: onSubmit,
+        hintText: hintText ?? 'Enter email address',
+        textInputType: TextInputType.emailAddress,
+        textInputAction: textInputAction,
+        autovalidateMode: autovalidateMode ?? AutovalidateMode.onUnfocus,
+        isRequired: isRequired,
+        readOnly: readOnly,
+        fillColor: fillColor,
+        suffixIcon: suffixIcon,
+        validator: (value) {
+          return value == null || !value.isValidEmail ? 'Invalid email' : null;
+        },
       );
 
   factory AppTextField.name({
@@ -162,7 +171,7 @@ class AppTextField extends StatelessWidget {
           // ),
         ],
         validator: validator ??
-                (value) {
+            (value) {
               return value == null || value.isEmpty
                   ? 'Field is required'
                   : null;
@@ -341,6 +350,7 @@ class AppTextField extends StatelessWidget {
         Flexible(
           flex: expands ? 1 : 0,
           child: TextFormField(
+            focusNode: focusNode,
             initialValue: initialValue,
             controller: controller,
             validator: ((optional || isRequired == false) && !mustUseValidator)
@@ -351,6 +361,7 @@ class AppTextField extends StatelessWidget {
             maxLines: maxLines,
             minLines: minLines,
             expands: expands,
+            onFieldSubmitted: onSubmit,
             readOnly: readOnly,
             textAlignVertical: TextAlignVertical.top,
             onTap: onTap,

@@ -1,13 +1,17 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/core/error_handling/try_catch.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
+import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/modules/auth/data/oauth_source.dart';
-import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:jima/src/modules/profile/domain/entities/user.dart';
+import 'package:jima/src/tools/constants/tables.dart';
 
 class AuthSource {
   final SupabaseAuthService _authService;
+  final AppDatabaseService _databaseService;
 
-  AuthSource(this._authService);
+  AuthSource(this._authService, this._databaseService);
 
   Future<void> login({
     required String email,
@@ -19,37 +23,78 @@ class AuthSource {
     );
   }
 
-  Future<void> signup({
-    required String firstname,
-    required String lastname,
-    required String email,
-    required String password,
-  }) async {
-    await _authService.signUp(
-      email: email,
-      password: password,
-      otherData: {'firstname': firstname, 'lastname': lastname, 'email': email},
-    );
+  Future<User> signup({required User seed, required String password}) async {
+    await _authService.signUp(email: seed.email!, password: password);
+
+    // delay to allow supabase internal get the updated user
+    await Future.delayed(const Duration(milliseconds: 500));
+    final id = _authService.currentState!.id;
+
+    return _fetchOrCreateUser(seed: seed, id: id);
   }
 
-  Future<void> loginWithGoogle() async {
+  Future<User> loginWithGoogle() async {
     final value = await container<OauthSource>().signInWithGoogle();
 
     await _authService.continueWithGoogle(
       idToken: value!.idToken!,
       accessToken: value.accessToken!,
     );
+
+    // delay to allow supabase internal get the updated user
+    await Future.delayed(const Duration(milliseconds: 500));
+    final id = _authService.currentState!.id;
+
+    return await _fetchOrCreateUser(seed: value.user, id: id);
   }
 
-  Future<void> loginWithFacebook() async {
-    // final value = await container<OauthSource>().signInWithFacebook();
-    //
-    // if (value == null) throw 'Unable to authenticate user!';
+  Future<User> _fetchOrCreateUser({
+    required User seed,
+    required String id,
+  }) async {
+    final result = await _databaseService
+        .selectSingle(Tables.users, filter: (request) => request.eq('id', id))
+        .tryCatch();
+
+    if (result case Right(:final value)) return User.fromMap(value);
+
+    await _databaseService.insert(
+      Tables.users,
+      values: seed.copyWith(id: id).toMap(),
+    );
+
+    final updatedUser = await _databaseService.selectSingle(
+      Tables.users,
+      filter: (request) => request.eq('id', id),
+    );
+
+    return User.fromMap(updatedUser);
+  }
+
+  Future<User> loginWithFacebook() async {
     await _authService.continueWithFacebook();
+    // delay to allow supabase internal get the updated user
+    await Future.delayed(const Duration(milliseconds: 500));
+    final id = _authService.currentState!.id;
+    final email = _authService.currentState!.email;
+
+    return await _fetchOrCreateUser(
+      seed: User.create(id: id, email: email),
+      id: id,
+    );
   }
 
-  Future<void> loginAnonymously() async {
+  Future<User> loginAnonymously() async {
     await _authService.loginAnonymously();
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    final id = _authService.currentState!.id;
+    final email = _authService.currentState!.email;
+
+    return await _fetchOrCreateUser(
+      seed: User.create(id: id, email: email),
+      id: id,
+    );
   }
 
   Future<void> sendResetInstructions(String email) async {
@@ -61,21 +106,6 @@ class AuthSource {
     required String email,
   }) async {
     await _authService.verifyOtp(email: email, otp: otp);
-  }
-
-  Future<void> switchUsersToAdmin() async {
-    await _authService.updateUserInfo(data: {'is_admin': true});
-    await Future.delayed(const Duration(milliseconds: 200));
-    Logger.info('metadata: ${_authService.currentState?.userMetadata}');
-  }
-
-  bool get isUserAdmin {
-    return _authService.currentState?.userMetadata?['is_admin'] == 'true' ||
-        _authService.currentState?.userMetadata?['is_admin'] == true;
-  }
-
-  bool get isUserAnonymous {
-    return _authService.currentState?.isAnonymous == true;
   }
 
   Future<void> changePassword(String password) async {

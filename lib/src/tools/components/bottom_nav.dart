@@ -4,8 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/home_observer.dart';
 import 'package:jima/src/core/navigation/routes.dart';
-import 'package:jima/src/core/supabase_infra/auth_service.dart';
-import 'package:jima/src/modules/auth/data/auth_source.dart';
+import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
 enum BottomNavItem {
@@ -22,11 +21,11 @@ enum BottomNavItem {
 
   Future<void> resolveAction(BuildContext context) async {
     if (this == profile) {
-      if (container<AuthSource>().isUserAnonymous) {
-        context.showErrorToast('You have to be logged in to access this page');
+      if (container<UserNotifier>().userPrivilege.isNone) {
+        context.showErrorToast('You don\'t have the privilege to access this page');
         return;
       }
-      return container<AuthSource>().isUserAdmin
+      return container<UserNotifier>().userPrivilege.isAdmin
           ? context.goNamed(AppRoute.admin.name)
           : context.goNamed(route.name);
     }
@@ -37,9 +36,8 @@ enum BottomNavItem {
 
   bool get shouldBeRemoved {
     if (this != profile) return false;
-    return this == profile &&
-            container<SupabaseAuthService>().currentState == null ||
-        container<AuthSource>().isUserAnonymous;
+
+    return container<UserNotifier>().userPrivilege.isNone;
   }
 
   factory BottomNavItem.fromRoute(AppRoute route) {
@@ -121,7 +119,9 @@ class BottomNav extends StatelessWidget {
                               3.boxHeight,
                               FittedBox(
                                 child: Text(
-                                  container<AuthSource>().isUserAdmin &&
+                                  container<UserNotifier>()
+                                              .userPrivilege
+                                              .isAdmin &&
                                           item == BottomNavItem.profile
                                       ? 'Admin'
                                       : item.name.toFirstUppercase(),

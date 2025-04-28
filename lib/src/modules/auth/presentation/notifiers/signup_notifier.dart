@@ -1,5 +1,8 @@
+import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/error_handling/try_catch.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
+import 'package:jima/src/modules/profile/domain/entities/user.dart';
+import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 typedef SignupState = BaseState<Object?>;
@@ -17,18 +20,21 @@ class SignupNotifier extends BaseNotifier<Object?> {
   }) async {
     setOutLoading();
 
-    final result = await _source
-        .signup(
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          password: password,
-        )
-        .tryCatch();
+    final createdUser = User.create(
+      id: '',
+      email: email,
+      firstname: firstname,
+      lastname: lastname,
+    );
+    final result =
+        await _source.signup(seed: createdUser, password: password).tryCatch();
 
     return switch (result) {
       Left(:final value) => setError(value.message!),
-      Right() => setSuccess(),
+      Right(:final value) => () {
+          setSuccess();
+          container<UserNotifier>().setData(value);
+        }(),
     };
   }
 }

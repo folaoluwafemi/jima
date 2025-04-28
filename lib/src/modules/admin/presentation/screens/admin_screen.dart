@@ -30,6 +30,7 @@ class AdminScreen extends StatelessWidget {
             ('Upload Audio', Vectors.audios, AppRoute.uploadAudio),
             ('Upload Books', Vectors.books, AppRoute.uploadBook),
             ('Update Donation', Vectors.donation, AppRoute.uploadDonation),
+            ('Manage Admins', Vectors.profile, AppRoute.manageAdmins),
           ].map(
             (e) {
               return InkWell(
@@ -38,9 +39,7 @@ class AdminScreen extends StatelessWidget {
                   padding: REdgeInsets.symmetric(horizontal: 40, vertical: 10),
                   child: Row(
                     children: [
-                      e.$2.vectorAssetWidget(
-                        dimension: 32.sp,
-                      ),
+                      e.$2.vectorAssetWidget(dimension: 32.sp),
                       20.boxWidth,
                       Text(
                         e.$1,

@@ -30,6 +30,16 @@ class GreyBox extends StatelessWidget {
   })  : height = dimension,
         width = dimension;
 
+  GreyBox.circle({
+    required double dimension,
+    this.color,
+    this.radius,
+    this.margin,
+    super.key,
+  })  : height = dimension,
+        borderRadius = 100000.circularBorder,
+        width = dimension;
+
   const GreyBox.boxEdge({
     this.color,
     this.height,

@@ -12,13 +12,15 @@ class SplashNotifier extends BaseNotifier<AppRoute?> {
   SplashNotifier() : super(const InitialState());
 
   Future<void> loadApp(BuildContext context) async {
-    // TODO: fetch locally stored user
     await precacheImage(const AssetImage(Images.jimaPastorImage), context);
-    await Future.delayed(const Duration(milliseconds: 2000));
-    final user = container<UserNotifier>().state;
-    final bool userNotLoggedIn =
-        container<SupabaseAuthService>().currentState?.id == null;
-    if (userNotLoggedIn) return setData(AppRoute.authAction);
-    if (!userNotLoggedIn) return setData(AppRoute.dashboard);
+    final authenticated = container<SupabaseAuthService>().currentState?.id == null;
+    if (authenticated) return setData(AppRoute.authAction);
+
+    await container<UserNotifier>().fetchUser();
+    final user = container<UserNotifier>().data;
+
+    if (user != null) return setData(AppRoute.dashboard);
+
+    return setData(AppRoute.authAction);
   }
 }

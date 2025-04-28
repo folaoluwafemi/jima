@@ -5,6 +5,7 @@ import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/splash_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/admin_screen.dart';
+import 'package:jima/src/modules/admin/presentation/screens/manage_admins_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/update_donation_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/upload_audio_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/upload_books_screen.dart';
@@ -195,6 +196,12 @@ abstract final class AppRouter {
                 name: AppRoute.uploadDonation.name,
                 path: AppRoute.uploadDonation.path,
                 builder: (context, state) => const UpdateDonationScreen(),
+              ),
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.manageAdmins.name,
+                path: AppRoute.manageAdmins.path,
+                builder: (context, state) => const ManageAdminsScreen(),
               ),
             ],
           ),
