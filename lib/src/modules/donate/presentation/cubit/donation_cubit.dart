@@ -12,12 +12,10 @@ class DonationNotifier extends BaseNotifier<DonationData?> {
   DonationNotifier(this._source) : super(const InitialState(data: null));
 
   Future<void> uploadData({
-    required String targetAmount,
     required String description,
     required List<List<PaymentMethodValue>> paymentGroup,
   }) async {
     final data = DonationData(
-      targetAmount: targetAmount,
       description: description,
       paymentGroup: paymentGroup,
     );

@@ -100,36 +100,43 @@ class AuthActionScreen extends StatelessWidget {
                                 ),
                                 16.boxHeight,
                                 AppButton.outlined(
-                                  loading: state.isInLoading,
+                                  loading: state is FatalErrorState,
                                   onPressed: context
                                       .read<AuthActionNotifier>()
-                                      .loginWithFacebook,
-                                  text: 'Continue with Facebook',
-                                  icon: Vectors.facebook.vectorAssetWidget(),
+                                      .loginAnonymously,
+                                  text: 'Continue as Guest',
                                 ),
-                                16.boxHeight,
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: AppButton.outlined(
-                                        loading: state is FatalErrorState,
-                                        onPressed: context
-                                            .read<AuthActionNotifier>()
-                                            .loginAnonymously,
-                                        text: 'Continue as Guest',
-                                      ),
-                                    ),
-                                    16.boxWidth,
-                                    Expanded(
-                                      child: AppButton.outlined(
-                                        onPressed: () => context.goNamed(
-                                          AppRoute.login.name,
-                                        ),
-                                        text: 'Sign In as Admin',
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // AppButton.outlined(
+                                //   loading: state.isInLoading,
+                                //   onPressed: context
+                                //       .read<AuthActionNotifier>()
+                                //       .loginWithFacebook,
+                                //   text: 'Continue with Facebook',
+                                //   icon: Vectors.facebook.vectorAssetWidget(),
+                                // ),
+                                // 16.boxHeight,
+                                // Row(
+                                //   children: [
+                                //     Expanded(
+                                //       child: AppButton.outlined(
+                                //         loading: state is FatalErrorState,
+                                //         onPressed: context
+                                //             .read<AuthActionNotifier>()
+                                //             .loginAnonymously,
+                                //         text: 'Continue as Guest',
+                                //       ),
+                                //     ),
+                                //     16.boxWidth,
+                                //     Expanded(
+                                //       child: AppButton.outlined(
+                                //         onPressed: () => context.goNamed(
+                                //           AppRoute.login.name,
+                                //         ),
+                                //         text: 'Sign In as Admin',
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                               ],
                             ),
                           );

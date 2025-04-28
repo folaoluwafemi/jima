@@ -45,9 +45,6 @@ class UploadDonationView extends StatefulWidget {
 }
 
 class _UploadDonationViewState extends State<UploadDonationView> {
-  late final amountController = TextEditingController(
-    text: widget.data?.targetAmount,
-  );
   late final descriptionController = TextEditingController(
     text: widget.data?.description,
   );
@@ -58,7 +55,6 @@ class _UploadDonationViewState extends State<UploadDonationView> {
 
   @override
   void dispose() {
-    amountController.dispose();
     descriptionController.dispose();
     paymentDetailsNotifier.dispose();
     super.dispose();
@@ -107,12 +103,6 @@ class _UploadDonationViewState extends State<UploadDonationView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  24.boxHeight,
-                  AppTextField.amount(
-                    labelText: 'Target Amount',
-                    hintText: 'Enter target amount e.g \$400',
-                    controller: amountController,
-                  ),
                   24.boxHeight,
                   SizedBox(
                     height: 178.h,
@@ -201,7 +191,6 @@ class _UploadDonationViewState extends State<UploadDonationView> {
                     loading: state.isInLoading || state.isOutLoading,
                     onPressed: () {
                       context.read<DonationNotifier>().uploadData(
-                            targetAmount: amountController.text,
                             description: descriptionController.text,
                             paymentGroup: paymentDetailsNotifier.value,
                           );

@@ -49,76 +49,32 @@ class DonationScreen extends StatelessWidget {
                       ),
                     ),
                     32.boxHeight,
-                    Text(
-                      ' Joshua Iginla Ministries',
-                      style: Textstyles.bold.copyWith(
-                        height: 1.5,
-                        fontSize: 16.sp,
-                        color: const Color(0xFF3E3E3E),
-                      ),
-                    ),
-                    22.boxHeight,
                     if (state.isInLoading)
                       const DonationDataLoading()
                     else ...[
-                      Padding(
-                        padding: REdgeInsets.fromLTRB(7, 8, 7, 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: 10.83.circularBorder,
-                                color: AppColors.blue,
-                              ),
-                              padding: REdgeInsets.all(9),
-                              child: Vectors.sendIcon.vectorAssetWidget(
-                                dimension: 24.sp,
-                              ),
-                            ),
-                            6.boxWidth,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Target amount',
-                                  style: Textstyles.medium.copyWith(
-                                    fontSize: 12.sp,
-                                    height: 1.8,
-                                    color: const Color(0xFF373E49),
-                                  ),
-                                ),
-                                Text(
-                                  '\$${state.data?.targetAmount.formattedToNumber.commaFormatted() ?? '15,000'}',
-                                  style: Textstyles.semibold.copyWith(
-                                    fontSize: 14.sp,
-                                    height: 1.8,
-                                    color: const Color(0xFF373E49),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      18.boxHeight,
-                      Padding(
-                        padding: REdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          state.data?.description ??
-                              'Lorem ipsum dolor sit amet consectetur. Lobortis elit donec '
-                                  'tellus quis eleifend congue risus. Mauris duis eu lacus gravida'
-                                  ' interdum nibh varius adipiscing. Viverra adipiscing blandit '
-                                  'pulvinar ultrices ultrices in nunc feugiat. Mauris est turpis '
-                                  'nec egestas. Ridiculus nibh bibendum nulla.',
-                          style: Textstyles.normal.copyWith(
-                            fontSize: 14.sp,
-                            height: 1.7857,
-                            color: const Color(0xCC3E3E3E),
+                      if (state.data?.description.nullIfEmpty != null) ...[
+                        Text(
+                          ' Joshua Iginla Ministries',
+                          style: Textstyles.bold.copyWith(
+                            height: 1.5,
+                            fontSize: 16.sp,
+                            color: const Color(0xFF3E3E3E),
                           ),
                         ),
-                      ),
-                      32.boxHeight,
+                        22.boxHeight,
+                        Padding(
+                          padding: REdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            state.data?.description ?? '',
+                            style: Textstyles.normal.copyWith(
+                              fontSize: 14.sp,
+                              height: 1.7857,
+                              color: const Color(0xCC3E3E3E),
+                            ),
+                          ),
+                        ),
+                        32.boxHeight,
+                      ],
                       Text(
                         'Donation Details',
                         style: Textstyles.bold.copyWith(
