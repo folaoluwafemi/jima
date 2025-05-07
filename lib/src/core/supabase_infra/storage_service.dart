@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -25,6 +26,27 @@ final class AppStorageService {
     await _client.storage
         .from(bucket)
         .upload(path, file, retryAttempts: retryAttempts);
+
+    final String downloadUrl =
+        '${_client.storage.url}/object/public/$bucket/$path';
+
+    return downloadUrl;
+  }
+
+  /// Uploads a file at a local [filePath] to the supabase storage [bucket]
+  Future<String> uploadFileBinary(
+    Uint8List file,
+    String filename, {
+    required String bucket,
+    int? retryAttempts,
+  }) async {
+    final refId = DateTime.now().millisecondsSinceEpoch;
+    final path =
+        '$filename-$refId'.trim().replaceAll('..', '').replaceAll('~', '');
+
+    await _client.storage
+        .from(bucket)
+        .uploadBinary(path, file, retryAttempts: retryAttempts);
 
     final String downloadUrl =
         '${_client.storage.url}/object/public/$bucket/$path';

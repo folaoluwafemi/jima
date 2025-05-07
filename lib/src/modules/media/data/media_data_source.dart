@@ -24,6 +24,7 @@ class MediaDataSource {
     final result = await _database.select(
       Tables.videos,
       columns: Video.columns,
+      filter: (request) => request.not('url', 'is', null),
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -47,6 +48,7 @@ class MediaDataSource {
     final result = await _database.select(
       Tables.audios,
       columns: Audio.columns,
+      filter: (request) => request.not('url', 'is', null),
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -70,6 +72,7 @@ class MediaDataSource {
     final result = await _database.select(
       Tables.books,
       columns: Audio.columns,
+      filter: (request) => request.not('url', 'is', null),
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request

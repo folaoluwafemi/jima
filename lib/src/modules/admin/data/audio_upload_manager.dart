@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:files_uploader/files_uploader.dart';
-import 'package:jima/src/modules/media/data/models/upload_event.dart';
+import 'package:jima/src/modules/admin/data/upload_event.dart';
 import 'package:jima/src/tools/constants/buckets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';

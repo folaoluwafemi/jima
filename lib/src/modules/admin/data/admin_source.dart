@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/core/supabase_infra/storage_service.dart';
 import 'package:jima/src/modules/profile/domain/entities/user.dart';
@@ -55,18 +57,38 @@ class AdminSource {
     );
   }
 
-  Future<void> uploadAudio(
-    String title,
-    String spotifyUrl,
-    DateTime releaseDate,
-  ) async {
+  Future<void> uploadAudio({
+    required String title,
+    required String audioUrl,
+    required DateTime releaseDate,
+    required String? thumbnail,
+  }) async {
     await _database.insert(
       Tables.audios,
       values: {
+        'thumbnailUrl': thumbnail,
         'title': title,
-        'url': spotifyUrl,
+        'url': audioUrl,
         'dateReleased': releaseDate.toUtc().toIso8601String(),
       },
+    );
+  }
+
+  Future<String> uploadAudioFile(String filePath) async {
+    return await _storageService.uploadFile(
+      filePath,
+      bucket: StorageBuckets.audio,
+    );
+  }
+
+  Future<String> uploadAudioThumbnail(
+    Uint8List data,
+    String filename,
+  ) async {
+    return await _storageService.uploadFileBinary(
+      data,
+      filename,
+      bucket: StorageBuckets.audioThumbnails,
     );
   }
 

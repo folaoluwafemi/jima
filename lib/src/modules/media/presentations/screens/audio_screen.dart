@@ -101,15 +101,17 @@ class _AudiosScreenState extends State<AudiosScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Padding(
-                        padding: REdgeInsets.symmetric(vertical: 120),
-                        child: Text(
-                          state is InitialState
-                              ? 'Enter the query you want to search'
-                              : 'No results!!!',
-                          style: Textstyles.normal.copyWith(
-                            fontSize: 16.sp,
-                            color: AppColors.buttonTextBlack,
+                      Center(
+                        child: Padding(
+                          padding: REdgeInsets.symmetric(vertical: 120),
+                          child: Text(
+                            state is InitialState
+                                ? 'Enter the query you want to search'
+                                : 'No results!!!',
+                            style: Textstyles.normal.copyWith(
+                              fontSize: 16.sp,
+                              color: AppColors.buttonTextBlack,
+                            ),
                           ),
                         ),
                       ),

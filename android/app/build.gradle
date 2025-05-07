@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.dartgod.jima.jima"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
