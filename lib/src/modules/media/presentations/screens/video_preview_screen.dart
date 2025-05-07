@@ -86,7 +86,6 @@ class _VideoPreviewerState extends State<VideoPreviewer> {
     initialVideoId: YoutubePlayer.convertUrlToId(widget.video.url)!,
     flags: const YoutubePlayerFlags(
       autoPlay: false,
-      mute: true,
     ),
   );
 

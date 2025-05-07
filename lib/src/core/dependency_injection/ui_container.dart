@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/modules/admin/presentation/notifiers/manage_admins_notifier.dart';
 import 'package:jima/src/modules/auth/presentation/notifiers/login_notifier.dart';
+import 'package:jima/src/modules/media/presentations/cubits/audio_player_manager.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
@@ -30,6 +31,9 @@ class GeneralUiIOCContainer extends StatelessWidget {
         InheritedVanilla<VideosNotifier>(createNotifier: () => container()),
         InheritedVanilla<AudiosNotifier>(createNotifier: () => container()),
         InheritedVanilla<BooksNotifier>(createNotifier: () => container()),
+        InheritedVanilla<AudioPlayerManager>(
+          createNotifier: () => AudioPlayerManager(),
+        ),
         InheritedVanilla<ManageAdminsNotifier>(
           createNotifier: () => ManageAdminsNotifier(container()),
         ),

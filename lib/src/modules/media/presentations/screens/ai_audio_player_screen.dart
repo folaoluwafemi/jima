@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
+import 'package:jima/src/core/core.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
+import 'package:jima/src/modules/media/presentations/cubits/audio_player_manager.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:vanilla_state/vanilla_state.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
   final Audio audio;
@@ -17,9 +18,8 @@ class AudioPlayerScreen extends StatefulWidget {
 }
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
-  final AudioPlayer _player = AudioPlayer();
-
-  StreamSubscription? positionSub;
+  late final _player =
+      context.read<AudioPlayerManager>().getPlayerForAudio(widget.audio);
 
   Stream<DurationState> get _durationStateStream =>
       Rx.combineLatest2<Duration, Duration?, DurationState>(
@@ -40,25 +40,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   Future<void> _init() async {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
-    await _player.setAudioSource(
-      AudioSource.uri(
-        Uri.parse(widget.audio.url),
-        tag: MediaItem(
-          id: widget.audio.id,
-          album: "Album name",
-          title: widget.audio.title,
-          artUri: Uri.tryParse(widget.audio.thumbnail ?? ''),
-        ),
-      ),
-    );
+    await Future.delayed(const Duration(milliseconds: 100));
     _player.play();
-  }
-
-  @override
-  void dispose() {
-    _player.dispose();
-    positionSub?.cancel();
-    super.dispose();
   }
 
   @override
@@ -111,7 +94,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                 return Column(
                   children: [
                     Slider(
-                      activeColor: Colors.blue,
+                      activeColor: AppColors.blue,
                       inactiveColor: Colors.grey.shade300,
                       min: 0,
                       max: total.inMilliseconds.toDouble(),
@@ -139,7 +122,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Icon(Icons.repeat, color: Colors.grey),
                 IconButton(
                   icon: const Icon(Icons.fast_rewind_outlined),
                   onPressed: () => _player.seek(
@@ -148,7 +130,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                 ),
                 CircleAvatar(
                   radius: 30,
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.blue,
                   child: StreamBuilder<bool>(
                     stream: _player.playingStream,
                     builder: (context, snapshot) {
@@ -170,7 +152,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                     _player.position + const Duration(seconds: 10),
                   ),
                 ),
-                const Icon(Icons.shuffle, color: Colors.grey),
               ],
             ),
           ],
