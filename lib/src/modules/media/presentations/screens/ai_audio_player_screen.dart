@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/modules/media/data/media_data_source.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
+import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audio_player_manager.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:vanilla_state/vanilla_state.dart';
@@ -35,6 +37,16 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   void initState() {
     super.initState();
     _init();
+    updateViewCount();
+  }
+
+  Future<void> updateViewCount() async {
+    await Future.delayed(const Duration(seconds: 5));
+    if (!mounted) return;
+    container<MediaDataSource>().increaseMediaViewedCount(
+      id: widget.audio.id,
+      type: GenericMediaType.audio,
+    );
   }
 
   Future<void> _init() async {

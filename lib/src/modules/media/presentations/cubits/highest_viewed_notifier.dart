@@ -3,9 +3,9 @@ import 'package:jima/src/modules/media/data/media_data_source.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
-typedef HighestViewedState = BaseState<GenericMedia?>;
+typedef HighestViewedState = BaseState<List<GenericMedia>>;
 
-class HighestViewedNotifier extends BaseNotifier<GenericMedia?> {
+class HighestViewedNotifier extends BaseNotifier<List<GenericMedia>> {
   final MediaDataSource _source;
 
   HighestViewedNotifier(this._source) : super(const InitialState());

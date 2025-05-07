@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/routes.dart';
+import 'package:jima/src/modules/media/data/media_data_source.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
+import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
@@ -50,14 +52,14 @@ class _DashboardBookWidgetsState extends State<DashboardBookWidgets> {
               ],
             ),
             16.boxHeight,
-            SizedBox(
-              height: 258.h,
+            UnconstrainedBox(
               child: SingleChildScrollView(
                 padding: REdgeInsets.symmetric(horizontal: 26),
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   spacing: 16.w,
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ...books.take(4).map((e) {
                       return BookItemWidget(book: e);
@@ -134,6 +136,10 @@ class BookItemWidget extends StatelessWidget {
   });
 
   Future<void> onPressed() async {
+    container<MediaDataSource>().increaseMediaViewedCount(
+      id: book.id,
+      type: GenericMediaType.book,
+    );
     launchUrl(
       Uri.parse(book.url),
       mode: LaunchMode.externalApplication,

@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
-import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
-import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
+import 'package:jima/src/modules/media/presentations/widgets/highest_media_carousel.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
@@ -16,52 +14,33 @@ class HighestViewedMediaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: REdgeInsets.symmetric(horizontal: 26),
-      child: VanillaListener<HighestViewedNotifier, HighestViewedState>(
-        listener: (previous, current) {
-          if (current case ErrorState(:final message)) {
-            context.showErrorToast(message);
+    return VanillaListener<HighestViewedNotifier, HighestViewedState>(
+      listener: (previous, current) {
+        if (current case ErrorState(:final message)) {
+          context.showErrorToast(message);
+        }
+      },
+      child: VanillaBuilder<HighestViewedNotifier, HighestViewedState>(
+        builder: (context, state) {
+          if (state.isInLoading && state.data == null) {
+            return const AllViewCountLoader();
           }
+          if (state.data.isNullOrEmpty) return const SizedBox.shrink();
+          return Padding(
+            padding: REdgeInsets.only(top: 24),
+            child: HighestMediaCarousel(mediaList: state.data ?? []),
+          );
         },
-        child: VanillaBuilder<HighestViewedNotifier, HighestViewedState>(
-          builder: (context, state) {
-            if (state.isInLoading && state.data == null) {
-              return const AllViewCountLoader();
-            }
-            if (state.data == null) return const SizedBox.shrink();
-            return Padding(
-              padding: REdgeInsets.only(top: 24),
-              child: HighestViewedMediaWidget(
-                media: state.data!,
-                onPressed: switch (state.data!.type) {
-                  GenericMediaType.audio => () => context.pushNamed(
-                        AppRoute.audioPreview.name,
-                        extra: state.data!.toAudio(),
-                      ),
-                  GenericMediaType.book => () => context.pushNamed(
-                        AppRoute.bookPreview.name,
-                        extra: state.data!.toBook(),
-                      ),
-                  GenericMediaType.video => () => context.pushNamed(
-                        AppRoute.videoPreview.name,
-                        extra: state.data!.toVideo(),
-                      ),
-                },
-              ),
-            );
-          },
-        ),
       ),
     );
   }
 }
 
-class HighestViewedMediaWidget extends StatelessWidget {
+class HighestViewedMediaItemWidget extends StatelessWidget {
   final GenericMedia media;
   final VoidCallback? onPressed;
 
-  const HighestViewedMediaWidget({
+  const HighestViewedMediaItemWidget({
     super.key,
     required this.media,
     required this.onPressed,

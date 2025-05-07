@@ -129,10 +129,10 @@ class MediaDataSource {
     return res.map((e) => e.toAudio()).toList();
   }
 
-  Future<GenericMedia> fetchHighestViewCountItem() async {
+  Future<List<GenericMedia>> fetchHighestViewCountItem() async {
     final result = await _database.rpc(RpcFunctions.getHighestViewCountItem);
 
-    return GenericMedia.fromMap(((result[0]) as Map).cast());
+    return ParseUtils.parseMapArray(result, mapper: GenericMedia.fromMap);
   }
 
   Future<void> increaseMediaViewedCount({
