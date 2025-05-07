@@ -20,8 +20,8 @@ import 'package:jima/src/modules/donate/presentation/screen/donation_screen.dart
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
+import 'package:jima/src/modules/media/presentations/screens/ai_audio_player_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/all_media_search_screen.dart';
-import 'package:jima/src/modules/media/presentations/screens/audio_player_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/audio_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/book_preview_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/books_screen.dart';
