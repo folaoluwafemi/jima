@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
@@ -40,31 +40,24 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   Future<void> _init() async {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
-
-    // Enable background playback
-    if (!AudioService.running) {
-      AudioService.start(
-        backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
-        androidNotificationChannelName: 'Audio Playback',
-        androidNotificationColor: 0xFF2196F3,
-        androidNotificationIcon: 'mipmap/ic_launcher',
-      );
-    }
-
-    // Restore playback position if available
-    await _player.setUrl(widget.audio.url);
-    positionSub = AudioService.position.listen(
-      (position) => _player.seek(position),
+    await _player.setAudioSource(
+      AudioSource.uri(
+        Uri.parse(widget.audio.url),
+        tag: MediaItem(
+          id: widget.audio.id,
+          album: "Album name",
+          title: widget.audio.title,
+          artUri: Uri.tryParse(widget.audio.thumbnail ?? ''),
+        ),
+      ),
     );
-
     _player.play();
   }
 
   @override
   void dispose() {
-    positionSub?.cancel();
-    AudioService.stop();
     _player.dispose();
+    positionSub?.cancel();
     super.dispose();
   }
 
@@ -186,11 +179,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     );
   }
 
-  // Background task entry point
-  void _backgroundTaskEntrypoint() {
-    AudioServiceBackground.run(() => AudioPlayerTask());
-  }
-
   String _formatTime(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = twoDigits(duration.inMinutes.remainder(60));
@@ -204,43 +192,4 @@ class DurationState {
   final Duration total;
 
   DurationState({required this.position, required this.total});
-}
-
-// Background audio task
-class AudioPlayerTask extends BackgroundAudioTask {
-  final _player = AudioPlayer();
-  StreamSubscription? positionSub;
-
-  @override
-  Future<void> onStart(Map<String, dynamic>? params) async {
-    await _player.setUrl(params?['url']);
-    _player.play();
-    positionSub = _player.positionStream.listen((position) {
-      AudioServiceBackground.setState(
-        controls: [
-          MediaControl.pause,
-          MediaControl.play,
-          MediaControl.stop,
-        ],
-        position: position,
-        playing: _player.playing,
-      );
-    });
-  }
-
-  @override
-  Future<void> onPlay() => _player.play();
-
-  @override
-  Future<void> onPause() => _player.pause();
-
-  @override
-  Future<void> onSeekTo(Duration position) => _player.seek(position);
-
-  @override
-  Future<void> onStop() async {
-    await _player.stop();
-    positionSub?.cancel();
-    await super.onStop();
-  }
 }

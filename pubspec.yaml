@@ -43,8 +43,8 @@ dependencies:
   pinput: ^5.0.1
   files_uploader: ^0.1.1
   just_audio: ^0.10.2
+  just_audio_background: ^0.0.1-beta.16
   audio_session: ^0.2.1
-  audio_service: ^0.18.18
   rxdart: ^0.28.0
   audiotags: ^1.4.5
 

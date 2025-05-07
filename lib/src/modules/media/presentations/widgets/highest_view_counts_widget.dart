@@ -9,7 +9,6 @@ import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 class HighestViewedMediaView extends StatelessWidget {
@@ -36,12 +35,10 @@ class HighestViewedMediaView extends StatelessWidget {
               child: HighestViewedMediaWidget(
                 media: state.data!,
                 onPressed: switch (state.data!.type) {
-                  GenericMediaType.audio => () {
-                      launchUrl(
-                        Uri.parse(state.data!.url),
-                        mode: LaunchMode.externalApplication,
-                      );
-                    },
+                  GenericMediaType.audio => () => context.pushNamed(
+                        AppRoute.audioPreview.name,
+                        extra: state.data!.toAudio(),
+                      ),
                   GenericMediaType.book => () => context.pushNamed(
                         AppRoute.bookPreview.name,
                         extra: state.data!.toBook(),
@@ -78,14 +75,14 @@ class HighestViewedMediaWidget extends StatelessWidget {
         borderRadius: 20.circularBorder,
         child: SizedBox(
           width: context.screenWidth(),
-          height: 173.h,
+          height: 180.h,
           child: Stack(
             children: [
               CachedNetworkImage(
                 imageUrl: media.thumbnail ?? NetworkImages.placeholder,
                 fit: BoxFit.cover,
                 width: context.screenWidth(),
-                height: 173.h,
+                height: 180.h,
               ),
               Container(color: AppColors.black.withAlpha(128)),
               Padding(

@@ -5,6 +5,7 @@ import 'package:jima/src/core/app_setup/jima_app.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/supabase_infra/supabase_api.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,4 +24,10 @@ Future<void> setupInfra() async {
 
   await Hive.initFlutter();
   await Hive.openBox<Map>(StorageAccess.user);
+
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
 }

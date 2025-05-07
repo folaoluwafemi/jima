@@ -132,7 +132,9 @@ class AppButton extends StatelessWidget {
                 icon!,
                 8.boxWidth,
               ],
-              Text(text, style: style),
+              FittedBox(
+                child: Text(text, style: style),
+              ),
             ] else
               SizedBox.square(
                 dimension: 21.h,
