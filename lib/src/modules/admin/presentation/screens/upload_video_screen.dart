@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/modules/admin/presentation/notifiers/upload_video_notifier.dart';
+import 'package:jima/src/modules/admin/presentation/widget/select_category_modal.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
@@ -18,12 +20,14 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
   final titleController = TextEditingController();
   final videoIdController = TextEditingController();
   final releaseDateNotifier = ValueNotifier<DateTime?>(null);
+  final categoryNotifier = ValueNotifier<Category?>(null);
 
   @override
   void dispose() {
     titleController.dispose();
     videoIdController.dispose();
     releaseDateNotifier.dispose();
+    categoryNotifier.dispose();
     super.dispose();
   }
 
@@ -71,7 +75,6 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                       key: ValueKey(releaseDate),
                       readOnly: true,
                       onTap: () async {
-
                         final date = await showDatePicker(
                           context: context,
                           initialDate: releaseDate,
@@ -88,6 +91,31 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                       autovalidateMode: AutovalidateMode.onUnfocus,
                       labelText: 'Release Date',
                       hintText: 'Select Release Date',
+                    );
+                  },
+                ),
+                32.boxHeight,
+                ValueListenableBuilder<Category?>(
+                  valueListenable: categoryNotifier,
+                  builder: (context, category, _) {
+                    return AppTextField.text(
+                      key: ValueKey(category),
+                      readOnly: true,
+                      onTap: () async {
+                        final category = await SelectCategoryModal.show();
+                        if (category == null || !mounted) return;
+                        categoryNotifier.value = category;
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Select a category';
+                        }
+                        return null;
+                      },
+                      initialValue: category?.name,
+                      autovalidateMode: AutovalidateMode.onUnfocus,
+                      labelText: 'Category',
+                      hintText: 'Select Category',
                     );
                   },
                 ),

@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:jima/src/core/core.dart';
 import 'package:jima/src/modules/admin/presentation/notifiers/upload_audio_notifier.dart';
+import 'package:jima/src/modules/admin/presentation/widget/select_category_modal.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
@@ -19,12 +21,14 @@ class _UploadAudioScreenState extends State<UploadAudioScreen> {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final releaseDateNotifier = ValueNotifier<DateTime?>(null);
+  final categoryNotifier = ValueNotifier<Category?>(null);
   String? filePath;
 
   @override
   void dispose() {
     titleController.dispose();
     releaseDateNotifier.dispose();
+    categoryNotifier.dispose();
     super.dispose();
   }
 
@@ -88,6 +92,32 @@ class _UploadAudioScreenState extends State<UploadAudioScreen> {
                       autovalidateMode: AutovalidateMode.onUnfocus,
                       labelText: 'Release Date',
                       hintText: 'Select Release Date',
+                    );
+                  },
+                ),
+
+                32.boxHeight,
+                ValueListenableBuilder<Category?>(
+                  valueListenable: categoryNotifier,
+                  builder: (context, category, _) {
+                    return AppTextField.text(
+                      key: ValueKey(category),
+                      readOnly: true,
+                      onTap: () async {
+                        final category = await SelectCategoryModal.show();
+                        if (category == null || !mounted) return;
+                        categoryNotifier.value = category;
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Select a category';
+                        }
+                        return null;
+                      },
+                      initialValue: category?.name,
+                      autovalidateMode: AutovalidateMode.onUnfocus,
+                      labelText: 'Category',
+                      hintText: 'Select Category',
                     );
                   },
                 ),
