@@ -143,6 +143,7 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                                 titleController.text.trim(),
                                 videoIdController.text.trim(),
                                 releaseDateNotifier.value!,
+                                categoryNotifier.value!,
                               );
                         },
                         text: 'Upload',

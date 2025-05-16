@@ -1,5 +1,6 @@
 import 'package:jima/src/core/error_handling/try_catch.dart';
 import 'package:jima/src/modules/admin/data/admin_source.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 typedef UploadBookState = BaseState<Object?>;
@@ -14,6 +15,7 @@ class UploadBookNotifier extends BaseNotifier<Object?> {
     required String bookUrl,
     required String imagePath,
     required DateTime releaseDate,
+    required Category category,
   }) async {
     setOutLoading();
     final imageResult =
@@ -27,12 +29,7 @@ class UploadBookNotifier extends BaseNotifier<Object?> {
     }
 
     final result = await _adminSource
-        .uploadBook(
-          title: title,
-          bookUrl: bookUrl,
-          releaseDate: releaseDate,
-          imageUrl: imageUrl,
-        )
+        .uploadBook(title, bookUrl, releaseDate, imageUrl, category)
         .tryCatch();
     return switch (result) {
       Left(:final value) => setError(value.displayMessage),

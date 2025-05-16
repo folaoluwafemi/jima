@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/core/supabase_infra/storage_service.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/modules/profile/domain/entities/user.dart';
 import 'package:jima/src/modules/profile/domain/entities/user_privilege.dart';
 import 'package:jima/src/tools/constants/buckets.dart';
@@ -18,6 +19,7 @@ class AdminSource {
     String title,
     String videoId,
     DateTime releaseDate,
+    Category category,
   ) async {
     final videoUrl = 'https://youtu.be/$videoId';
     final imageUrl = 'https://img.youtube.com/vi/$videoId/maxresdefault.jpg';
@@ -28,6 +30,7 @@ class AdminSource {
         'title': title,
         'url': videoUrl,
         'thumbnailUrl': imageUrl,
+        'categoryId': category.id,
         'dateReleased': releaseDate.toUtc().toIso8601String(),
       },
     );
@@ -40,18 +43,20 @@ class AdminSource {
     );
   }
 
-  Future<void> uploadBook({
-    required String title,
-    required String bookUrl,
-    required DateTime releaseDate,
-    required String imageUrl,
-  }) async {
+  Future<void> uploadBook(
+    String title,
+    String bookUrl,
+    DateTime releaseDate,
+    String imageUrl,
+    Category category,
+  ) async {
     await _database.insert(
       Tables.books,
       values: {
         'title': title,
         'url': bookUrl,
         'thumbnailUrl': imageUrl,
+        'categoryId': category.id,
         'dateReleased': releaseDate.toUtc().toIso8601String(),
       },
     );
@@ -62,6 +67,7 @@ class AdminSource {
     required String audioUrl,
     required DateTime releaseDate,
     required String? thumbnail,
+    required Category category,
   }) async {
     await _database.insert(
       Tables.audios,
@@ -69,6 +75,7 @@ class AdminSource {
         'thumbnailUrl': thumbnail,
         'title': title,
         'url': audioUrl,
+        'categoryId': category.id,
         'dateReleased': releaseDate.toUtc().toIso8601String(),
       },
     );

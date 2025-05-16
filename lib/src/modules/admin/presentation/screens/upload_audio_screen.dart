@@ -95,7 +95,6 @@ class _UploadAudioScreenState extends State<UploadAudioScreen> {
                     );
                   },
                 ),
-
                 32.boxHeight,
                 ValueListenableBuilder<Category?>(
                   valueListenable: categoryNotifier,
@@ -152,6 +151,7 @@ class _UploadAudioScreenState extends State<UploadAudioScreen> {
                                 titleController.text.trim(),
                                 filePath!,
                                 releaseDateNotifier.value!,
+                                categoryNotifier.value!,
                               );
                         },
                         text: 'Upload',

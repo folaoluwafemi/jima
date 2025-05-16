@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audiotags/audiotags.dart';
 import 'package:jima/src/core/error_handling/try_catch.dart';
 import 'package:jima/src/modules/admin/data/admin_source.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/tools/extensions/extensions.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
@@ -17,6 +18,7 @@ class UploadAudioNotifier extends BaseNotifier<Object?> {
     String title,
     String audioPath,
     DateTime releaseDate,
+    Category category,
   ) async {
     setOutLoading();
     final thumbnail = await uploadThumbnail(audioPath);
@@ -32,6 +34,7 @@ class UploadAudioNotifier extends BaseNotifier<Object?> {
           audioUrl: audioUrl,
           releaseDate: releaseDate,
           thumbnail: thumbnail,
+          category: category,
         )
         .tryCatch();
 

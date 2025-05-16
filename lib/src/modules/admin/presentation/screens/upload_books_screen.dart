@@ -171,6 +171,7 @@ class _UploadBooksScreenState extends State<UploadBooksScreen> {
                                 bookUrl: bookUrlController.text.trim(),
                                 imagePath: imagePathNotifier.value!,
                                 releaseDate: releaseDateNotifier.value!,
+                                category: categoryNotifier.value!,
                               );
                         },
                         text: 'Upload',
