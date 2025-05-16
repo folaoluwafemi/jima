@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/navigation/home_observer.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:jima/src/modules/_onboarding/presentation/screens/splash_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/admin_screen.dart';
+import 'package:jima/src/modules/admin/presentation/screens/edit_categories_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/manage_admins_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/update_donation_screen.dart';
 import 'package:jima/src/modules/admin/presentation/screens/upload_audio_screen.dart';
@@ -19,12 +20,15 @@ import 'package:jima/src/modules/auth/presentation/screens/signup_screen.dart';
 import 'package:jima/src/modules/donate/presentation/screen/donation_screen.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
+import 'package:jima/src/modules/media/domain/entities/categorized_media.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
 import 'package:jima/src/modules/media/presentations/screens/ai_audio_player_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/all_media_search_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/audio_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/book_preview_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/books_screen.dart';
+import 'package:jima/src/modules/media/presentations/screens/categorized_media_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/dashboard_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/video_preview_screen.dart';
 import 'package:jima/src/modules/media/presentations/screens/videos_screen.dart';
@@ -85,6 +89,15 @@ abstract final class AppRouter {
             builder: (context, state) => const SignupScreen(),
           ),
         ],
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        name: AppRoute.categorizedMedia.name,
+        path: AppRoute.categorizedMedia.path,
+        builder: (context, state) => CategorizedMediaScreen(
+          category: (state.extra as (Category, CategorizedMedia?)).$1,
+          defaultMediaType: (state.extra as (Category, CategorizedMedia?)).$2,
+        ),
       ),
       ShellRoute(
         navigatorKey: homeNavigatorKey,
@@ -202,6 +215,12 @@ abstract final class AppRouter {
                 name: AppRoute.manageAdmins.name,
                 path: AppRoute.manageAdmins.path,
                 builder: (context, state) => const ManageAdminsScreen(),
+              ),
+              GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
+                name: AppRoute.editCategories.name,
+                path: AppRoute.editCategories.path,
+                builder: (context, state) => const EditCategoriesScreen(),
               ),
             ],
           ),

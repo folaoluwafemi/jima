@@ -30,7 +30,7 @@ extension EitherFuture<T> on Future<T> {
         ),
       );
     } on PostgrestException catch (e, s) {
-      print('stack trace${e.runtimeType}$e:$s');
+      print('$e:$s');
       return Left(
         Failure(
           message: e.message,

@@ -5,4 +5,5 @@ abstract final class Tables {
   static const String books = 'Books';
   static const String ministers = 'Ministers';
   static const String usageData = 'UsageData';
+  static const String categories = 'Category';
 }

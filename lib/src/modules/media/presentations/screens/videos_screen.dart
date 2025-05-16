@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jima/src/core/core.dart';
+import 'package:jima/src/modules/media/domain/entities/categorized_media.dart';
 import 'package:jima/src/modules/media/presentations/cubits/videos_notifier.dart';
+import 'package:jima/src/modules/media/presentations/screens/dashboard_screen.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_video_widgets.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
@@ -121,13 +123,14 @@ class _VideosScreenState extends State<VideosScreen> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const CategorizesList(mediaType: CategorizedMedia.video),
                   28.boxHeight,
                   Padding(
                     padding: REdgeInsets.symmetric(horizontal: 26),
                     child: Text(
                       'Videos',
                       style: Textstyles.bold.copyWith(
-                        fontSize: 32.sp,
+                        fontSize: 16.sp,
                         height: 1.5,
                       ),
                     ),

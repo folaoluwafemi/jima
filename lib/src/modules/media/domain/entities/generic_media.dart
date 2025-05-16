@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/domain/entities/minister.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
@@ -16,6 +17,7 @@ class GenericMedia with EquatableMixin {
   final int viewCount;
   final DateTime createdAt;
   final GenericMediaType type;
+  final Category? category;
 
   const GenericMedia({
     required this.id,
@@ -27,6 +29,7 @@ class GenericMedia with EquatableMixin {
     required this.viewCount,
     required this.createdAt,
     required this.type,
+    this.category,
   });
 
   GenericMedia copyWith({
@@ -39,6 +42,7 @@ class GenericMedia with EquatableMixin {
     int? viewCount,
     DateTime? createdAt,
     GenericMediaType? type,
+    Category? category,
   }) {
     return GenericMedia(
       id: id ?? this.id,
@@ -50,6 +54,7 @@ class GenericMedia with EquatableMixin {
       viewCount: viewCount ?? this.viewCount,
       createdAt: createdAt ?? this.createdAt,
       type: type ?? this.type,
+      category: category ?? this.category,
     );
   }
 
@@ -62,6 +67,7 @@ class GenericMedia with EquatableMixin {
         viewCount: viewCount,
         createdAt: createdAt,
         thumbnail: thumbnail,
+        category: category,
       );
 
   Audio toAudio() => Audio(
@@ -73,6 +79,7 @@ class GenericMedia with EquatableMixin {
         viewCount: viewCount,
         createdAt: createdAt,
         thumbnail: thumbnail,
+        category: category,
       );
 
   Book toBook() => Book(
@@ -97,6 +104,7 @@ class GenericMedia with EquatableMixin {
           viewCount: video.viewCount,
           createdAt: video.createdAt,
           type: GenericMediaType.video,
+          category: video.category,
         ),
       Audio audio => GenericMedia(
           id: audio.id,
@@ -106,7 +114,8 @@ class GenericMedia with EquatableMixin {
           minister: audio.minister,
           viewCount: audio.viewCount,
           createdAt: audio.createdAt,
-          type: GenericMediaType.video,
+          type: GenericMediaType.audio,
+          category: audio.category,
         ),
       Book book => GenericMedia(
           id: book.id,
@@ -116,7 +125,7 @@ class GenericMedia with EquatableMixin {
           minister: book.minister,
           viewCount: book.viewCount,
           createdAt: book.createdAt,
-          type: GenericMediaType.video,
+          type: GenericMediaType.book,
         ),
       _ => throw UnimplementedError(),
     };
@@ -128,11 +137,12 @@ class GenericMedia with EquatableMixin {
       'title': title,
       'url': url,
       'thumbnailUrl': thumbnail,
-      'dateReleased': dateReleased,
-      'minister': minister,
+      'dateReleased': dateReleased.toIso8601String(),
+      'minister': minister.toMap(),
       'viewCount': viewCount,
-      'createdAt': createdAt,
-      'type': type,
+      'createdAt': createdAt.toIso8601String(),
+      'type': type.name,
+      'category': category?.toMap(),
     };
   }
 
@@ -150,6 +160,9 @@ class GenericMedia with EquatableMixin {
       viewCount: map['viewCount'] as int,
       createdAt: ParseUtils.parseDateTime(map['createdAt']),
       type: ParseUtils.parseEnum(map['type'], GenericMediaType.values),
+      category: map['category'] != null
+          ? Category.fromMap(map['category'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -164,5 +177,6 @@ class GenericMedia with EquatableMixin {
         viewCount,
         createdAt,
         type,
+        category,
       ];
 }

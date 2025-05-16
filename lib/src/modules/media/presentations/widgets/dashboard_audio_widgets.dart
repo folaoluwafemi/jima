@@ -6,7 +6,12 @@ import 'package:jima/src/core/core.dart';
 import 'package:jima/src/core/navigation/router.dart';
 import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
+import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
+import 'package:jima/src/modules/media/presentations/widgets/dashboard_audio_loader.dart';
+import 'package:jima/src/modules/media/presentations/widgets/more_modal.dart';
+import 'package:jima/src/modules/profile/domain/entities/user_privilege.dart';
+import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
@@ -24,16 +29,13 @@ class _DashboardAudioWidgetsState extends State<DashboardAudioWidgets> {
     return VanillaBuilder<AudiosNotifier, AudiosState>(
       builder: (context, state) {
         final audios = state.data?.items;
-        if (state.isInLoading && audios.isNullOrEmpty) {
-          return const AudiosLoader();
-        }
         if (audios == null || audios.isEmpty) return const SizedBox.shrink();
-        return Padding(
-          padding: REdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              24.boxHeight,
-              Row(
+        return Column(
+          children: [
+            24.boxHeight,
+            Padding(
+              padding: REdgeInsets.symmetric(horizontal: 20),
+              child: Row(
                 children: [
                   Text(
                     'Top Audios',
@@ -60,15 +62,25 @@ class _DashboardAudioWidgetsState extends State<DashboardAudioWidgets> {
                   ),
                 ],
               ),
-              16.boxHeight,
-              Column(
-                spacing: 10.h,
-                children: [
-                  ...audios.take(3).map((e) => AudioItemWidget(audio: e)),
-                ],
+            ),
+            16.boxHeight,
+            if (state.isInLoading && audios.isNullOrEmpty)
+              const DashboardAudiosLoader()
+            else
+              UnconstrainedBox(
+                constrainedAxis: Axis.horizontal,
+                child: SingleChildScrollView(
+                  padding: REdgeInsets.symmetric(horizontal: 20),
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    spacing: 20.h,
+                    children: [
+                      ...audios.take(3).map((e) => AudioItemWidget(audio: e)),
+                    ],
+                  ),
+                ),
               ),
-            ],
-          ),
+          ],
         );
       },
     );
@@ -89,7 +101,7 @@ class AudiosLoader extends StatelessWidget {
           children: [
             24.boxHeight,
             ...List.generate(
-              2,
+              4,
               (index) {
                 return Row(
                   children: [
@@ -146,6 +158,8 @@ class AudioItemWidget extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
             borderRadius: 8.circularBorder,
@@ -162,21 +176,58 @@ class AudioItemWidget extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                audio.title,
-                style: Textstyles.semibold.copyWith(
-                  fontSize: 12.sp,
-                  height: 1.5,
-                ),
-              ),
-              7.boxHeight,
-              Text(
-                audio.minister.name,
-                style: Textstyles.normal.copyWith(
-                  fontSize: 11.sp,
-                  height: 1.5,
-                  color: AppColors.grey400,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      8.boxHeight,
+                      Text(
+                        audio.title,
+                        style: Textstyles.semibold.copyWith(
+                          fontSize: 12.sp,
+                          height: 1.5,
+                        ),
+                      ),
+                      7.boxHeight,
+                      Text(
+                        audio.minister.name,
+                        style: Textstyles.normal.copyWith(
+                          fontSize: 11.sp,
+                          height: 1.5,
+                          color: AppColors.grey400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  4.boxWidth,
+                  ValueListenableBuilder(
+                    valueListenable: container<UserNotifier>(),
+                    builder: (context, state, _) {
+                      if (state.data?.privilege != UserPrivilege.admin) {
+                        return const SizedBox.shrink();
+                      }
+                      return InkWell(
+                        onTap: () => MoreModal.show(
+                          audio.id,
+                          type: GenericMediaType.audio,
+                        ),
+                        borderRadius: 40.circularBorder,
+                        child: ClipOval(
+                          child: Padding(
+                            padding: REdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 3.h,
+                            ),
+                            child: const Icon(Icons.more_vert_sharp),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
               7.boxHeight,
               Row(

@@ -241,14 +241,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.0.0"
-  files_uploader:
-    dependency: "direct main"
-    description:
-      name: files_uploader
-      sha256: "1c9506d21f86d3571ad64e386fbe12d1a8f1976a189f29e800cf4922af0415f3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.1"
   fixnum:
     dependency: transitive
     description:

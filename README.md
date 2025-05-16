@@ -1,212 +1,116 @@
-# Project Structure & Architecture Guidelines
+# JIMA
 
-## Project Structure
+A modern Flutter application that provides a feature-rich experience with audio playback capabilities, social authentication, and more.
+
+## 🚀 Features
+
+- Audio playback with background support
+- Social authentication (Google, Facebook)
+- YouTube video integration
+- Secure storage and data management
+- Responsive UI with material design
+- State management using Vanilla State
+- API integration with Dio
+- Local storage with Hive
+- Environment configuration support
+- Supabase backend integration
+
+## 📋 Prerequisites
+
+- Flutter SDK ^3.6.2
+- Dart SDK (compatible with Flutter SDK version)
+- Android Studio / VS Code
+- iOS development setup (for iOS deployment)
+- Android development setup (for Android deployment)
+
+## 🛠️ Dependencies
+
+### Main Dependencies
+- **State Management**: `vanilla_state: ^1.1.0+1`
+- **Networking**: `dio: ^5.8.0+1`
+- **Routing**: `go_router: ^14.8.1`
+- **Local Storage**: `hive_flutter: ^1.1.0`
+- **UI Components**:
+  - `flutter_screenutil: ^5.9.3`
+  - `google_fonts: ^6.2.1`
+  - `flutter_svg: ^2.0.17`
+- **Authentication**:
+  - `google_sign_in: ^6.3.0`
+  - `flutter_facebook_auth: ^7.1.1`
+- **Media**:
+  - `youtube_player_flutter: ^9.1.1`
+  - `just_audio: ^0.10.2`
+  - `just_audio_background: ^0.0.1-beta.16`
+
+### Development Dependencies
+- `flutter_lints: ^5.0.0`
+- `flutter_test`
+
+## 📁 Project Structure
 
 ```
 lib/
-├── src/
-│   ├── core/
-│   │   ├── api/           # API clients and services
-│   │   ├── constants/     # App-wide constants
-│   │   ├── exceptions/    # Custom exceptions
-│   │   ├── extensions/    # Extension methods
-│   │   ├── navigation/    # Router configuration
-│   │   ├── storage/       # Local storage services
-│   │   ├── theme/         # App theme definitions
-│   │   └── core.dart      # Barrel file for core exports
-│   │
-│   ├── modules/           # Feature modules
-│   │   ├── admin/
-│   │   │   ├── data/      # Repository implementations, models, data sources
-│   │   │   ├── domain/    # Business logic, entities, repository interfaces
-│   │   │   └── presentation/
-│   │   │       ├── notifiers/  # State management
-│   │   │       ├── screens/    # UI screens
-│   │   │       └── widgets/    # Reusable widgets
-│   │   │
-│   │   ├── auth/          # Authentication module
-│   │   ├── audio/         # Audio module
-│   │   ├── books/         # Books module
-│   │   ├── dashboard/     # Dashboard module
-│   │   ├── donation/      # Donation module
-│   │   ├── profile/       # Profile module
-│   │   └── videos/        # Videos module
-│   │
-│   └── tools/             # Utility functions and helpers
-│       └── tools_barrel.dart  # Barrel file for tools
-│
-├── assets/
-│   ├── images/            # Image assets
-│   ├── vectors/           # SVG assets
-│   └── env/               # Environment configuration files
-│
-└── main.dart              # Application entry point
+├── main.dart
+└── src/
+    ├── core/       # Core functionality and utilities
+    ├── modules/    # Feature modules
+    └── tools/      # Helper tools and utilities
 ```
 
-## Architecture
+## 🚀 Getting Started
 
-This project follows a modular architecture with clear separation of concerns:
+1. **Clone the repository**
+   ```bash
+   git clone [repository-url]
+   cd jima
+   ```
 
-1. **Core Layer**: Contains app-wide utilities, constants, and services
-2. **Modules**: Feature-based modules following a clean architecture pattern with:
-    - **Data Layer**: API clients, repositories, models
-    - **Domain Layer**: Business logic, entities
-    - **Presentation Layer**: UI components, state management
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
 
-## Coding Style Guidelines
+3. **Set up environment variables**
+   - Create a `.env` file in the `assets/env/` directory
+   - Add required configuration variables
 
-### Naming Conventions
+4. **Run the application**
+   ```bash
+   flutter run
+   ```
 
-- **Classes**: Pascal case (e.g., `UploadVideoScreen`, `AppColors`)
-- **Variables/Functions**: Camel case (e.g., `titleController`, `uploadVideo`)
-- **Constants**: Camel case for constants (e.g., `blackVoid` in `AppColors`)
-- **Files**: Snake case (e.g., `upload_video_screen.dart`)
+## 🔑 Environment Configuration
 
-### File Organization
-
-1. **Import Order**:
-    - Dart/Flutter SDK imports
-    - External package imports
-    - Project imports
-    - Relative imports
-
-2. **Class Structure**:
-    - Properties
-    - Constructor
-    - Lifecycle methods (`dispose`, `initState`)
-    - Public methods
-    - Private methods
-    - Build method (for widgets)
-
-## State Management
-
-The project uses the **Vanilla State** package for state management:
-
-- State classes extend `VanillaState`
-- Notifiers handle business logic and state changes
-- `VanillaBuilder` rebuilds UI when state changes
-- `VanillaListener` handles side effects
-
-Example usage:
-
-```dart
-// State definition
-class UploadVideoState extends VanillaState {
-  final bool isOutLoading;
-  final bool isSuccess;
-
-  const UploadVideoState({
-    this.isOutLoading = false,
-    this.isSuccess = false,
-  });
-}
-
-// Listening to state changes
-VanillaListener<UploadVideoNotifier, UploadVideoState>
-(
-listener: (previous, current) {
-// Handle state changes
-},
-child: VanillaBuilder<UploadVideoNotifier, UploadVideoState>(
-builder: (context, state) {
-// Build UI based on state
-},
-)
-,
-);
+Create a `.env` file in `assets/env/` with the following variables:
+```
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+GOOGLE_CLIENT_ID=your_google_client_id
+FACEBOOK_CLIENT_ID=your_facebook_client_id
 ```
 
-## Dependency Injection
+## 📱 Supported Platforms
 
-The project uses **GetIt** for dependency injection:
+- iOS
+- Android
 
-- Services and repositories are registered with the container
-- Components access dependencies through the container
-- Example usage: `container()` to get an instance of a registered dependency
+## 🤝 Contributing
 
-```dart
-// Service registration
-final GetIt container = GetIt.instance;
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-void setupDependencies() {
-  container.registerLazySingleton<ApiClient>(() => ApiClientImpl());
-  container.registerFactory<UploadVideoNotifier>(() => UploadVideoNotifier(container()));
-}
+## 📄 License
 
-// Service usage
-final apiClient = container<ApiClient>();
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Navigation
+## 👥 Authors
 
-The application uses **go_router** for navigation:
+- Initial work - [Author Name]
 
-- Routes are defined in `lib/src/core/navigation/router.dart`
-- Named routes with parameters
-- Nested routes for feature modules
-- Shell routes for persistent navigation elements
+## 🙏 Acknowledgments
 
-Example:
-
-```dart
-GoRoute
-(
-name: AppRoute.uploadVideo.name,
-path: AppRoute.uploadVideo.path,
-builder: (context, state
-)
-=>
-const
-UploadVideoScreen
-(
-)
-,
-)
-```
-
-## Native Plugin Configuration
-
-For plugins requiring native configuration:
-
-1. **Android**:
-    - Update `android/app/build.gradle` for compiler options
-    - Add necessary permissions in `AndroidManifest.xml`
-    - Configure services for background processing
-
-2. **iOS**:
-    - Update `Info.plist` for permissions and capabilities
-    - Configure `Podfile` for iOS-specific settings
-
-## Linting
-
-The project uses Flutter's linting rules with customizations:
-
-- `flutter_lints` package for base rules
-- Run linting: `flutter analyze`
-- Auto-fix issues: `flutter fix --apply`
-
-Recommended custom linting rules:
-
-```yaml
-# analysis_options.yaml
-include: package:flutter_lints/flutter.yaml
-
-linter:
-  rules:
-    - always_declare_return_types
-    - prefer_const_constructors
-    - prefer_const_declarations
-    - sort_child_properties_last
-    - use_key_in_widget_constructors
-```
-
-## Testing Guidelines
-
-- Unit tests in `test/` directory matching the source structure
-- Widget tests for UI components
-- Integration tests for end-to-end flows
-- Use mocks for dependencies
-- Test coverage target: 80%+
-
-This documentation provides a comprehensive guide to the project structure and coding practices
-based on the code samples provided.
+- Flutter team for the amazing framework
+- All contributors who have helped this project grow

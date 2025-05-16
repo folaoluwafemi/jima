@@ -7,6 +7,9 @@ import 'package:jima/src/modules/media/data/media_data_source.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
+import 'package:jima/src/modules/media/presentations/widgets/more_modal.dart';
+import 'package:jima/src/modules/profile/domain/entities/user_privilege.dart';
+import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/components/make_shimmer.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -148,52 +151,87 @@ class BookItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      borderRadius: 16.circularBorder,
-      child: SizedBox(
-        width: 136.w,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: 4.circularBorder,
-              child: SizedBox(
-                height: 148.h,
-                width: 136.w,
-                child: Image.network(
-                  book.thumbnail ?? NetworkImages.placeholder,
-                  fit: BoxFit.cover,
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        InkWell(
+          onTap: onPressed,
+          borderRadius: 16.circularBorder,
+          child: SizedBox(
+            width: 136.w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: 4.circularBorder,
+                  child: SizedBox(
+                    height: 148.h,
+                    width: 136.w,
+                    child: Image.network(
+                      book.thumbnail ?? NetworkImages.placeholder,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                8.boxHeight,
+                Text(
+                  book.title,
+                  style: Textstyles.semibold.copyWith(
+                    fontSize: 14.sp,
+                    height: 1.3,
+                    color: AppColors.buttonTextBlack,
+                  ),
+                ),
+                Text(
+                  book.minister.name,
+                  style: Textstyles.normal.copyWith(
+                    fontSize: 14.sp,
+                    height: 1.3,
+                    color: AppColors.darkGrey,
+                  ),
+                ),
+                8.boxHeight,
+                AppButton.primary(
+                  padding: REdgeInsets.symmetric(vertical: 8.5),
+                  borderRadius: 12.circularBorder,
+                  onPressed: onPressed,
+                  text: 'Buy Now',
+                ),
+              ],
+            ),
+          ),
+        ),
+        ValueListenableBuilder(
+          valueListenable: container<UserNotifier>(),
+          builder: (context, state, _) {
+            if (state.data?.privilege != UserPrivilege.admin) {
+              return const SizedBox.shrink();
+            }
+            return Padding(
+              padding: REdgeInsets.all(4),
+              child: InkWell(
+                onTap: () => MoreModal.show(
+                  book.id,
+                  type: GenericMediaType.book,
+                ),
+                borderRadius: 40.circularBorder,
+                child: ClipOval(
+                  child: Container(
+                    color: AppColors.black.withOpacity(0.4),
+                    child: Padding(
+                      padding: REdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.more_vert_sharp,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-            8.boxHeight,
-            Text(
-              book.title,
-              style: Textstyles.semibold.copyWith(
-                fontSize: 14.sp,
-                height: 1.3,
-                color: AppColors.buttonTextBlack,
-              ),
-            ),
-            Text(
-              book.minister.name,
-              style: Textstyles.normal.copyWith(
-                fontSize: 14.sp,
-                height: 1.3,
-                color: AppColors.darkGrey,
-              ),
-            ),
-            8.boxHeight,
-            AppButton.primary(
-              padding: REdgeInsets.symmetric(vertical: 8.5),
-              borderRadius: 12.circularBorder,
-              onPressed: onPressed,
-              text: 'Buy Now',
-            ),
-          ],
+            );
+          },
         ),
-      ),
+      ],
     );
   }
 }

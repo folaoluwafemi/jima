@@ -31,6 +31,7 @@ class AdminScreen extends StatelessWidget {
             ('Upload Books', Vectors.books, AppRoute.uploadBook),
             ('Update Donation', Vectors.donation, AppRoute.uploadDonation),
             ('Manage Admins', Vectors.profile, AppRoute.manageAdmins),
+            ('Edit Categories', Vectors.books, AppRoute.editCategories),
           ].map(
             (e) {
               return InkWell(

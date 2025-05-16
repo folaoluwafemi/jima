@@ -19,7 +19,7 @@ class DonationScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Donate',
+            'Give',
             style: Textstyles.bold.copyWith(
               fontWeight: FontWeight.w800,
               fontSize: 18.sp,
@@ -76,7 +76,7 @@ class DonationScreen extends StatelessWidget {
                         32.boxHeight,
                       ],
                       Text(
-                        'Donation Details',
+                        'Account Details',
                         style: Textstyles.bold.copyWith(
                           height: 1.5,
                           fontSize: 16.sp,

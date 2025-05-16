@@ -22,11 +22,7 @@ class OauthSource {
           'email',
           'https://www.googleapis.com/auth/userinfo.profile',
         ],
-        serverClientId: dotenv.get(
-          'GOOGLE_WEB_CLIENT_ID',
-          fallback:
-              '392098157619-mmttihkl8jq9vitlvf76uqourjo406md.apps.googleusercontent.com',
-        ),
+        serverClientId: dotenv.get('GOOGLE_WEB_CLIENT_ID'),
       ).signIn();
 
       if (googleUser == null) return null;

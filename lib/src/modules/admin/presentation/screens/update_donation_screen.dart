@@ -139,8 +139,10 @@ class _UploadDonationViewState extends State<UploadDonationView> {
                         width: 1.sp,
                       ),
                     ),
-                    visualDensity:
-                        const VisualDensity(horizontal: -4, vertical: -4),
+                    visualDensity: const VisualDensity(
+                      horizontal: -4,
+                      vertical: -4,
+                    ),
                     padding: EdgeInsets.zero,
                     child: Padding(
                       padding: REdgeInsets.symmetric(

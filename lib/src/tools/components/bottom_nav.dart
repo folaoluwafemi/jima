@@ -12,7 +12,7 @@ enum BottomNavItem {
   videos(AppRoute.videos, Vectors.videos),
   audios(AppRoute.audios, Vectors.audios),
   books(AppRoute.books, Vectors.books),
-  donate(AppRoute.donation, Vectors.donation),
+  give(AppRoute.donation, Vectors.donation),
   profile(AppRoute.profile, Vectors.profile),
   ;
 

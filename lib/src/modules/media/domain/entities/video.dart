@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/modules/media/domain/entities/minister.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
 
@@ -11,17 +12,43 @@ class Video with EquatableMixin {
   final Minister minister;
   final int viewCount;
   final DateTime createdAt;
+  final Category? category;
 
   const Video({
     required this.id,
     required this.title,
     required this.url,
+    this.thumbnail,
     required this.dateReleased,
     required this.minister,
     required this.viewCount,
     required this.createdAt,
-    this.thumbnail,
+    this.category,
   });
+
+  Video copyWith({
+    String? id,
+    String? title,
+    String? url,
+    String? thumbnail,
+    DateTime? dateReleased,
+    Minister? minister,
+    int? viewCount,
+    DateTime? createdAt,
+    Category? category,
+  }) {
+    return Video(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      url: url ?? this.url,
+      thumbnail: thumbnail ?? this.thumbnail,
+      dateReleased: dateReleased ?? this.dateReleased,
+      minister: minister ?? this.minister,
+      viewCount: viewCount ?? this.viewCount,
+      createdAt: createdAt ?? this.createdAt,
+      category: category ?? this.category,
+    );
+  }
 
   static String get columns => '''
   id,
@@ -31,19 +58,21 @@ class Video with EquatableMixin {
   minister:Ministers!inner(*),
   viewCount,
   createdAt,
-  thumbnailUrl
-  ''';
+  thumbnailUrl,
+  category:Category(*)
+    ''';
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'url': url,
-      'thumbnail': thumbnail,
-      'dateReleased': dateReleased,
-      'minister_id': minister.id,
+      'thumbnailUrl': thumbnail,
+      'dateReleased': dateReleased.toIso8601String(),
+      'minister': minister.toMap(),
       'viewCount': viewCount,
-      'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
+      'category': category?.toMap(),
     };
   }
 
@@ -60,6 +89,9 @@ class Video with EquatableMixin {
       ),
       viewCount: map['viewCount'] as int,
       createdAt: ParseUtils.parseDateTime(map['createdAt']),
+      category: map['category'] != null
+          ? Category.fromMap(map['category'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -73,5 +105,6 @@ class Video with EquatableMixin {
         minister,
         viewCount,
         createdAt,
+        category,
       ];
 }

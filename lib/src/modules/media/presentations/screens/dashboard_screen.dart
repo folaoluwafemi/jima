@@ -10,10 +10,13 @@ import 'package:jima/src/core/navigation/routes.dart';
 import 'package:jima/src/core/supabase_infra/auth_service.dart';
 import 'package:jima/src/modules/auth/data/auth_source.dart';
 import 'package:jima/src/modules/donate/presentation/cubit/donation_cubit.dart';
+import 'package:jima/src/modules/media/domain/entities/categorized_media.dart';
 import 'package:jima/src/modules/media/presentations/cubits/audios_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/books_notifier.dart';
+import 'package:jima/src/modules/media/presentations/cubits/categories_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/highest_viewed_notifier.dart';
 import 'package:jima/src/modules/media/presentations/cubits/videos_notifier.dart';
+import 'package:jima/src/modules/media/presentations/widgets/categories_list_loader.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_audio_widgets.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_book_widget.dart';
 import 'package:jima/src/modules/media/presentations/widgets/dashboard_video_widgets.dart';
@@ -21,6 +24,7 @@ import 'package:jima/src/modules/media/presentations/widgets/highest_view_counts
 import 'package:jima/src/modules/profile/presentation/cubits/user_cubit.dart';
 import 'package:jima/src/tools/constants/vectors.dart';
 import 'package:jima/src/tools/extensions/extensions.dart';
+import 'package:vanilla_state/vanilla_state.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -138,6 +142,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const HighestViewedMediaView(),
+              const CategorizesList(),
               const DashboardVideoWidgets(),
               const DashboardAudioWidgets(),
               const DashboardBookWidgets(),
@@ -146,6 +151,112 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CategorizesList extends StatefulWidget {
+  final CategorizedMedia? mediaType;
+
+  const CategorizesList({super.key, this.mediaType});
+
+  @override
+  State<CategorizesList> createState() => _CategorizesListState();
+}
+
+class _CategorizesListState extends State<CategorizesList> {
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        if (!mounted ||
+            context
+                .read<CategoriesNotifier>()
+                .data![widget.mediaType]
+                .isNotNullOrEmpty) {
+          return;
+        }
+
+        switch (widget.mediaType) {
+          case CategorizedMedia.audio:
+            context.read<CategoriesNotifier>().fetchAudiosCategories();
+          case CategorizedMedia.video:
+            context.read<CategoriesNotifier>().fetchVideosCategories();
+          case null:
+            context.read<CategoriesNotifier>().fetchCategories();
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return VanillaBuilder<CategoriesNotifier, CategoriesState>(
+      builder: (context, state) {
+        final categories = state.data?[widget.mediaType] ?? [];
+        if (state.isInLoading) {
+          return const CategoriesListLoader();
+        }
+        return Column(
+          children: [
+            24.boxHeight,
+            Row(
+              children: [
+                25.boxWidth,
+                Text(
+                  'Categories',
+                  style: Textstyles.bold.copyWith(
+                    fontSize: 16.sp,
+                    height: 1.5,
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
+            16.boxHeight,
+            UnconstrainedBox(
+              constrainedAxis: Axis.horizontal,
+              child: SingleChildScrollView(
+                padding: REdgeInsets.fromLTRB(24, 0, 26, 0),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: 20.w,
+                  children: [
+                    ...categories.map(
+                      (e) => InkWell(
+                        onTap: () => context.pushNamed(
+                          AppRoute.categorizedMedia.name,
+                          extra: (e, widget.mediaType),
+                        ),
+                        borderRadius: 4.circularBorder,
+                        child: Container(
+                          padding: REdgeInsets.symmetric(
+                            vertical: 16.h,
+                            horizontal: 30.w,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.black500,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            e.name,
+                            style: Textstyles.medium.copyWith(
+                              fontSize: 14.sp,
+                              height: 1.5,
+                              color: AppColors.iGrey500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

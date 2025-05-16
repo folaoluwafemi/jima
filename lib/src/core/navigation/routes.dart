@@ -11,6 +11,7 @@ enum AppRoute {
   forgotPasswordOtp('forgot-password-otp', '/auth-action/login/forgot-password/forgot-password-otp'),
   changePassword('change-password', '/auth-action/login/change-password'),
   dashboard('/dashboard', '/dashboard'),
+  categorizedMedia('/categorized-media', '/categorized-media'),
   allMediaSearch('all-media-search', '/dashboard/all-media-search'),
   books('/books', '/books'),
   bookPreview('/book-preview', '/book-preview'),
@@ -26,6 +27,7 @@ enum AppRoute {
   uploadBook('upload-book', '/admin/upload-book'),
   uploadDonation('upload-donation', '/admin/upload-donation'),
   manageAdmins('manage-admins', '/admin/manage-admins'),
+  editCategories('edit-categories', '/admin/edit-categories'),
   ;
 
   final String path;

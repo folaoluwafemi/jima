@@ -3,6 +3,8 @@ import 'package:jima/src/modules/donate/domain/entities/donation_data.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/audio_data.dart';
 import 'package:jima/src/modules/media/domain/entities/books.dart';
+import 'package:jima/src/modules/media/domain/entities/categorized_media.dart';
+import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
@@ -15,16 +17,65 @@ class MediaDataSource {
 
   MediaDataSource(this._database);
 
+  Future<List<Category>> fetchAllCategories() async {
+    final result = await _database.select(
+      Tables.categories,
+      columns: '*',
+    );
+
+    return ParseUtils.parseMapArray(result, mapper: Category.fromMap);
+  }
+
+  Future<void> deleteCategory(String id) async {
+    await _database.delete(
+      Tables.categories,
+      filter: (request) => request.eq('id', id),
+    );
+  }
+
+  Future<void> addCategory(String name) async {
+    await _database.insert(
+      Tables.categories,
+      values: {'name': name},
+    );
+  }
+
+  Future<void> deleteMedia(String id, GenericMediaType type) async {
+    await _database.delete(
+      switch (type) {
+        GenericMediaType.audio => Tables.audios,
+        GenericMediaType.video => Tables.videos,
+        GenericMediaType.book => Tables.books,
+      },
+      filter: (request) => request.eq('id', id),
+    );
+  }
+
+  Future<List<Category>> fetchCategoriesFor({
+    CategorizedMedia? filter,
+  }) async {
+    final result = await _database.rpc(filter.filterCategoryRpcFunction);
+
+    return ParseUtils.parseMapArray(result, mapper: Category.fromMap);
+  }
+
   Future<List<Video>> fetchVideos({
     bool fetchAFresh = false,
     required int page,
     int? ratingFilter,
+    String? categoryId,
     int pageSize = 50,
   }) async {
     final result = await _database.select(
       Tables.videos,
       columns: Video.columns,
-      filter: (request) => request.not('url', 'is', null),
+      filter: (request) {
+        var query = request.not('url', 'is', null);
+        if (categoryId != null) {
+          query = query.eq('categoryId', categoryId);
+        }
+        return query;
+      },
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -43,12 +94,19 @@ class MediaDataSource {
     bool fetchAFresh = false,
     required int page,
     int? ratingFilter,
+    String? categoryId,
     int pageSize = 50,
   }) async {
     final result = await _database.select(
       Tables.audios,
       columns: Audio.columns,
-      filter: (request) => request.not('url', 'is', null),
+      filter: (request) {
+        var query = request.not('url', 'is', null);
+        if (categoryId != null) {
+          query = query.eq('categoryId', categoryId);
+        }
+        return query;
+      },
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -71,8 +129,11 @@ class MediaDataSource {
   }) async {
     final result = await _database.select(
       Tables.books,
-      columns: Audio.columns,
-      filter: (request) => request.not('url', 'is', null),
+      columns: Book.columns,
+      filter: (request) {
+        var query = request.not('url', 'is', null);
+        return query;
+      },
       transform: (request) {
         final int start = page == 0 ? 0 : (page - 1) * pageSize;
         return request
@@ -90,6 +151,7 @@ class MediaDataSource {
   Future<List<GenericMedia>> searchMedia({
     required String searchQuery,
     required GenericMediaType? type,
+    String? categoryId,
   }) async {
     final result = await _database.rpc(
       RpcFunctions.searchAllMediaByType,
@@ -97,6 +159,7 @@ class MediaDataSource {
         'search_term': searchQuery,
         'item_type': type?.name.toFirstUppercase() ?? 'all',
       },
+      filter: (r) => categoryId != null ? r.eq('categoryId', categoryId) : r,
     );
 
     return (result as List)
@@ -113,24 +176,34 @@ class MediaDataSource {
     return res.map((e) => e.toBook()).toList();
   }
 
-  Future<List<Video>> searchVideos(String searchQuery) async {
+  Future<List<Video>> searchVideos(
+    String searchQuery, {
+    String? categoryId,
+  }) async {
     final res = await searchMedia(
       searchQuery: searchQuery,
       type: GenericMediaType.video,
+      categoryId: categoryId,
     );
     return res.map((e) => e.toVideo()).toList();
   }
 
-  Future<List<Audio>> searchAudios(String searchQuery) async {
+  Future<List<Audio>> searchAudios(
+    String searchQuery, {
+    String? categoryId,
+  }) async {
     final res = await searchMedia(
       searchQuery: searchQuery,
       type: GenericMediaType.audio,
+      categoryId: categoryId,
     );
     return res.map((e) => e.toAudio()).toList();
   }
 
   Future<List<GenericMedia>> fetchHighestViewCountItem() async {
-    final result = await _database.rpc(RpcFunctions.getHighestViewCountItem);
+    final result = await _database.rpc(
+      RpcFunctions.getHighestViewCountItem,
+    );
 
     return ParseUtils.parseMapArray(result, mapper: GenericMedia.fromMap);
   }
