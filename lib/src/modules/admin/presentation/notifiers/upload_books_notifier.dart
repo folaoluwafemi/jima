@@ -6,9 +6,9 @@ import 'package:vanilla_state/vanilla_state.dart';
 typedef UploadBookState = BaseState<Object?>;
 
 class UploadBookNotifier extends BaseNotifier<Object?> {
-  final AdminSource _adminSource;
+  final AdminSource _source;
 
-  UploadBookNotifier(this._adminSource) : super(const InitialState());
+  UploadBookNotifier(this._source) : super(const InitialState());
 
   Future<void> uploadBook({
     required String title,
@@ -18,17 +18,16 @@ class UploadBookNotifier extends BaseNotifier<Object?> {
     required Category category,
   }) async {
     setOutLoading();
-    final imageResult =
-        await _adminSource.uploadBookCoverImage(imagePath).tryCatch();
+    final imgResult = await _source.uploadBookCoverImage(imagePath).tryCatch();
     final String imageUrl;
-    switch (imageResult) {
+    switch (imgResult) {
       case Left(:final value):
         return setError(value.displayMessage);
       case Right(:final value):
         imageUrl = value;
     }
 
-    final result = await _adminSource
+    final result = await _source
         .uploadBook(title, bookUrl, releaseDate, imageUrl, category)
         .tryCatch();
     return switch (result) {
