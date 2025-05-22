@@ -213,6 +213,7 @@ class BookItemWidget extends StatelessWidget {
                 onTap: () => MoreModal.show(
                   book.id,
                   type: GenericMediaType.book,
+                  mediaUrl: book.url,
                 ),
                 borderRadius: 40.circularBorder,
                 child: ClipOval(

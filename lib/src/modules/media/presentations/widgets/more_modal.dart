@@ -14,22 +14,29 @@ import 'package:vanilla_state/vanilla_state.dart';
 class MoreModal extends StatelessWidget {
   final String mediaId;
   final GenericMediaType type;
+  final String mediaUrl;
 
   const MoreModal({
     super.key,
     required this.mediaId,
     required this.type,
+    required this.mediaUrl,
   });
 
   static Future show(
     String mediaId, {
     required GenericMediaType type,
+    required String mediaUrl,
   }) {
     final context = AppRouter.rootNavigatorKey.currentContext!;
     return showModalBottomSheet(
       context: context,
       showDragHandle: true,
-      builder: (context) => MoreModal(mediaId: mediaId, type: type),
+      builder: (context) => MoreModal(
+        mediaId: mediaId,
+        type: type,
+        mediaUrl: mediaUrl,
+      ),
     );
   }
 
@@ -70,7 +77,7 @@ class MoreModal extends StatelessWidget {
                 InkWell(
                   onTap: () => context
                       .read<DeleteMediaNotifier>()
-                      .deleteMedia(mediaId, type),
+                      .deleteMedia(mediaId, type, mediaUrl),
                   child: Padding(
                     padding:
                         REdgeInsets.symmetric(horizontal: 24, vertical: 16),

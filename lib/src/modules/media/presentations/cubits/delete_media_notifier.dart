@@ -8,10 +8,14 @@ class DeleteMediaNotifier extends BaseNotifier {
 
   DeleteMediaNotifier(this._source) : super(const InitialState());
 
-  Future<void> deleteMedia(String mediaId, GenericMediaType type) async {
+  Future<void> deleteMedia(
+    String mediaId,
+    GenericMediaType type,
+    String url,
+  ) async {
     setOutLoading();
 
-    final result = await _source.deleteMedia(mediaId, type).tryCatch();
+    final result = await _source.deleteMedia(mediaId, type, url).tryCatch();
 
     return switch (result) {
       Left(:final value) => setError(value.displayMessage),

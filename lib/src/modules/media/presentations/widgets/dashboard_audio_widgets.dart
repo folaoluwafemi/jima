@@ -213,6 +213,7 @@ class AudioItemWidget extends StatelessWidget {
                         onTap: () => MoreModal.show(
                           audio.id,
                           type: GenericMediaType.audio,
+                          mediaUrl: audio.url,
                         ),
                         borderRadius: 40.circularBorder,
                         child: ClipOval(

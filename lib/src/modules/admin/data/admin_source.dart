@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/core/supabase_infra/storage_service.dart';
 import 'package:jima/src/modules/media/domain/entities/category.dart';
@@ -8,6 +9,9 @@ import 'package:jima/src/modules/profile/domain/entities/user_privilege.dart';
 import 'package:jima/src/tools/constants/buckets.dart';
 import 'package:jima/src/tools/constants/tables.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:minio_new/io.dart';
+import 'package:minio_new/minio.dart';
+import 'package:path/path.dart' as p;
 
 class AdminSource {
   final AppDatabaseService _database;
@@ -34,6 +38,29 @@ class AdminSource {
         'dateReleased': releaseDate.toUtc().toIso8601String(),
       },
     );
+  }
+
+  Future<String?> uploadAudioFile(String filepath) async {
+    final minio = Minio(
+      endPoint: dotenv.get('B2_ENDPOINT'),
+      accessKey: dotenv.get('B2KEY_ID'),
+      secretKey: dotenv.get('B2_SECRET_KEY'),
+    );
+
+    String fileName = p.basename(filepath);
+    String objectName = '${DateTime.now().millisecondsSinceEpoch}_$fileName';
+
+    await minio.fPutObject(
+      StorageBuckets.backBlazeAudios,
+      objectName,
+      filepath,
+    );
+
+    String downloadUrl = 'https://${dotenv.get('B2_BUCKET_NAME')}'
+        '.${dotenv.get('B2_ENDPOINT')}'
+        '/$objectName';
+
+    return downloadUrl;
   }
 
   Future<String> uploadBookCoverImage(String path) async {
@@ -81,12 +108,12 @@ class AdminSource {
     );
   }
 
-  Future<String> uploadAudioFile(String filePath) async {
-    return await _storageService.uploadFile(
-      filePath,
-      bucket: StorageBuckets.audio,
-    );
-  }
+  // Future<String> uploadAudioFile(String filePath) async {
+  //   return await _storageService.uploadFile(
+  //     filePath,
+  //     bucket: StorageBuckets.audio,
+  //   );
+  // }
 
   Future<String> uploadAudioThumbnail(
     Uint8List data,

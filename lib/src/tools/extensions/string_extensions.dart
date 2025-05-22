@@ -25,6 +25,8 @@ extension StringEx on String {
     return num.parse(cleanForNum);
   }
 
+  String get filename => split('/').last;
+
   String get cleanForNum => replaceAll(',', '').replaceAll(' ', '');
 
   String toFirstUppercase() {

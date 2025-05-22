@@ -176,6 +176,7 @@ class VideoItemWidget extends StatelessWidget {
                 onTap: () => MoreModal.show(
                   video.id,
                   type: GenericMediaType.video,
+                  mediaUrl: video.url,
                 ),
                 borderRadius: 40.circularBorder,
                 child: ClipOval(

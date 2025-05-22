@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jima/src/core/supabase_infra/database.dart';
 import 'package:jima/src/modules/donate/domain/entities/donation_data.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
@@ -8,9 +9,11 @@ import 'package:jima/src/modules/media/domain/entities/category.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media.dart';
 import 'package:jima/src/modules/media/domain/entities/generic_media_type.dart';
 import 'package:jima/src/modules/media/domain/entities/video.dart';
+import 'package:jima/src/tools/constants/buckets.dart';
 import 'package:jima/src/tools/constants/rpc_functions.dart';
 import 'package:jima/src/tools/constants/tables.dart';
 import 'package:jima/src/tools/tools_barrel.dart';
+import 'package:minio_new/minio.dart';
 
 class MediaDataSource {
   final AppDatabaseService _database;
@@ -40,7 +43,11 @@ class MediaDataSource {
     );
   }
 
-  Future<void> deleteMedia(String id, GenericMediaType type) async {
+  Future<void> deleteMedia(
+    String id,
+    GenericMediaType type,
+    String url,
+  ) async {
     await _database.delete(
       switch (type) {
         GenericMediaType.audio => Tables.audios,
@@ -49,6 +56,34 @@ class MediaDataSource {
       },
       filter: (request) => request.eq('id', id),
     );
+    if (type == GenericMediaType.audio) deleteAudioFile(url);
+  }
+
+  Future<void> deleteAudioFile(String downloadUrl) async {
+    final minioClient = Minio(
+      endPoint: dotenv.get('B2_ENDPOINT'),
+      accessKey: dotenv.get('B2KEY_ID'),
+      secretKey: dotenv.get('B2_SECRET_KEY'),
+    );
+
+    if (downloadUrl.isEmpty) throw "Error: Download URL cannot be empty.";
+
+    Uri parsedUrl = Uri.parse(downloadUrl);
+
+    String objectName = parsedUrl.path.startsWith('/')
+        ? parsedUrl.path.substring(1)
+        : parsedUrl.path;
+
+    if (objectName.isEmpty) throw "Could not extract object name from URL.";
+
+    const String bucketName = StorageBuckets.backBlazeAudios;
+
+    print('Attempting to delete:');
+    print('  Bucket: $bucketName');
+    print('  Object: $objectName');
+    print('  From URL: $downloadUrl');
+
+    await minioClient.removeObject(bucketName, objectName);
   }
 
   Future<List<Category>> fetchCategoriesFor({
