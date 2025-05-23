@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jima/src/core/core.dart';
@@ -29,6 +30,20 @@ class _SelectCategoryModalState extends State<SelectCategoryModal> {
   final controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) {
+        if (!mounted ||
+            context.read<AllCategoriesNotifier>().data.isNotNullOrEmpty) {
+          return;
+        }
+        context.read<AllCategoriesNotifier>().fetchAllCategories();
+      },
+    );
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
@@ -41,6 +56,7 @@ class _SelectCategoryModalState extends State<SelectCategoryModal> {
         final List<Category> categories = state.data ?? [];
         return Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Flexible(
               fit: FlexFit.loose,
@@ -49,6 +65,13 @@ class _SelectCategoryModalState extends State<SelectCategoryModal> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if (categories.isEmpty)
+                      Padding(
+                        padding: REdgeInsets.only(top: 50, bottom: 100),
+                        child: state.isInLoading
+                            ? const CircularProgressIndicator()
+                            : const Text('No categories'),
+                      ),
                     ...categories.map(
                       (category) {
                         return InkWell(

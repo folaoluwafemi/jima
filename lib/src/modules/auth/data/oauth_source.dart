@@ -1,5 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jima/src/modules/profile/domain/entities/user.dart';
 import 'package:jima/src/modules/profile/domain/entities/user_privilege.dart';
@@ -51,8 +51,8 @@ class OauthSource {
     }
   }
 
-  Future<String?> signInWithFacebook() async {
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-    return loginResult.accessToken?.tokenString;
-  }
+  // Future<String?> signInWithFacebook() async {
+  //   final LoginResult loginResult = await FacebookAuth.instance.login();
+  //   return loginResult.accessToken?.tokenString;
+  // }
 }

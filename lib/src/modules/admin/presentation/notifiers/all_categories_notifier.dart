@@ -11,6 +11,7 @@ class AllCategoriesNotifier extends BaseNotifier<List<Category>> {
   AllCategoriesNotifier(this._source) : super(const InitialState());
 
   Future<void> fetchAllCategories() async {
+    print('fetching categories');
     setInLoading();
 
     final result = await _source.fetchAllCategories().tryCatch();

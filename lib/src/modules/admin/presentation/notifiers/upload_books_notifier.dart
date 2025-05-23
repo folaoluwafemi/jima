@@ -17,6 +17,7 @@ class UploadBookNotifier extends BaseNotifier<Object?> {
     required DateTime releaseDate,
     required Category category,
   }) async {
+    if(state.isOutLoading) return;
     setOutLoading();
     final imgResult = await _source.uploadBookCoverImage(imagePath).tryCatch();
     final String imageUrl;
@@ -31,7 +32,10 @@ class UploadBookNotifier extends BaseNotifier<Object?> {
         .uploadBook(title, bookUrl, releaseDate, imageUrl, category)
         .tryCatch();
     return switch (result) {
-      Left(:final value) => setError(value.displayMessage),
+      Left(:final value) => () {
+          _source.deleteBookThumbnail(imageUrl);
+          setError(value.displayMessage);
+        }(),
       Right() => setSuccess(),
     };
   }

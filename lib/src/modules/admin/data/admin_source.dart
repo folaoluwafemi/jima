@@ -56,7 +56,7 @@ class AdminSource {
       filepath,
     );
 
-    String downloadUrl = 'https://${dotenv.get('B2_BUCKET_NAME')}'
+    String downloadUrl = 'https://${StorageBuckets.backBlazeAudios}'
         '.${dotenv.get('B2_ENDPOINT')}'
         '/$objectName';
 
@@ -68,6 +68,14 @@ class AdminSource {
       path,
       bucket: StorageBuckets.books,
     );
+  }
+
+  Future<void> deleteAudioThumbnail(String url) async {
+    await _storageService.delete([url], bucket: StorageBuckets.audioThumbnails);
+  }
+
+  Future<void> deleteBookThumbnail(String url) async {
+    await _storageService.delete([url], bucket: StorageBuckets.books);
   }
 
   Future<void> uploadBook(

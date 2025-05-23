@@ -46,7 +46,7 @@ void injectDependencies() {
     )
     ..registerLazySingleton<UserNotifier>(() => UserNotifier(container()))
     ..registerLazySingleton(() => AuthSource(container(), container()))
-    ..registerLazySingleton(() => MediaDataSource(container()))
+    ..registerLazySingleton(() => MediaDataSource(container(), container()))
     ..registerLazySingleton(() => HighestViewedNotifier(container()))
     ..registerLazySingleton(() => SearchAllMediaNotifier(container()))
     ..registerLazySingleton(() => VideosNotifier(container()))

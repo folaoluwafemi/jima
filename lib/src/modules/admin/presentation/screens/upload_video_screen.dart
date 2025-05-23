@@ -125,6 +125,7 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                     if (current.isSuccess) {
                       titleController.clear();
                       videoIdController.clear();
+                      categoryNotifier.value = null;
                       releaseDateNotifier.value = null;
                       context.showSuccessToast('Upload successful');
                     }

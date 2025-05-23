@@ -3,6 +3,6 @@ abstract final class StorageBuckets {
   static const String books = 'books';
   static const String audio = 'audio';
   static const String audios = 'audios';
-  static const String backBlazeAudios = 'jima-audio-files';
+  static const String backBlazeAudios = 'jima-audio-filles';
   static const String audioThumbnails = 'audio-thumbnails';
 }

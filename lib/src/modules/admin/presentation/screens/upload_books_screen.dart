@@ -150,6 +150,7 @@ class _UploadBooksScreenState extends State<UploadBooksScreen> {
                       titleController.clear();
                       bookUrlController.clear();
                       releaseDateNotifier.value = null;
+                      categoryNotifier.value = null;
                       imagePathNotifier.value = null;
                       context.showSuccessToast('Upload successful');
                     }

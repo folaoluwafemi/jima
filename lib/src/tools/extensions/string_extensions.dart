@@ -57,8 +57,6 @@ extension StringEx on String {
     return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
   }
 
-  // String capit
-
   bool compareAgainst(String query) {
     final value = this;
     final formattedValue = value.trim().toLowerCase();

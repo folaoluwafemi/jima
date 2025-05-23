@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jima/src/core/supabase_infra/database.dart';
+import 'package:jima/src/core/supabase_infra/storage_service.dart';
 import 'package:jima/src/modules/donate/domain/entities/donation_data.dart';
 import 'package:jima/src/modules/media/domain/entities/audio.dart';
 import 'package:jima/src/modules/media/domain/entities/audio_data.dart';
@@ -17,8 +18,9 @@ import 'package:minio_new/minio.dart';
 
 class MediaDataSource {
   final AppDatabaseService _database;
+  final AppStorageService _storageService;
 
-  MediaDataSource(this._database);
+  MediaDataSource(this._database, this._storageService);
 
   Future<List<Category>> fetchAllCategories() async {
     final result = await _database.select(

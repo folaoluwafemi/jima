@@ -126,6 +126,7 @@ class _UploadAudioScreenState extends State<UploadAudioScreen> {
                     if (current.isSuccess) {
                       titleController.clear();
                       releaseDateNotifier.value = null;
+                      categoryNotifier.value = null;
                       filePath = null;
                       setState(() {});
                       context.showSuccessToast('Upload successful');

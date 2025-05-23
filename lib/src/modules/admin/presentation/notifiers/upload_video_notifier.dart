@@ -16,6 +16,7 @@ class UploadVideoNotifier extends BaseNotifier<Object?> {
     DateTime releaseDate,
     Category category,
   ) async {
+    if(state.isOutLoading) return;
     setOutLoading();
     final result = await _adminSource
         .uploadVideo(title, videoId, releaseDate, category)

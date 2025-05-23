@@ -20,13 +20,19 @@ class UploadAudioNotifier extends BaseNotifier<Object?> {
     DateTime releaseDate,
     Category category,
   ) async {
+    if (state.isOutLoading) return;
     setOutLoading();
     final thumbnail = await uploadThumbnail(audioPath);
     print("uploaded thumbnail:$thumbnail");
 
+    if (thumbnail == null) return setError('Failed to upload thumbnail');
+
     final audioUrl = await uploadAudioFile(audioPath);
-    if (audioUrl == null) return setError('Failed to upload audio file');
-    print("uploaded thumbnail:$audioUrl");
+    if (audioUrl == null) {
+      _adminSource.deleteAudioThumbnail(thumbnail);
+      return setError('Failed to upload audio file');
+    }
+    print("uploaded audio:$audioUrl");
 
     final result = await _adminSource
         .uploadAudio(
