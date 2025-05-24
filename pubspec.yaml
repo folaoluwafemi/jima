@@ -44,9 +44,9 @@ dependencies:
   just_audio_background: ^0.0.1-beta.16
   audio_session: ^0.2.1
   rxdart: ^0.28.0
-  audiotags: ^1.4.5
   minio_new: ^1.0.2
   path: ^1.9.0
+  id3tag: ^0.2.0
 
 dependency_overrides:
   http: ^0.13.5

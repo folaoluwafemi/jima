@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:audiotags/audiotags.dart';
+import 'package:id3tag/id3tag.dart' as reader;
 import 'package:jima/src/core/error_handling/try_catch.dart';
 import 'package:jima/src/modules/admin/data/admin_source.dart';
 import 'package:jima/src/modules/media/domain/entities/category.dart';
-import 'package:jima/src/tools/extensions/extensions.dart';
+import 'package:jima/src/tools/tools_barrel.dart';
 import 'package:vanilla_state/vanilla_state.dart';
 
 typedef UploadAudioState = BaseState<Object?>;
@@ -55,9 +55,7 @@ class UploadAudioNotifier extends BaseNotifier<Object?> {
   Future<String?> uploadAudioFile(String filePath) async {
     final file = File(filePath);
     if (!file.existsSync()) return null;
-    print('starting url');
     final url = await _adminSource.uploadAudioFile(filePath).tryCatch();
-    print("completing audio url: $url");
     return switch (url) {
       Left(:final value) => () {
           setError(value.displayMessage);
@@ -70,21 +68,18 @@ class UploadAudioNotifier extends BaseNotifier<Object?> {
 
   Future<String?> uploadThumbnail(String audioPath) async {
     try {
-      print("audio path:$audioPath");
-      final metadataRetriever = await AudioTags.read(audioPath);
-      final image = metadataRetriever?.pictures.firstWhereOrNull(
-        (element) =>
-            element.pictureType == PictureType.coverFront ||
-            element.pictureType == PictureType.coverBack ||
-            element.pictureType == PictureType.illustration ||
-            element.pictureType == PictureType.media ||
-            element.pictureType == PictureType.leaflet,
+      final track = reader.ID3TagReader.path(audioPath).readTagSync();
+
+      final image = track.pictures.firstWhereOrNull(
+        (element) => element.imageData.isNotEmpty,
       );
+
       if (image == null) return null;
+
       final filename = audioPath.split('/').last;
       final thumbnailFilename = '${filename.split('.').first}thumbmail.jpg';
       final result = await _adminSource
-          .uploadAudioThumbnail(image.bytes, thumbnailFilename)
+          .uploadAudioThumbnail(image.imageData, thumbnailFilename)
           .tryCatch();
 
       return switch (result) {
@@ -96,7 +91,6 @@ class UploadAudioNotifier extends BaseNotifier<Object?> {
         Right(:final value) => value,
       };
     } catch (e) {
-      print('Error uploading thumbnail: $e');
       return null;
     }
   }

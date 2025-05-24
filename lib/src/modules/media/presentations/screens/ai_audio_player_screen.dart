@@ -53,7 +53,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
     await Future.delayed(const Duration(milliseconds: 100));
-    _player.play();
   }
 
   @override

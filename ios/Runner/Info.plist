@@ -28,17 +28,14 @@
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>GIDClientID</key>
     <string>392098157619-qfg2cib7o0dg8unfh46q8eekbdna7746.apps.googleusercontent.com</string>
-		<key>CFBundleURLTypes</key>
+    <key>CFBundleURLTypes</key>
     <array>
-    	<dict>
-    		<key>CFBundleTypeRole</key>
-    		<string>Editor</string>
-    		<key>CFBundleURLSchemes</key>
-    		<array>
-    			<string>com.googleusercontent.apps.392098157619-qfg2cib7o0dg8unfh46q8eekbdna774</string>
-    			<string>fb638122922359825</string>
-    		</array>
-    	</dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.392098157619-qfg2cib7o0dg8unfh46q8eekbdna7746</string>
+        </array>
+      </dict>
     </array>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>

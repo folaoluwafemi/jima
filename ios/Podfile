@@ -35,28 +35,14 @@ target 'Runner' do
     inherit! :search_paths
   end
 end
+
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-
+    # Ensure audio frameworks are linked
     target.build_configurations.each do |config|
-      config.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
-      current_ldflags = config.build_settings['OTHER_LDFLAGS'].is_a?(Array) ?
-                        config.build_settings['OTHER_LDFLAGS'].join(' ') :
-                        config.build_settings['OTHER_LDFLAGS']
-
-      # Add -all_load if not already present
-      unless current_ldflags.include?('-all_load')
-        current_ldflags = "#{current_ldflags} -all_load"
-      end
-      rust_lib_name = "libaudiotags_frb.a"
-      rust_lib_path = "\"$(BUILT_PRODUCTS_DIR)/#{rust_lib_name}\""
-
-      unless current_ldflags.include?("-force_load #{rust_lib_path}")
-        config.build_settings['OTHER_LDFLAGS'] = "#{current_ldflags} -force_load #{rust_lib_path}"
-      end
-      # Set the final OTHER_LDFLAGS value
-      config.build_settings['OTHER_LDFLAGS'] = current_ldflags
+      config.build_settings['OTHER_LDFLAGS'] = (config.build_settings['OTHER_LDFLAGS'] || '$(inherited)').split(' ') + ['-framework', 'AVFoundation', '-all_load']
     end
   end
 end
+

@@ -124,11 +124,11 @@ class AdminSource {
   // }
 
   Future<String> uploadAudioThumbnail(
-    Uint8List data,
+    List<int> data,
     String filename,
   ) async {
     return await _storageService.uploadFileBinary(
-      data,
+      Uint8List.fromList(data),
       filename,
       bucket: StorageBuckets.audioThumbnails,
     );
